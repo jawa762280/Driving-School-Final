@@ -24,6 +24,9 @@ class MyTextformfield extends StatelessWidget {
       obscureText: obscureText == null || obscureText == false ? false : true,
       validator: valid,
       controller: mycontroller,
+      onTapOutside: (event) {
+        FocusManager.instance.primaryFocus!.unfocus();
+      },
       keyboardType: keyboardType,
       decoration: InputDecoration(
         filled: filled,
