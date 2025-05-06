@@ -1,3 +1,4 @@
+import 'package:driving_school/core/constant/approuts.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -11,6 +12,10 @@ class LoginController extends GetxController {
   showPass() {
     isShowPass = isShowPass == true ? false : true;
     update();
+  }
+
+  goTOForgetPassword() {
+    Get.toNamed(AppRouts.forgetPasswordScreen);
   }
 
   @override
