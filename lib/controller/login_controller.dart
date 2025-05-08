@@ -3,14 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class LoginController extends GetxController {
-  late TextEditingController phoneController;
+  late TextEditingController emailController;
   late TextEditingController passwordController;
   var rememberMe = true.obs;
   bool isShowPass = true;
   GlobalKey<FormState> formState = GlobalKey<FormState>();
 
   showPass() {
-    isShowPass = isShowPass == true ? false : true;
+    isShowPass = !isShowPass;
     update();
   }
 
@@ -18,16 +18,20 @@ class LoginController extends GetxController {
     Get.toNamed(AppRouts.forgetPasswordScreen);
   }
 
+  goToSignUp() {
+    Get.toNamed(AppRouts.signupscreen);
+  }
+
   @override
   void onInit() {
-    phoneController = TextEditingController();
+    emailController = TextEditingController();
     passwordController = TextEditingController();
     super.onInit();
   }
 
   @override
   void onClose() {
-    phoneController.dispose();
+    emailController.dispose();
     passwordController.dispose();
     super.onClose();
   }
@@ -39,7 +43,7 @@ class LoginController extends GetxController {
   void login() {
     if (!formState.currentState!.validate()) return;
 
-    String phone = phoneController.text;
+    String phone = emailController.text;
     String password = passwordController.text;
     bool remember = rememberMe.value;
 

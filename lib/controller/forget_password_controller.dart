@@ -5,7 +5,6 @@ import 'package:get/get.dart';
 class ForgetPasswordController extends GetxController {
   late TextEditingController emailController;
   GlobalKey<FormState> formState = GlobalKey<FormState>();
-  
 
   @override
   void onInit() {
@@ -21,6 +20,6 @@ class ForgetPasswordController extends GetxController {
 
   void sendEmail() {
     if (!formState.currentState!.validate()) return;
-    Get.toNamed(AppRouts.resetPasswordScreen);
+    Get.toNamed(AppRouts.verifyCodeScreen);
   }
 }

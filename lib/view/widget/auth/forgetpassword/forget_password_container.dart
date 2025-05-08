@@ -39,10 +39,10 @@ class ForgetPasswordContainer extends StatelessWidget {
                 style: TextStyle(color: Colors.grey[800], fontSize: 12)),
             const SizedBox(height: 15),
             MyTextformfield(
-              valid: (val) => validInput(val, 4, 20, "email"),
+              valid: (val) => validInput(val, 4, 50, "email"),
               mycontroller: controller.emailController,
               keyboardType: TextInputType.emailAddress,
-              prefixIcon: Icons.email_outlined,
+              prefixIcon: Icons.email,
               filled: true,
             ),
             SizedBox(

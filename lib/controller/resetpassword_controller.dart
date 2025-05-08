@@ -1,3 +1,4 @@
+import 'package:driving_school/core/constant/approuts.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -39,5 +40,6 @@ class ResetPasswordController extends GetxController {
           title: "Warnning", middleText: "Password not match");
     }
     if (!formState.currentState!.validate()) return;
+    Get.offAllNamed(AppRouts.loginScreen);
   }
 }

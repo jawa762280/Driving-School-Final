@@ -9,7 +9,8 @@ class MyTextformfield extends StatelessWidget {
       required this.filled,
       this.onTapIcon,
       this.obscureText,
-      required this.valid});
+      required this.valid,
+      this.iconColor});
   final TextEditingController mycontroller;
   final TextInputType keyboardType;
   final IconData prefixIcon;
@@ -17,6 +18,7 @@ class MyTextformfield extends StatelessWidget {
   final void Function()? onTapIcon;
   final bool? obscureText;
   final String? Function(String?) valid;
+  final Color? iconColor;
 
   @override
   Widget build(BuildContext context) {
@@ -39,6 +41,7 @@ class MyTextformfield extends StatelessWidget {
           onTap: onTapIcon,
           child: Icon(
             prefixIcon,
+            color: iconColor,
           ),
         ),
       ),

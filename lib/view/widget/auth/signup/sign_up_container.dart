@@ -1,15 +1,13 @@
-import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:driving_school/controller/login_controller.dart';
+import 'package:driving_school/controller/sign_up_controller.dart';
 import 'package:driving_school/core/constant/appcolors.dart';
 import 'package:driving_school/core/functions/validinput.dart';
 import 'package:driving_school/view/widget/my_button.dart';
 import 'package:driving_school/view/widget/my_textformfield.dart';
+import 'package:flutter/material.dart';
 
-class LoginContainer extends StatelessWidget {
-  final LoginController controller;
-
-  const LoginContainer({super.key, required this.controller});
+class SignUpContainer extends StatelessWidget {
+  const SignUpContainer({super.key, required this.controller});
+  final SignUpController controller;
 
   @override
   Widget build(BuildContext context) {
@@ -33,19 +31,48 @@ class LoginContainer extends StatelessWidget {
           children: [
             const Center(
               child: Text(
-                "تسجيل الدخول",
+                "تسجيل حساب",
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
             ),
             const SizedBox(height: 24),
+            Text("الاسم",
+                style: TextStyle(color: Colors.grey[800], fontSize: 11)),
+            const SizedBox(height: 15),
+            MyTextformfield(
+              valid: (val) => validInput(val, 3, 30, "username"),
+              mycontroller: controller.firstNameController,
+              keyboardType: TextInputType.name,
+              prefixIcon: Icons.person,
+              iconColor: AppColors.primaryColor,
+              filled: true,
+            ),
+            SizedBox(
+              height: 16,
+            ),
+            Text("الكنية",
+                style: TextStyle(color: Colors.grey[800], fontSize: 11)),
+            const SizedBox(height: 15),
+            MyTextformfield(
+              valid: (val) => validInput(val, 3, 30, "username"),
+              mycontroller: controller.lastNameController,
+              keyboardType: TextInputType.name,
+              prefixIcon: Icons.person_2_outlined,
+              iconColor: AppColors.primaryColor,
+              filled: true,
+            ),
+            SizedBox(
+              height: 16,
+            ),
             Text("البريد الالكتروني",
-                style: TextStyle(color: Colors.grey[700], fontSize: 12)),
+                style: TextStyle(color: Colors.grey[800], fontSize: 11)),
             const SizedBox(height: 15),
             MyTextformfield(
               valid: (val) => validInput(val, 4, 50, "email"),
               mycontroller: controller.emailController,
               keyboardType: TextInputType.emailAddress,
               prefixIcon: Icons.email,
+              iconColor: AppColors.primaryColor,
               filled: true,
             ),
             const SizedBox(height: 16),
@@ -54,49 +81,23 @@ class LoginContainer extends StatelessWidget {
             const SizedBox(height: 15),
             MyTextformfield(
               valid: (val) => validInput(val, 8, 50, "password"),
-              mycontroller: controller.passwordController,
+              mycontroller: controller.passController,
               obscureText: controller.isShowPass,
               keyboardType: TextInputType.visiblePassword,
               prefixIcon: Icons.visibility,
+              iconColor: AppColors.primaryColor,
               onTapIcon: () => controller.showPass(),
               filled: true,
             ),
-            const SizedBox(height: 8),
-            Row(
-              children: [
-                Obx(() => Checkbox(
-                      value: controller.rememberMe.value,
-                      activeColor: AppColors.primaryColor,
-                      onChanged: (_) => controller.toggleRememberMe(),
-                    )),
-                const Text("تذكرني"),
-                const Spacer(),
-                TextButton(
-                  onPressed: () {
-                    controller.goTOForgetPassword();
-                  },
-                  child: const Text("هل نسيت كلمة المرور؟"),
-                ),
-              ],
+            SizedBox(
+              height: 30,
             ),
-            const SizedBox(height: 8),
             MyButton(
-              onPressed: () => controller.login(),
-              icon: Icons.arrow_back,
-              text: "تسجيل الدخول",
+              onPressed: () {
+                controller.signUp();
+              },
+              text: "حفظ",
             ),
-            const SizedBox(height: 12),
-            Center(
-              child: TextButton(
-                onPressed: () {
-                  controller.goToSignUp();
-                },
-                child: Text("لا تملك حساب ؟",
-                    style: TextStyle(
-                        color: AppColors.primaryColor,
-                        fontWeight: FontWeight.bold)),
-              ),
-            )
           ],
         ),
       ),
