@@ -1,3 +1,4 @@
+import 'package:driving_school/core/constant/approuts.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -16,6 +17,7 @@ class SignUpController extends GetxController {
 
   signUp() {
     if (!formState.currentState!.validate()) return;
+    Get.toNamed(AppRouts.verifyCodeSignUpScreen);
   }
 
   @override

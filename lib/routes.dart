@@ -4,7 +4,10 @@ import 'package:driving_school/view/screen/onboarding_screen.dart';
 import 'package:driving_school/view/screen/forget_password_screen.dart';
 import 'package:driving_school/view/screen/reset_password_screen.dart';
 import 'package:driving_school/view/screen/sign_up_screen.dart';
+import 'package:driving_school/view/screen/success_reset_password_screen.dart';
+import 'package:driving_school/view/screen/success_verifycode_signup_screen.dart';
 import 'package:driving_school/view/screen/verify_code_screen.dart';
+import 'package:driving_school/view/screen/verify_code_sign_up_screen.dart';
 import 'package:get/get.dart';
 
 List<GetPage<dynamic>> routes = [
@@ -26,11 +29,22 @@ List<GetPage<dynamic>> routes = [
       name: AppRouts.resetPasswordScreen,
       page: () => const ResetPasswordScreen()),
   GetPage(
-    name: AppRouts.signupscreen,
+    name: AppRouts.signUpScreen,
     page: () => const SignUpScreen(),
   ),
   GetPage(
     name: AppRouts.verifyCodeScreen,
     page: () => const VerifyCodeScreen(),
-  )
+  ),
+  GetPage(
+    name: AppRouts.successResetPasswordScreen,
+    page: () => const SuccessResetPasswordScreen(),
+  ),
+  GetPage(
+    name: AppRouts.successVerifyCodeSignUpScreen,
+    page: () => const SuccessVerifyCodeSignUpScreen(),
+  ),
+  GetPage(
+      name: AppRouts.verifyCodeSignUpScreen,
+      page: () => const VerifyCodeSignUpScreen()),
 ];

@@ -40,6 +40,6 @@ class ResetPasswordController extends GetxController {
           title: "Warnning", middleText: "Password not match");
     }
     if (!formState.currentState!.validate()) return;
-    Get.offAllNamed(AppRouts.loginScreen);
+    Get.offAllNamed(AppRouts.successResetPasswordScreen);
   }
 }

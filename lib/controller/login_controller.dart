@@ -19,7 +19,7 @@ class LoginController extends GetxController {
   }
 
   goToSignUp() {
-    Get.toNamed(AppRouts.signupscreen);
+    Get.toNamed(AppRouts.signUpScreen);
   }
 
   @override
