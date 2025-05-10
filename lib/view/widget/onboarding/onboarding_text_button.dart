@@ -1,7 +1,7 @@
 import 'package:driving_school/controller/onboarding_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 class OnboardingTextButton extends GetView<OnboardingController> {
   const OnboardingTextButton({super.key});
 
@@ -11,7 +11,13 @@ class OnboardingTextButton extends GetView<OnboardingController> {
       onPressed: () {
         controller.skip();
       },
-      child: Text("Skip", style: TextStyle(color: Colors.white, fontSize: 16)),
+      child: Text(
+        "Skip",
+        style: TextStyle(
+          color: Colors.white,
+          fontSize: 16.sp, 
+        ),
+      ),
     );
   }
 }

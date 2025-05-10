@@ -2,6 +2,7 @@ import 'package:driving_school/controller/verifycode_controller.dart';
 import 'package:driving_school/view/widget/app_logo.dart';
 import 'package:driving_school/view/widget/auth/verifycode/verifycode_container.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
 class VerifyCodeScreen extends StatelessWidget {
@@ -15,7 +16,7 @@ class VerifyCodeScreen extends StatelessWidget {
         backgroundColor: const Color(0xFFF8FAFB),
         body: SafeArea(
           child: SingleChildScrollView(
-            padding: const EdgeInsets.all(24),
+            padding:  EdgeInsets.all(24.w),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class MyTextformfield extends StatelessWidget {
   const MyTextformfield(
@@ -34,7 +35,7 @@ class MyTextformfield extends StatelessWidget {
         filled: filled,
         fillColor: const Color(0xFFF2F3F5),
         border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(16),
+          borderRadius: BorderRadius.circular(16.r),
           borderSide: BorderSide.none,
         ),
         prefixIcon: InkWell(
@@ -42,6 +43,7 @@ class MyTextformfield extends StatelessWidget {
           child: Icon(
             prefixIcon,
             color: iconColor,
+            size: 24.sp,
           ),
         ),
       ),

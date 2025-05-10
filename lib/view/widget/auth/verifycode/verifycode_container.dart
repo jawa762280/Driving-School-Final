@@ -2,6 +2,7 @@ import 'package:driving_school/controller/verifycode_controller.dart';
 import 'package:driving_school/core/constant/appcolors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_otp_text_field/flutter_otp_text_field.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class VerifycodeContainer extends StatelessWidget {
   const VerifycodeContainer({super.key, required this.controller});
@@ -10,77 +11,75 @@ class VerifycodeContainer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(20),
+      padding: EdgeInsets.all(20.w),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(24),
+        borderRadius: BorderRadius.circular(24.w),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withAlpha(12),
-            blurRadius: 12,
-            offset: const Offset(0, 4),
+            blurRadius: 12.w,
+            offset: Offset(0, 4.w),
           ),
         ],
       ),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          const SizedBox(height: 32),
-          const Text(
+          SizedBox(height: 32.h),
+          Text(
             "أدخل رمز التحقق",
             style: TextStyle(
-              fontSize: 20,
+              fontSize: 20.sp,
               fontWeight: FontWeight.bold,
             ),
             textAlign: TextAlign.center,
           ),
-          const SizedBox(height: 15),
+          SizedBox(height: 15.h),
           Text(
             "لقد أرسلنا رمز تحقق مكون من 5 أرقام إلى بريدك الإلكتروني",
             style: TextStyle(
-              fontSize: 14,
+              fontSize: 14.sp,
               color: Colors.grey[700],
             ),
             textAlign: TextAlign.center,
           ),
-          const SizedBox(height: 32),
+          SizedBox(height: 32.h),
           OtpTextField(
-            fieldWidth: 45,
-            borderRadius: BorderRadius.circular(12),
+            fieldWidth: 45.w,
+            borderRadius: BorderRadius.circular(12.w),
             numberOfFields: 5,
             borderColor: AppColors.primaryColor,
             focusedBorderColor: AppColors.primaryColor,
             showFieldAsBox: true,
             onCodeChanged: (String code) {
-              // يتم التحديث عند تغيير أي خانة
               controller.code = code;
             },
             onSubmit: (String code) {
-              // عند إدخال الخمس خانات، يتم فقط الحفظ وليس التوجيه
               controller.code = code;
             },
           ),
-          const SizedBox(height: 24),
+          SizedBox(height: 24.h),
           SizedBox(
             width: double.infinity,
             child: ElevatedButton(
               style: ElevatedButton.styleFrom(
                 backgroundColor: AppColors.primaryColor,
-                padding: const EdgeInsets.symmetric(vertical: 14),
+                padding: EdgeInsets.symmetric(vertical: 14.h),
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12),
+                  borderRadius: BorderRadius.circular(12.w),
                 ),
               ),
               onPressed: () {
                 controller.submit();
               },
-              child: const Text(
+              child: Text(
                 "تأكيد",
-                style: TextStyle(fontSize: 16, color: Colors.white),
+                style: TextStyle(fontSize: 16.sp, color: Colors.white),
               ),
             ),
           ),
-          const SizedBox(height: 20),
+          SizedBox(height: 20.h),
           TextButton(
             onPressed: controller.resendCode,
             child: Text(

@@ -1,5 +1,6 @@
 import 'package:driving_school/core/constant/appcolors.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class AppLogo extends StatelessWidget {
   const AppLogo({super.key});
@@ -7,15 +8,15 @@ class AppLogo extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 24),
+      padding: EdgeInsets.symmetric(vertical: 24.h),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Container(
-            width: 48,
-            height: 48,
+            width: 48.w,
+            height: 48.h,
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(12),
+              borderRadius: BorderRadius.circular(12.r),
               color: AppColors.primaryColor,
               image: const DecorationImage(
                 image: AssetImage('assets/images/Icon.png'),
@@ -23,11 +24,11 @@ class AppLogo extends StatelessWidget {
               ),
             ),
           ),
-          const SizedBox(width: 12),
+          SizedBox(width: 12.w),
           Text(
             "مدرسة قيادة",
             style: TextStyle(
-              fontSize: 27,
+              fontSize: 27.sp,
               fontWeight: FontWeight.bold,
               color: AppColors.primaryColor,
             ),

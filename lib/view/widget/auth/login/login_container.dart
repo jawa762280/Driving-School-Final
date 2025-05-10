@@ -5,6 +5,7 @@ import 'package:driving_school/core/constant/appcolors.dart';
 import 'package:driving_school/core/functions/validinput.dart';
 import 'package:driving_school/view/widget/my_button.dart';
 import 'package:driving_school/view/widget/my_textformfield.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart'; 
 
 class LoginContainer extends StatelessWidget {
   final LoginController controller;
@@ -14,15 +15,15 @@ class LoginContainer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(20),
+      padding: EdgeInsets.all(20.w), 
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(24),
+        borderRadius: BorderRadius.circular(24.r), 
         boxShadow: [
           BoxShadow(
             color: Colors.black.withAlpha((0.05 * 255).toInt()),
-            blurRadius: 12,
-            offset: const Offset(0, 4),
+            blurRadius: 12.r, 
+            offset: Offset(0, 4.h), 
           ),
         ],
       ),
@@ -31,16 +32,21 @@ class LoginContainer extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
-            const Center(
+            Center(
               child: Text(
                 "تسجيل الدخول",
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                style: TextStyle(
+                  fontSize: 18.sp, 
+                  fontWeight: FontWeight.bold,
+                ),
               ),
             ),
-            const SizedBox(height: 24),
-            Text("البريد الالكتروني",
-                style: TextStyle(color: Colors.grey[700], fontSize: 12)),
-            const SizedBox(height: 15),
+            SizedBox(height: 24.h), 
+            Text(
+              "البريد الالكتروني",
+              style: TextStyle(color: Colors.grey[700], fontSize: 12.sp),
+            ),
+            SizedBox(height: 15.h),
             MyTextformfield(
               valid: (val) => validInput(val, 4, 50, "email"),
               mycontroller: controller.emailController,
@@ -48,10 +54,12 @@ class LoginContainer extends StatelessWidget {
               prefixIcon: Icons.email,
               filled: true,
             ),
-            const SizedBox(height: 16),
-            Text("كلمة المرور",
-                style: TextStyle(color: Colors.grey[800], fontSize: 12)),
-            const SizedBox(height: 15),
+            SizedBox(height: 16.h),
+            Text(
+              "كلمة المرور",
+              style: TextStyle(color: Colors.grey[800], fontSize: 12.sp),
+            ),
+            SizedBox(height: 15.h),
             MyTextformfield(
               valid: (val) => validInput(val, 8, 50, "password"),
               mycontroller: controller.passwordController,
@@ -61,7 +69,7 @@ class LoginContainer extends StatelessWidget {
               onTapIcon: () => controller.showPass(),
               filled: true,
             ),
-            const SizedBox(height: 8),
+            SizedBox(height: 8.h),
             Row(
               children: [
                 Obx(() => Checkbox(
@@ -69,32 +77,42 @@ class LoginContainer extends StatelessWidget {
                       activeColor: AppColors.primaryColor,
                       onChanged: (_) => controller.toggleRememberMe(),
                     )),
-                const Text("تذكرني"),
-                const Spacer(),
+                Text(
+                  "تذكرني",
+                  style: TextStyle(fontSize: 12.sp),
+                ),
+                Spacer(),
                 TextButton(
                   onPressed: () {
                     controller.goTOForgetPassword();
                   },
-                  child: const Text("هل نسيت كلمة المرور؟"),
+                  child: Text(
+                    "هل نسيت كلمة المرور؟",
+                    style: TextStyle(fontSize: 12.sp),
+                  ),
                 ),
               ],
             ),
-            const SizedBox(height: 8),
+            SizedBox(height: 8.h),
             MyButton(
               onPressed: () => controller.login(),
               icon: Icons.arrow_back,
               text: "تسجيل الدخول",
             ),
-            const SizedBox(height: 12),
+            SizedBox(height: 12.h),
             Center(
               child: TextButton(
                 onPressed: () {
                   controller.goToSignUp();
                 },
-                child: Text("لا تملك حساب ؟",
-                    style: TextStyle(
-                        color: AppColors.primaryColor,
-                        fontWeight: FontWeight.bold)),
+                child: Text(
+                  "لا تملك حساب ؟",
+                  style: TextStyle(
+                    color: AppColors.primaryColor,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 14.sp, 
+                  ),
+                ),
               ),
             )
           ],

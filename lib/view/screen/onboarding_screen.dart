@@ -8,12 +8,15 @@ import 'package:driving_school/view/widget/onboarding/onboarding_text_button.dar
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+
 class OnboardingScreen extends StatelessWidget {
   const OnboardingScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     Get.put(OnboardingController());
+
     return GetBuilder<OnboardingController>(
       builder: (controller) => Scaffold(
         body: Stack(
@@ -35,7 +38,7 @@ class OnboardingScreen extends StatelessWidget {
                   OnboardingContainer(),
                   Center(
                     child: Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 90),
+                      padding: EdgeInsets.symmetric(vertical: 90.h),
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.end,
                         crossAxisAlignment: CrossAxisAlignment.center,
@@ -43,25 +46,25 @@ class OnboardingScreen extends StatelessWidget {
                           Text(
                             onboardingList[i].title,
                             textAlign: TextAlign.center,
-                            style: const TextStyle(
+                            style: TextStyle(
                               color: Colors.white,
-                              fontSize: 34,
+                              fontSize: 34.sp,
                               fontWeight: FontWeight.bold,
                               height: 1.3,
                             ),
                           ),
-                          const SizedBox(height: 16),
+                          SizedBox(height: 16.h),
                           Text(
                             onboardingList[i].description,
                             textAlign: TextAlign.center,
                             style: TextStyle(
                               color:
                                   Colors.white.withAlpha((0.9 * 255).toInt()),
-                              fontSize: 14,
+                              fontSize: 14.sp,
                               height: 1.4,
                             ),
                           ),
-                          const SizedBox(height: 32),
+                          SizedBox(height: 32.h),
                         ],
                       ),
                     ),
@@ -73,14 +76,14 @@ class OnboardingScreen extends StatelessWidget {
               OnboardingGetstartedButton(),
             if (controller.currentpage != onboardingList.length - 1)
               Positioned(
-                bottom: 66,
-                right: 24,
+                bottom: 66.h,
+                right: 24.w,
                 child: const DotController(),
               ),
             if (controller.currentpage != onboardingList.length - 1)
               Positioned(
-                bottom: 40,
-                left: 24,
+                bottom: 40.h,
+                left: 24.w,
                 child: Row(
                   children: [OnboardingIcon(), OnboardingTextButton()],
                 ),
@@ -91,19 +94,3 @@ class OnboardingScreen extends StatelessWidget {
     );
   }
 }
-//  if (controller.currentpage == onboardingList.length - 1)
-//                 OnboardingGetstartedButton(),
-//               if (controller.currentpage != onboardingList.length - 1)
-//                 Positioned(
-//                   bottom: 66,
-//                   right: 24,
-//                   child: const DotController(),
-//                 ),
-//               if (controller.currentpage != onboardingList.length - 1)
-//                 Positioned(
-//                   bottom: 40,
-//                   left: 24,
-//                   child: Row(
-//                     children: [OnboardingIcon(), OnboardingTextButton()],
-//                   ),
-//                 ),

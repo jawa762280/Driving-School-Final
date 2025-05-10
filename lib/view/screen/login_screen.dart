@@ -3,6 +3,7 @@ import 'package:driving_school/view/widget/app_logo.dart';
 import 'package:driving_school/view/widget/auth/login/login_container.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class LoginScreen extends StatelessWidget {
   const LoginScreen({super.key});
@@ -14,13 +15,16 @@ class LoginScreen extends StatelessWidget {
       builder: (controller) => Scaffold(
         backgroundColor: const Color(0xFFF8FAFB),
         body: SafeArea(
-            child: SingleChildScrollView(
-              padding: const EdgeInsets.all(24),
-              child: Column(
-                children: [AppLogo(), LoginContainer(controller: controller)],
-              ),
+          child: SingleChildScrollView(
+            padding: EdgeInsets.all(24.w),
+            child: Column(
+              children: [
+                AppLogo(),
+                SizedBox(height: 40.h),
+                LoginContainer(controller: controller),
+              ],
             ),
-          
+          ),
         ),
       ),
     );

@@ -4,6 +4,7 @@ import 'package:driving_school/view/widget/app_logo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_otp_text_field/flutter_otp_text_field.dart';
 import 'package:get/get.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class VerifyCodeSignUpScreen extends StatelessWidget {
   const VerifyCodeSignUpScreen({super.key});
@@ -16,40 +17,40 @@ class VerifyCodeSignUpScreen extends StatelessWidget {
         backgroundColor: const Color(0xFFF8FAFB),
         body: SafeArea(
           child: SingleChildScrollView(
-            padding: const EdgeInsets.all(24),
+            padding: EdgeInsets.all(24.w),
             child: Column(
               children: [
                 AppLogo(),
-                const SizedBox(height: 18),
+                SizedBox(height: 18.h),
                 Container(
-                  width: 100,
-                  height: 100,
+                  width: 100.w,
+                  height: 100.w,
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
                     color:
                         AppColors.primaryColor.withAlpha((0.1 * 255).toInt()),
                   ),
                   child: Icon(Icons.email_outlined,
-                      size: 60, color: AppColors.primaryColor),
+                      size: 60.sp, color: AppColors.primaryColor),
                 ),
-                const SizedBox(height: 22),
-                const Text(
+                SizedBox(height: 22.h),
+                Text(
                   "تأكيد البريد الإلكتروني",
                   style: TextStyle(
-                    fontSize: 22,
+                    fontSize: 22.sp,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                const SizedBox(height: 12),
+                SizedBox(height: 12.h),
                 Text(
                   "تم إرسال رمز تحقق إلى بريدك الإلكتروني\nالرجاء إدخاله أدناه",
                   textAlign: TextAlign.center,
-                  style: TextStyle(fontSize: 14, color: Colors.grey[700]),
+                  style: TextStyle(fontSize: 14.sp, color: Colors.grey[700]),
                 ),
-                const SizedBox(height: 25),
+                SizedBox(height: 25.h),
                 OtpTextField(
-                  fieldWidth: 45,
-                  borderRadius: BorderRadius.circular(12),
+                  fieldWidth: 45.w,
+                  borderRadius: BorderRadius.circular(12.w),
                   numberOfFields: 5,
                   borderColor: AppColors.primaryColor,
                   focusedBorderColor: AppColors.primaryColor,
@@ -58,7 +59,7 @@ class VerifyCodeSignUpScreen extends StatelessWidget {
                     controller.code = verificationCode;
                   },
                 ),
-                const SizedBox(height: 24),
+                SizedBox(height: 24.h),
                 SizedBox(
                   width: double.infinity,
                   child: ElevatedButton(
@@ -67,18 +68,18 @@ class VerifyCodeSignUpScreen extends StatelessWidget {
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: AppColors.primaryColor,
-                      padding: const EdgeInsets.symmetric(vertical: 14),
+                      padding: EdgeInsets.symmetric(vertical: 14.h),
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
+                        borderRadius: BorderRadius.circular(12.w),
                       ),
                     ),
-                    child: const Text(
+                    child: Text(
                       "تأكيد",
-                      style: TextStyle(fontSize: 16, color: Colors.white),
+                      style: TextStyle(fontSize: 16.sp, color: Colors.white),
                     ),
                   ),
                 ),
-                const SizedBox(height: 20),
+                SizedBox(height: 20.h),
                 TextButton(
                   onPressed: () {
                     controller.resendCode();
