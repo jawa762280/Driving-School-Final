@@ -1,5 +1,4 @@
 import 'package:driving_school/core/constant/appimages.dart';
-import 'package:driving_school/data/model/student_homepage_model.dart';
 import 'package:driving_school/view/widget/my_appbar.dart';
 import 'package:driving_school/view/widget/student_services.dart';
 import 'package:flutter/material.dart';
