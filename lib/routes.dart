@@ -1,4 +1,5 @@
 import 'package:driving_school/core/constant/approuts.dart';
+import 'package:driving_school/view/screen/student_homepage_screen.dart';
 import 'package:driving_school/view/screen/login_screen.dart';
 import 'package:driving_school/view/screen/onboarding_screen.dart';
 import 'package:driving_school/view/screen/forget_password_screen.dart';
@@ -13,7 +14,7 @@ import 'package:get/get.dart';
 List<GetPage<dynamic>> routes = [
   GetPage(
     name: "/",
-    page: () => OnboardingScreen(),
+    page: () => StudentHomePageScreen(),
   ),
   GetPage(
     name: AppRouts.loginScreen,
@@ -47,4 +48,7 @@ List<GetPage<dynamic>> routes = [
   GetPage(
       name: AppRouts.verifyCodeSignUpScreen,
       page: () => const VerifyCodeSignUpScreen()),
+  GetPage(
+      name: AppRouts.studentHomePageScreen,
+      page: () => const StudentHomePageScreen())
 ];

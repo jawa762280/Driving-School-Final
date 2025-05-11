@@ -12,16 +12,17 @@ class OnboardingModel {
 List<OnboardingModel> onboardingList = [
   OnboardingModel(
       image: AppImages.onboardingOneImage,
-      title: "Start Your Driving \n Journey",
+      title: "ابدأ رحلة القيادة \n الخاصة بك",
       description:
-          "Learn the rules of the road with interactive \n  lessons and real exam questions."),
+          "تعلم قواعد الطريق من خلال الدروس التفاعلية \n  وأسئلة الامتحان الحقيقية"),
   OnboardingModel(
       image: AppImages.onboardingTwoImage,
-      title: "Practice Anytime, \n Anywhere",
+      title: "تدرب في أي وقت \n وفي أي مكان",
       description:
-          "Take mock tests, track your progress, and get \n ready to pass with confidence."),
+          "قم بإجراء اختبارات تجريبية، وتتبع تقدمك \n واستعد للنجاح بثقة"),
   OnboardingModel(
       image: AppImages.onboardingThreeImage,
-      title: "Your Road to \n Success",
-      description: "Get tips, reminders, and support every step of the \n way to becomea safe driver.")
+      title: "طريقك إلى \n النجاح",
+      description:
+          "احصل على النصائح والتذكيرات والدعم في كل خطوة على\n الطريق لتصبح سائقًا آمنًا")
 ];

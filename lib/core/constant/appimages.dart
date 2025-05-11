@@ -1,7 +1,9 @@
 class AppImages {
   static const String rootImage = "assets/images";
-  static const String onboardingOneImage = "assets/images/onboardingOne.PNG";
-  static const String onboardingTwoImage = "assets/images/onboardingTwo.PNG";
+  static const String onboardingOneImage = "$rootImage/onboardingOne.PNG";
+  static const String onboardingTwoImage = "$rootImage/onboardingTwo.PNG";
   static const String onboardingThreeImage =
       "assets/images/onboardingThree.PNG";
+  static const String iconApp = "$rootImage/Icon.png";
+  static const String appPhoto = "$rootImage/App_photo.png";
 }
