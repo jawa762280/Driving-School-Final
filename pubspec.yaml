@@ -39,6 +39,10 @@ dependencies:
   flutter_screenutil: ^5.8.4
   shared_preferences: ^2.5.3
   flutter_otp_text_field: ^1.5.1+1
+  http: ^1.4.0
+  gender_picker: ^1.1.0
+  image_picker: ^1.1.2
+  intl: ^0.20.2
 
 flutter_launcher_icons:
   android: true
