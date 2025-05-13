@@ -1,4 +1,6 @@
+import 'package:driving_school/core/constant/app_api.dart';
 import 'package:driving_school/core/constant/approuts.dart';
+import 'package:driving_school/core/services/crud.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -40,18 +42,19 @@ class LoginController extends GetxController {
     rememberMe.value = !rememberMe.value;
   }
 
-  void login() {
+  void login() async {
     if (!formState.currentState!.validate()) return;
-
-    String phone = emailController.text;
+    Crud crud = Crud();
+    String email = emailController.text;
     String password = passwordController.text;
     bool remember = rememberMe.value;
-
-    // ignore: avoid_print
-    print("رقم الهاتف: $phone");
-    // ignore: avoid_print
-    print("كلمة المرور: $password");
-    // ignore: avoid_print
-    print("تذكرني: $remember");
+    final response = await crud.postRequest(AppApi.login, {
+      'email': email,
+      'password': password,
+    });
+    if (response['status'] == 'success') {
+      Get.toNamed(AppRouts.studentHomePageScreen);
+    }
+    update();
   }
 }
