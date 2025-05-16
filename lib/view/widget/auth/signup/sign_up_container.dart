@@ -254,12 +254,13 @@ class SignUpContainer extends StatelessWidget {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Icon(Icons.image,
-                                  size: 50.sp, color: Colors.grey),
+                                  size: 50.sp, color: Colors.white),
                               SizedBox(height: 10.h),
                               Text(
-                                'اضغط لاختيار صورة',
+                                textAlign: TextAlign.center,
+                                'اضغط لاختيار\n صورة',
                                 style: TextStyle(
-                                    color: Colors.grey[600], fontSize: 14.sp),
+                                    color: Colors.white, fontSize: 14.sp),
                               ),
                             ],
                           )

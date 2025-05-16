@@ -43,36 +43,39 @@ class StudentServices extends StatelessWidget {
                       constraints: BoxConstraints(
                         maxHeight: 120.h,
                       ),
-                      child: Container(
-                        decoration: BoxDecoration(
-                          color: Colors.green.shade100,
-                          borderRadius: BorderRadius.circular(25.r),
-                        ),
-                        padding: EdgeInsets.all(12.w),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            CircleAvatar(
-                              backgroundColor: Colors.white,
-                              radius: 20.r,
-                              child: Icon(
-                                studentServices[index].icon,
-                                color: Colors.green,
-                                size: 24.sp,
+                      child: Padding(
+                        padding: const EdgeInsets.only(bottom: 15),
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color: Colors.green.shade100,
+                            borderRadius: BorderRadius.circular(25.r),
+                          ),
+                          padding: EdgeInsets.all(12.w),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              CircleAvatar(
+                                backgroundColor: Colors.white,
+                                radius: 20.r,
+                                child: Icon(
+                                  studentServices[index].icon,
+                                  color: Colors.green,
+                                  size: 24.sp,
+                                ),
                               ),
-                            ),
-                            SizedBox(height: 10.h),
-                            Text(
-                              studentServices[index].title,
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 12.sp,
-                                height: 1.2,
-                                color: Colors.black87,
+                              SizedBox(height: 10.h),
+                              Text(
+                                studentServices[index].title,
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 12.sp,
+                                  height: 1.2,
+                                  color: Colors.black87,
+                                ),
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
                       ),
                     );
