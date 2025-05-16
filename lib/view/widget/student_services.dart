@@ -8,7 +8,10 @@ class StudentServices extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: Colors.white,
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(24)
+      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

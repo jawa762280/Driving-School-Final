@@ -1,3 +1,4 @@
+import 'package:driving_school/core/constant/approuts.dart';
 import 'package:driving_school/core/services/services.dart';
 import 'package:driving_school/routes.dart';
 import 'package:flutter/material.dart';
@@ -28,6 +29,9 @@ class MyApp extends StatelessWidget {
           theme: ThemeData(fontFamily: 'Cairo'),
           debugShowCheckedModeBanner: false,
           getPages: routes,
+          initialRoute: "/",
+          locale: const Locale('ar'),
+          fallbackLocale: Locale('ar'),
           builder: (context, widget) {
             return MediaQuery(
               data: MediaQuery.of(context)

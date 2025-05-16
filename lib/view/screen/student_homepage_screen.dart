@@ -17,32 +17,32 @@ class StudentHomePageScreen extends StatelessWidget {
     return Directionality(
       textDirection: TextDirection.rtl,
       child: Scaffold(
-          backgroundColor: Colors.grey.shade200,
-          body: SafeArea(
-            child: SingleChildScrollView(
-              child: Padding(
-                padding: EdgeInsets.all(16.w),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    MyAppBar(image: Image.asset(AppImages.appPhoto)),
-                    SizedBox(height: 20.h),
-                    Text(
-                      'مرحباً بك يا جوى',
-                      style: TextStyle(
-                        fontSize: 22.sp,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.black87,
-                      ),
+        backgroundColor: Colors.grey.shade200,
+        body: SafeArea(
+          child: SingleChildScrollView(
+            child: Padding(
+              padding: EdgeInsets.all(16.w),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  MyAppBar(image: Image.asset(AppImages.appPhoto)),
+                  SizedBox(height: 20.h),
+                  Text(
+                    'مرحباً بك يا جوى',
+                    style: TextStyle(
+                      fontSize: 22.sp,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black87,
                     ),
-                    SizedBox(height: 50.h),
-                    StudentServices(),
-                  ],
-                ),
+                  ),
+                  SizedBox(height: 50.h),
+                  StudentServices(),
+                ],
               ),
             ),
           ),
-          bottomNavigationBar: BottomAppbarHome()),
+        ),
+      ),
     );
   }
 }

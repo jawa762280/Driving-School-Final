@@ -9,12 +9,13 @@ import 'package:driving_school/view/screen/success_reset_password_screen.dart';
 import 'package:driving_school/view/screen/success_verifycode_signup_screen.dart';
 import 'package:driving_school/view/screen/verify_code_screen.dart';
 import 'package:driving_school/view/screen/verify_code_sign_up_screen.dart';
+import 'package:driving_school/view/widget/buttomappbar.dart';
 import 'package:get/get.dart';
 
 List<GetPage<dynamic>> routes = [
   GetPage(
     name: "/",
-    page: () => StudentHomePageScreen(),
+    page: () => BottomAppbarHome(),
   ),
   GetPage(
     name: AppRouts.loginScreen,
@@ -50,5 +51,5 @@ List<GetPage<dynamic>> routes = [
       page: () => const VerifyCodeSignUpScreen()),
   GetPage(
       name: AppRouts.studentHomePageScreen,
-      page: () => const StudentHomePageScreen())
+      page: () => const BottomAppbarHome())
 ];

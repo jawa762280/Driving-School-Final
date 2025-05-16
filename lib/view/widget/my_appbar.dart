@@ -11,7 +11,8 @@ class MyAppBar extends StatelessWidget {
       padding: EdgeInsets.all(10.w),
       width: double.infinity,
       height: 60.h,
-      color: Colors.white,
+      decoration: BoxDecoration(
+          color: Colors.white, borderRadius: BorderRadius.circular(24)),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
