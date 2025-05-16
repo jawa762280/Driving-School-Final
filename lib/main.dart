@@ -4,6 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+Future<void> initialServices() async {
+  await Get.putAsync(() async => await MyServices().init());
+}
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await initialServices();

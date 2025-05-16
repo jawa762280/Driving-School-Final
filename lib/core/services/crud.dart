@@ -7,7 +7,6 @@ import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 // ignore: depend_on_referenced_packages
 import 'package:path/path.dart';
-// ignore: depend_on_referenced_packages
 import 'package:http/http.dart' as http;
 
 class Crud extends GetxController {
@@ -18,71 +17,128 @@ class Crud extends GetxController {
         var responseBody = jsonDecode(response.body);
         return responseBody;
       } else {
-        Get.snackbar('Error', 'Sunucuya Bağlanılamıyor');
+        Get.snackbar('خطأ', 'غير قادر على الاتصال بالخادم');
       }
     } catch (e) {
-      // Get.snackbar('Hata', e.toString());
       print(e.toString());
-      debugPrint(e.toString());
     }
     update();
   }
 
   postRequest(String url, Map<String, String> datas) async {
     await Future.delayed(const Duration(milliseconds: 300));
-    var response = await http.post(Uri.parse(url), body: datas, headers: {
-      'apiPassword': '',
-      'Accept': 'application/json',
-      'userLang': 'ar',
-      // 'userLang': data.read('lang').toString(),
-    });
+
     try {
-      if (response.statusCode == 200) {
-        var responseBody = jsonDecode(response.body);
+      var response = await http.post(
+        Uri.parse(url),
+        body: datas,
+        headers: {
+          'apiPassword': '',
+          'Accept': 'application/json',
+          'userLang': 'ar',
+        },
+      );
+
+      var statusCode = response.statusCode;
+      // ignore: prefer_typing_uninitialized_variables
+      var responseBody;
+
+      try {
+        responseBody = jsonDecode(response.body);
+      } catch (e) {
+        if (kDebugMode) {
+          print("فشل في تحويل الرد إلى JSON:");
+          print(response.body);
+        }
+        return {
+          'status': 'error',
+          'message': 'فشل في تحليل استجابة الخادم',
+          'raw': response.body,
+          'statusCode': statusCode,
+        };
+      }
+
+      if (statusCode == 200) {
         return responseBody;
       } else {
-        var responseBody = jsonDecode(response.body);
-        print(responseBody['message'] ?? responseBody['status']);
-        if (responseBody['message'].toString() == 'User Not Found') {}
-        if (response.statusCode == 400) {}
+        if (kDebugMode) {
+          print("فشل الطلب. الكود: $statusCode");
+          print("الرد: $responseBody");
+        }
+        return {
+          'status': 'error',
+          'message': responseBody['message'] ?? 'حدث خطأ غير متوقع',
+          'errors': responseBody['errors'] ?? {},
+          'statusCode': statusCode,
+        };
       }
     } catch (e) {
       if (kDebugMode) {
-        print(e.toString());
-        print(response.body);
-        print(e.toString());
+        print("حدث استثناء أثناء الاتصال: $e");
       }
+      return {
+        'status': 'error',
+        'message': 'فشل الاتصال بالخادم',
+      };
+    } finally {
+      update();
     }
-    update();
   }
 
-  fileRequest(String url, Map<String, String> data, File file) async {
-    var request = http.MultipartRequest('POST', Uri.parse(url));
-    var length = await file.length();
-    var stream = http.ByteStream(file.openRead());
-    var multipartFile = http.MultipartFile('image[]', stream, length,
-        filename: basename(file.path));
-    request.files.add(multipartFile);
-    data.forEach((key, value) {
-      request.fields[key] = value;
-    });
-    var myRequest = await request.send();
-    var response = await http.Response.fromStream(myRequest);
-    if (response.statusCode == 200) {
-      var responseBody = jsonDecode(response.body);
-      return responseBody;
-    } else {
-      // Get.snackbar('Hata', response.toString());
-      // Get.snackbar('Hata', response.statusCode.toString());
-      // Get.snackbar('Hata', response.body);
-      print(response.statusCode.toString());
-      print(response.body);
-      print(response);
-      var responseBody = jsonDecode(response.body);
-      print(responseBody['status']);
-      print(responseBody['message']);
+  // ✅ الدالة المعدّلة لحل المشكلة
+  fileRequest(String url, Map<String, String> data, File? file) async {
+    try {
+      var request = http.MultipartRequest('POST', Uri.parse(url));
+
+      // إضافة الهيدرات
+      request.headers.addAll({
+        'Accept': 'application/json',
+        'userLang': 'ar',
+      });
+
+      // ✅ إضافة الملف فقط إذا كان موجودًا
+      if (file != null) {
+        var length = await file.length();
+        var stream = http.ByteStream(file.openRead());
+        var multipartFile = http.MultipartFile(
+          'image',
+          stream,
+          length,
+          filename: basename(file.path),
+        );
+        request.files.add(multipartFile);
+      }
+
+      // إضافة البيانات
+      request.fields.addAll(data);
+
+      // إرسال الطلب
+      var response = await request.send();
+      var responseBody = await http.Response.fromStream(response);
+
+      print('Status Code: ${response.statusCode}');
+      print('Response Body: ${responseBody.body}');
+
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        return jsonDecode(responseBody.body);
+      } else if (response.statusCode == 422) {
+        var errorResponse = jsonDecode(responseBody.body);
+        return {
+          'status': 'error',
+          'message': errorResponse['message'] ?? 'بيانات غير صالحة',
+          'errors': errorResponse['errors'] ?? {}
+        };
+      } else {
+        return {
+          'status': 'error',
+          'message': 'خطأ في الخادم (${response.statusCode})',
+          'body': responseBody.body
+        };
+      }
+    } catch (e) {
+      print('Error in fileRequest: $e');
+      return {'status': 'error', 'message': 'فشل الاتصال بالخادم'};
     }
-    update();
   }
 
   multiFileRequestMoreImagePath(String url, Map<String, String> datas,
@@ -113,14 +169,9 @@ class Crud extends GetxController {
       var responseBody = jsonDecode(response.body);
       return responseBody;
     } else {
-      // Get.snackbar('Error', response.toString());
-      // Get.snackbar('Error', response.statusCode.toString());
-      // Get.snackbar('Error', response.body);
       print(response.body);
-      print(response);
       var responseBody = jsonDecode(response.body);
       print(responseBody['status'] + responseBody['message']);
-      // Get.snackbar(responseBody['status'], responseBody['message']);
     }
 
     update();
@@ -154,14 +205,9 @@ class Crud extends GetxController {
       var responseBody = jsonDecode(response.body);
       return responseBody;
     } else {
-      // Get.snackbar('Error', response.toString());
-      // Get.snackbar('Error', response.statusCode.toString());
-      // Get.snackbar('Error', response.body);
       print(response.body);
-      print(response);
       var responseBody = jsonDecode(response.body);
       print(responseBody['status'] + responseBody['message']);
-      // Get.snackbar(responseBody['status'], responseBody['message']);
     }
 
     update();

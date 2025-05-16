@@ -15,6 +15,7 @@ class MyTextformfield extends StatelessWidget {
     this.hintText,
     this.readOnly = false,
     this.onTapTextField,
+    this.errorText,
   });
   final TextEditingController mycontroller;
   final TextInputType? keyboardType;
@@ -26,6 +27,7 @@ class MyTextformfield extends StatelessWidget {
   final Color? iconColor;
   final String? hintText;
   final bool readOnly;
+  final String? errorText;
   final void Function()? onTapTextField;
 
   @override
@@ -41,6 +43,7 @@ class MyTextformfield extends StatelessWidget {
       keyboardType: keyboardType,
       readOnly: readOnly,
       decoration: InputDecoration(
+        errorText: errorText,
         hintText: hintText,
         filled: filled,
         fillColor: const Color(0xFFF2F3F5),

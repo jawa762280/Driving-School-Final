@@ -14,7 +14,7 @@ import 'package:get/get.dart';
 List<GetPage<dynamic>> routes = [
   GetPage(
     name: "/",
-    page: () => SignUpScreen(),
+    page: () => OnboardingScreen(),
   ),
   GetPage(
     name: AppRouts.loginScreen,

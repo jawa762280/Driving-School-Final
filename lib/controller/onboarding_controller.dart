@@ -19,7 +19,7 @@ class OnboardingController extends GetxController {
   next() {
     currentpage++;
     if (currentpage > onboardingList.length - 1) {
-      myServices.sharedpreferences.setString("step", "1");
+      myServices.sharedPreferences.setString("step", "1");
       Get.offAllNamed(AppRouts.loginScreen);
     } else {
       (pagecontroller.animateToPage(currentpage,
