@@ -14,7 +14,7 @@ class SearchScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final MySearchController controller = Get.put(MySearchController());
     return Directionality(
-      textDirection: TextDirection.rtl,
+      textDirection: TextDirection.ltr,
       child: Scaffold(
         backgroundColor: Colors.grey.shade100,
         body: SafeArea(

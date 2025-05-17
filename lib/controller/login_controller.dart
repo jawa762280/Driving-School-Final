@@ -8,6 +8,8 @@ import 'package:driving_school/core/services/crud.dart';
 import 'package:driving_school/core/constant/app_api.dart';
 import 'package:driving_school/core/constant/approuts.dart';
 
+import '../main.dart';
+
 class LoginController extends GetxController {
   late TextEditingController emailController;
   late TextEditingController passwordController;
@@ -79,14 +81,11 @@ class LoginController extends GetxController {
           final token = response['data']['token'];
 
           await myServices.saveToken(token);
-          await myServices.sharedPreferences
-              .setString('userId', userData['user_id'].toString());
-          await myServices.sharedPreferences
-              .setString('userEmail', userData['email']);
-          await myServices.sharedPreferences
-              .setString('userName', userData['name']);
-          await myServices.sharedPreferences
-              .setString('userRole', response['data']['role']);
+
+          await data.write('userId', userData['id'].toString());
+          await data.write('userEmail', userData['email']);
+          await data.write('userName', userData['name']);
+          await data.write('userRole', userData['role']);
 
           currentUser = UserModel.fromJson(userData);
 
@@ -115,8 +114,9 @@ class LoginController extends GetxController {
         }
       } catch (e) {
         isLoading.value = false;
+        // ignore: avoid_print
         print("❌ حصل استثناء أثناء تسجيل الدخول: $e");
-        if (!Get.isSnackbarOpen!) {
+        if (!Get.isSnackbarOpen) {
           Get.snackbar("فشل الاتصال", "تعذر الاتصال بالخادم. حاول لاحقًا.");
         }
       }

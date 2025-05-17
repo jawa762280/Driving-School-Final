@@ -15,6 +15,7 @@ class MySearchController extends GetxController {
   }
 
   void fetchInstructors({String query = ''}) async {
+    // ignore: avoid_print
     print("🔍 البحث عن: $query");
 
     try {
@@ -25,12 +26,15 @@ class MySearchController extends GetxController {
       if (response != null && response['data'] != null) {
         allInstructors.value = response['data'];
         filteredInstructors.value = response['data'];
+        // ignore: avoid_print
         print("✅ تم جلب ${response['data'].length} مدرب");
       } else {
+        // ignore: avoid_print
         print("❌ فشل في جلب البيانات: $response");
         Get.snackbar("خطأ", "فشل في جلب البيانات");
       }
     } catch (e) {
+      // ignore: avoid_print
       print("🚨 استثناء أثناء الطلب: $e");
       Get.snackbar("خطأ", "تعذر الاتصال بالخادم");
     }

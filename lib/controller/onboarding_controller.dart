@@ -1,6 +1,7 @@
 import 'package:driving_school/core/constant/approuts.dart';
 import 'package:driving_school/core/services/services.dart';
 import 'package:driving_school/data/model/onboarding_model.dart';
+import 'package:driving_school/main.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -19,7 +20,7 @@ class OnboardingController extends GetxController {
   next() {
     currentpage++;
     if (currentpage > onboardingList.length - 1) {
-      myServices.sharedPreferences.setString("step", "1");
+      data.write("step", "1");
       Get.offAllNamed(AppRouts.loginScreen);
     } else {
       (pagecontroller.animateToPage(currentpage,
