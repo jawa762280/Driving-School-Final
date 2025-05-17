@@ -13,25 +13,28 @@ class ForgetPasswordScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final controller = Get.put(ForgetPasswordController());
 
-    return Scaffold(
-        backgroundColor: const Color(0xFFF8FAFB),
-        body: SafeArea(
-          child: Obx(
-            () => Stack(children: [
-              SafeArea(
-                child: SingleChildScrollView(
-                  padding: EdgeInsets.all(24.w),
-                  child: Column(
-                    children: [
-                      AppLogo(),
-                      ForgetPasswordContainer(),
-                    ],
+    return Directionality(
+      textDirection: TextDirection.ltr,
+      child: Scaffold(
+          backgroundColor: const Color(0xFFF8FAFB),
+          body: SafeArea(
+            child: Obx(
+              () => Stack(children: [
+                SafeArea(
+                  child: SingleChildScrollView(
+                    padding: EdgeInsets.all(24.w),
+                    child: Column(
+                      children: [
+                        AppLogo(),
+                        ForgetPasswordContainer(),
+                      ],
+                    ),
                   ),
                 ),
-              ),
-              if (controller.isLoading.value) const Loading(),
-            ]),
-          ),
-        ));
+                if (controller.isLoading.value) const Loading(),
+              ]),
+            ),
+          )),
+    );
   }
 }

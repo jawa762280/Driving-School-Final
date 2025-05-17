@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 
-class BottomAppbarHome extends StatelessWidget {
-  const BottomAppbarHome({super.key});
+class BottomAppbarHomeStudent extends StatelessWidget {
+  const BottomAppbarHomeStudent({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -41,6 +41,7 @@ class BottomAppbarHome extends StatelessWidget {
                     ),
                     child: SvgPicture.asset(
                       'assets/images/home.svg',
+                      // ignore: deprecated_member_use
                       color: controller.currentpage == 0
                           ? AppColors.primaryColor
                           : AppColors.grey,
@@ -64,6 +65,7 @@ class BottomAppbarHome extends StatelessWidget {
                     ),
                     child: SvgPicture.asset(
                       'assets/images/profile.svg',
+                      // ignore: deprecated_member_use
                       color: controller.currentpage == 1
                           ? AppColors.primaryColor
                           : AppColors.grey,
@@ -71,7 +73,7 @@ class BottomAppbarHome extends StatelessWidget {
                   ),
                 ),
                 BottomNavigationBarItem(
-                  label: 'الملف الشخصي',
+                  label: 'البحث',
                   icon: Container(
                     width: 50,
                     height: 50,
@@ -87,6 +89,7 @@ class BottomAppbarHome extends StatelessWidget {
                     ),
                     child: SvgPicture.asset(
                       'assets/images/search.svg',
+                      // ignore: deprecated_member_use
                       color: controller.currentpage == 2
                           ? AppColors.primaryColor
                           : AppColors.grey,
@@ -94,7 +97,7 @@ class BottomAppbarHome extends StatelessWidget {
                   ),
                 ),
                 BottomNavigationBarItem(
-                  label: 'الملف الشخصي',
+                  label: 'الطلبات',
                   icon: Container(
                     width: 50,
                     height: 50,
@@ -110,6 +113,7 @@ class BottomAppbarHome extends StatelessWidget {
                     ),
                     child: SvgPicture.asset(
                       'assets/images/orders.svg',
+                      // ignore: deprecated_member_use
                       color: controller.currentpage == 3
                           ? AppColors.primaryColor
                           : AppColors.grey,
@@ -119,45 +123,6 @@ class BottomAppbarHome extends StatelessWidget {
               ],
             ),
           );
-        }
-
-        // builder: (controller) => BottomAppBar(
-        //   // shape: const CircularNotchedRectangle(),
-        //   // notchMargin: 10,
-        //   child: Row(
-        //     mainAxisAlignment: MainAxisAlignment.spaceAround,
-        //     children: [
-        //       InkwellBottomAppbarHome(
-        //           active: controller.currentpage == 0 ? true : false,
-        //           textIcon: "الرئيسية",
-        //           icon: Icons.home_outlined,
-        //           onTap: () {
-        //             controller.changPage(0);
-        //           }),
-        //       InkwellBottomAppbarHome(
-        //           active: controller.currentpage == 1 ? true : false,
-        //           textIcon: "الملف الشخصي",
-        //           icon: Icons.person_2_outlined,
-        //           onTap: () {
-        //             controller.changPage(1);
-        //           }),
-        //       InkwellBottomAppbarHome(
-        //           active: controller.currentpage == 2 ? true : false,
-        //           textIcon: "البحث",
-        //           icon: Icons.search,
-        //           onTap: () {
-        //             controller.changPage(2);
-        //           }),
-        //       InkwellBottomAppbarHome(
-        //           active: controller.currentpage == 3 ? true : false,
-        //           textIcon: "الطلبات",
-        //           icon: Icons.assignment,
-        //           onTap: () {
-        //             controller.changPage(3);
-        //           })
-        //     ],
-        //   ),
-        // ),
-        );
+        });
   }
 }

@@ -10,5 +10,7 @@ class AppRouts {
   static const String successVerifyCodeSignUpScreen =
       "/success_verifycode_signup_screen";
   static const String verifyCodeSignUpScreen = "/verify_code_sign_up_screen";
-  static const String studentHomePageScreen = "/student_homepage_screen";
+  static const String studentHomePageScreen = "/buttomappbarhomestudent";
+  static const String searchScreen = "/search_screen";
+  static const String trainerHomePageScreen = "/trainer_homepage_screen";
 }

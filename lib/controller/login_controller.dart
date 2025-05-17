@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:driving_school/core/constant/appcolors.dart';
 import 'package:driving_school/core/services/services.dart';
+import 'package:driving_school/data/model/user_model.dart';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:driving_school/core/services/crud.dart';
@@ -13,6 +14,7 @@ class LoginController extends GetxController {
   var rememberMe = true.obs;
   bool isShowPass = true;
   var isLoading = false.obs;
+  late UserModel currentUser;
 
   GlobalKey<FormState> formState = GlobalKey<FormState>();
 
@@ -86,8 +88,20 @@ class LoginController extends GetxController {
           await myServices.sharedPreferences
               .setString('userRole', userData['role']);
 
+          currentUser = UserModel.fromJson(userData);
+
           Get.snackbar("نجاح", "تم تسجيل الدخول بنجاح");
-          Get.offAllNamed(AppRouts.studentHomePageScreen);
+          String role = userData['role'];
+
+          if (currentUser.role == 'student') {
+            Get.offAllNamed(AppRouts.studentHomePageScreen,
+                arguments: {"user": currentUser});
+          } else if (currentUser.role == 'trainer') {
+            Get.offAllNamed(
+                AppRouts.trainerHomePageScreen); // ← تأكد أنك أنشأت هذا المسار
+          } else {
+            Get.snackbar("خطأ", "الدور غير معروف: $role");
+          }
           failedAttempts = 0;
         } else {
           failedAttempts++;

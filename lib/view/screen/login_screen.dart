@@ -13,24 +13,27 @@ class LoginScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final controller = Get.put(LoginController());
 
-    return Scaffold(
-      backgroundColor: const Color(0xFFF8FAFB),
-      body: SafeArea(
-        child: Obx(() => Stack(
-              children: [
-                SingleChildScrollView(
-                  padding: EdgeInsets.all(24.w),
-                  child: Column(
-                    children: [
-                      AppLogo(),
-                      SizedBox(height: 40.h),
-                      LoginContainer(),
-                    ],
+    return Directionality(
+      textDirection: TextDirection.ltr,
+      child: Scaffold(
+        backgroundColor: const Color(0xFFF8FAFB),
+        body: SafeArea(
+          child: Obx(() => Stack(
+                children: [
+                  SingleChildScrollView(
+                    padding: EdgeInsets.all(24.w),
+                    child: Column(
+                      children: [
+                        AppLogo(),
+                        SizedBox(height: 40.h),
+                        LoginContainer(),
+                      ],
+                    ),
                   ),
-                ),
-                if (controller.isLoading.value) const Loading(),
-              ],
-            )),
+                  if (controller.isLoading.value) const Loading(),
+                ],
+              )),
+        ),
       ),
     );
   }

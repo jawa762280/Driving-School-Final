@@ -12,23 +12,26 @@ class VerifyCodeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final controller = Get.put(VerifyCodeController());
-    return Scaffold(
-      backgroundColor: const Color(0xFFF8FAFB),
-      body: SafeArea(
-        child: Obx(
-          () => Stack(children: [
-            SingleChildScrollView(
-              padding: EdgeInsets.all(24.w),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  const AppLogo(),
-                  VerifycodeContainer(),
-                ],
+    return Directionality(
+      textDirection: TextDirection.ltr,
+      child: Scaffold(
+        backgroundColor: const Color(0xFFF8FAFB),
+        body: SafeArea(
+          child: Obx(
+            () => Stack(children: [
+              SingleChildScrollView(
+                padding: EdgeInsets.all(24.w),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    const AppLogo(),
+                    VerifycodeContainer(),
+                  ],
+                ),
               ),
-            ),
-            if (controller.isLoading.value) const Loading()
-          ]),
+              if (controller.isLoading.value) const Loading()
+            ]),
+          ),
         ),
       ),
     );

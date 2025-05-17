@@ -12,20 +12,22 @@ class ResetPasswordScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final controller = Get.put(ResetPasswordController());
-    return Scaffold(
-      backgroundColor: const Color(0xFFF8FAFB),
-      body: SafeArea(
-        child: Obx(
-          () => Stack(children: [
-            SingleChildScrollView(
-              padding: EdgeInsets.all(24.w),
-              child: Column(
-                children: [AppLogo(), ResetPasswordContainer()],
+    return Directionality(
+      textDirection: TextDirection.ltr,
+      child: Scaffold(
+        backgroundColor: const Color(0xFFF8FAFB),
+        body: SafeArea(
+          child: Obx(
+            () => Stack(children: [
+              SingleChildScrollView(
+                padding: EdgeInsets.all(24.w),
+                child: Column(
+                  children: [AppLogo(), ResetPasswordContainer()],
+                ),
               ),
-            
-            ),
-            if(controller.isLoading.value)const Loading(),
-          ]),
+              if (controller.isLoading.value) const Loading(),
+            ]),
+          ),
         ),
       ),
     );
