@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:image_picker/image_picker.dart';
 // ignore: depend_on_referenced_packages
 import 'package:path/path.dart';
@@ -12,17 +13,32 @@ import 'package:http/http.dart' as http;
 class Crud extends GetxController {
   getRequest(String url) async {
     try {
-      var response = await http.get(Uri.parse(url));
+      // افترض أن لديك التوكن مخزن في مكان ما (مثلاً باستخدام GetStorage)
+      String token = await GetStorage().read('token') ?? '';
+
+      var response = await http.get(
+        Uri.parse(url),
+        headers: {
+          'Authorization': 'Bearer $token',
+          'Accept': 'application/json',
+        },
+      );
+
       if (response.statusCode == 200) {
         var responseBody = jsonDecode(response.body);
         return responseBody;
       } else {
-        Get.snackbar('خطأ', 'غير قادر على الاتصال بالخادم');
+        print('❌ خطأ في الخادم: ${response.statusCode}');
+        print('📩 الرد: ${response.body}');
+        Get.snackbar(
+            'خطأ', 'غير قادر على الاتصال بالخادم: ${response.statusCode}');
+        return null;
       }
     } catch (e) {
-      print(e.toString());
+      print('🚨 استثناء: $e');
+      Get.snackbar('خطأ', 'تعذر الاتصال بالخادم');
+      return null;
     }
-    update();
   }
 
   postRequest(String url, Map<String, String> datas) async {
