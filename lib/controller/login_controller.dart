@@ -80,32 +80,33 @@ class LoginController extends GetxController {
 
           await myServices.saveToken(token);
           await myServices.sharedPreferences
-              .setString('userId', userData['id'].toString());
+              .setString('userId', userData['user_id'].toString());
           await myServices.sharedPreferences
               .setString('userEmail', userData['email']);
           await myServices.sharedPreferences
               .setString('userName', userData['name']);
           await myServices.sharedPreferences
-              .setString('userRole', userData['role']);
+              .setString('userRole', response['data']['role']);
 
           currentUser = UserModel.fromJson(userData);
 
-          Get.snackbar("نجاح", "تم تسجيل الدخول بنجاح");
-          String role = userData['role'];
+          String? role = response['data']['role'];
+          failedAttempts = 0;
 
-          if (currentUser.role == 'student') {
+          Get.snackbar("نجاح", "تم تسجيل الدخول بنجاح");
+
+          if (role == 'student') {
             Get.offAllNamed(AppRouts.studentHomePageScreen,
                 arguments: {"user": currentUser});
-          } else if (currentUser.role == 'trainer') {
-            Get.offAllNamed(
-                AppRouts.trainerHomePageScreen); // ← تأكد أنك أنشأت هذا المسار
+          } else if (role == 'trainer') {
+            Get.offAllNamed(AppRouts.trainerHomePageScreen,
+                arguments: {"user": currentUser});
           } else {
-            Get.snackbar("خطأ", "الدور غير معروف: $role");
+            Get.snackbar("خطأ", "الدور غير معروف أو غير محدد");
           }
-          failedAttempts = 0;
         } else {
+          isLoading.value = false;
           failedAttempts++;
-
           if (failedAttempts == 6) {
             _showLockoutDialog();
           } else {
@@ -113,7 +114,11 @@ class LoginController extends GetxController {
           }
         }
       } catch (e) {
-        Get.snackbar("فشل الاتصال", "تعذر الاتصال بالخادم. حاول لاحقًا.");
+        isLoading.value = false;
+        print("❌ حصل استثناء أثناء تسجيل الدخول: $e");
+        if (!Get.isSnackbarOpen!) {
+          Get.snackbar("فشل الاتصال", "تعذر الاتصال بالخادم. حاول لاحقًا.");
+        }
       }
     }
   }

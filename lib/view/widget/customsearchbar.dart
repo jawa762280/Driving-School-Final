@@ -1,8 +1,11 @@
+import 'package:driving_school/controller/search_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
 
 class CustomSearchBar extends StatelessWidget {
-  const CustomSearchBar({super.key});
+  const CustomSearchBar({super.key, this.onChanged});
+  final Function(String)? onChanged;
 
   @override
   Widget build(BuildContext context) {
@@ -44,6 +47,9 @@ class CustomSearchBar extends StatelessWidget {
               child: Padding(
                 padding: EdgeInsets.symmetric(horizontal: 10.w),
                 child: TextField(
+                  onChanged: (value) {
+                    Get.find<MySearchController>().search(value);
+                  },
                   textAlign: TextAlign.right,
                   decoration: InputDecoration(
                     border: InputBorder.none,

@@ -1,33 +1,49 @@
 class UserModel {
-  final String id;
+  final String userId;
   final String email;
   final String name;
+  final String? firstName;
+  final String? lastName;
+  final String? dateOfBirth;
+  final String? gender;
   final String? role;
   final String? imageUrl;
 
   UserModel({
-    required this.id,
+    required this.userId,
     required this.email,
     required this.name,
+    this.firstName,
+    this.lastName,
+    this.dateOfBirth,
+    this.gender,
     this.role,
     this.imageUrl,
   });
 
   factory UserModel.fromJson(Map<String, dynamic> json) {
     return UserModel(
-      id: json['id'].toString(),
+      userId: json['user_id'].toString(),
       email: json['email'] ?? '',
       name: json['name'] ?? '',
-      role: json['role'],
-      imageUrl: json['image'], // لو ما في صورة ترجع null، عادي
+      firstName: json['first_name'],
+      lastName: json['last_name'],
+      dateOfBirth: json['date_of_Birth'],
+      gender: json['gender'],
+      role: json['role'], // يمكن أن تكون null لذلك String?
+      imageUrl: json['image'],
     );
   }
 
   Map<String, dynamic> toJson() {
     return {
-      "id": id,
+      "user_id": userId,
       "email": email,
       "name": name,
+      "first_name": firstName,
+      "last_name": lastName,
+      "date_of_Birth": dateOfBirth,
+      "gender": gender,
       "role": role,
       "image": imageUrl,
     };

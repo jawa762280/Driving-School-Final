@@ -8,4 +8,7 @@ class AppLinks {
   static const String verifyCode = '$init/verify-reset-code';
   static const String forgetPassword = '$init/send-reset-code';
   static const String resendVerifyCode = '$init/resend-reset-code';
+    static const String searchTrainers = '$init/trainersApprove';
+
+
 }
