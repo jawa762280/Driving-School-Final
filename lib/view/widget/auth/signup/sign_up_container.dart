@@ -234,6 +234,7 @@ class SignUpContainer extends StatelessWidget {
                   final picker = ImagePicker();
                   final pickedFile =
                       await picker.pickImage(source: ImageSource.gallery);
+                  controller.update();
                   if (pickedFile != null) {
                     controller.imageFile = File(pickedFile
                         .path); // يجب إضافة imageFile داخل Controller كـ File?

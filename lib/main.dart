@@ -3,6 +3,7 @@ import 'package:driving_school/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get_storage/get_storage.dart';
 
 Future<void> initialServices() async {
   await Get.putAsync(() async => await MyServices().init());
@@ -13,6 +14,8 @@ void main() async {
   await initialServices();
   runApp(const MyApp());
 }
+
+GetStorage data = GetStorage();
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});

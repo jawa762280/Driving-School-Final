@@ -37,7 +37,6 @@ dependencies:
   flutter_launcher_icons: ^0.14.3
   get: ^4.7.2
   flutter_screenutil: ^5.8.4
-  shared_preferences: ^2.5.3
   flutter_otp_text_field: ^1.5.1+1
   http: ^1.4.0
   gender_picker: ^1.1.0
@@ -45,6 +44,7 @@ dependencies:
   intl: ^0.20.2
   flutter_spinkit: ^5.2.1
   flutter_svg: ^2.1.0
+  get_storage: ^2.1.1
 
 flutter_launcher_icons:
   android: true

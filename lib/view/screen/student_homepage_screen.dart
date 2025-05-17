@@ -1,6 +1,6 @@
 import 'package:driving_school/controller/student_homepage_controller.dart';
 import 'package:driving_school/core/constant/appimages.dart';
-import 'package:driving_school/data/model/user_model.dart';
+import 'package:driving_school/main.dart';
 import 'package:driving_school/view/widget/my_appbar.dart';
 import 'package:driving_school/view/widget/student_services.dart';
 import 'package:flutter/material.dart';
@@ -12,8 +12,6 @@ class StudentHomePageScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final UserModel user = Get.arguments['user'];
-
     Get.put(StudentHomepageController());
 
     return Directionality(
@@ -31,13 +29,12 @@ class StudentHomePageScreen extends StatelessWidget {
                     image: Image.asset(AppImages.appPhoto),
                     widget: CircleAvatar(
                       radius: 25.r,
-                      backgroundImage:
-                          AssetImage('${user.imageUrl}'), 
+                      backgroundImage: AssetImage('${data.read('userName')}'),
                     ),
                   ),
                   SizedBox(height: 20.h),
                   Text(
-                    'مرحباً بك يا ${user.name}',
+                    'مرحباً بك يا ${data.read('userName')}',
                     style: TextStyle(
                       fontSize: 22.sp,
                       fontWeight: FontWeight.bold,
