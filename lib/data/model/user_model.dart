@@ -30,7 +30,7 @@ class UserModel {
       lastName: json['last_name'],
       dateOfBirth: json['date_of_Birth'],
       gender: json['gender'],
-      role: json['role'], // يمكن أن تكون null لذلك String?
+      role: json['role'],
       imageUrl: json['image'],
     );
   }
