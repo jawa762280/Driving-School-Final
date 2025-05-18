@@ -41,7 +41,7 @@ class StudentHomePageScreen extends StatelessWidget {
                   ),
                   SizedBox(height: 20.h),
                   Text(
-                    'مرحباً بك يا ${data.read('userName')}',
+                    " مرحباً بك يا جوى",
                     style: TextStyle(
                       fontSize: 22.sp,
                       fontWeight: FontWeight.bold,

@@ -3,6 +3,7 @@ import 'package:driving_school/core/middleware/mymiddleware.dart';
 import 'package:driving_school/view/screen/login_screen.dart';
 import 'package:driving_school/view/screen/onboarding_screen.dart';
 import 'package:driving_school/view/screen/forget_password_screen.dart';
+import 'package:driving_school/view/screen/profile_screen.dart';
 import 'package:driving_school/view/screen/reset_password_screen.dart';
 import 'package:driving_school/view/screen/search_screen.dart';
 import 'package:driving_school/view/screen/sign_up_screen.dart';
@@ -16,9 +17,7 @@ import 'package:get/get.dart';
 
 List<GetPage<dynamic>> routes = [
   GetPage(
-      name: "/",
-      page: () => LoginScreen(),
-      middlewares: [AuthMiddleware()]),
+      name: "/", page: () => BottomAppbarHomeStudent(), middlewares: [AuthMiddleware()]),
   GetPage(
     name: AppRouts.loginScreen,
     page: () => LoginScreen(),
@@ -58,4 +57,8 @@ List<GetPage<dynamic>> routes = [
   GetPage(
       name: AppRouts.trainerHomePageScreen,
       page: () => const TrainerHomePageScreen()),
+  GetPage(
+    name: AppRouts.profileScreen,
+    page: () => const ProfileScreen(),
+  )
 ];

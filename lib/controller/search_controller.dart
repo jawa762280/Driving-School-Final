@@ -24,7 +24,6 @@ class MySearchController extends GetxController {
         // ✅ توجد نتائج
         allInstructors.value = response['data'];
         filteredInstructors.value = response['data'];
-        print("✅ تم جلب ${response['data'].length} مدرب");
       } else if (response != null && response['status'] == 'fail') {
         // ⚠️ لم يتم العثور على مدربين – بدون خطأ في السيرفر
         allInstructors.clear();
