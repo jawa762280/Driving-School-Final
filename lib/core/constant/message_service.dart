@@ -14,7 +14,7 @@ class MessageService {
       message,
       backgroundColor: backgroundColor ?? AppColors.primaryColor,
       colorText: Colors.white,
-      snackPosition: SnackPosition.BOTTOM,
+      snackPosition: SnackPosition.TOP,
       duration: duration,
       margin: const EdgeInsets.all(16),
       borderRadius: 12,

@@ -86,6 +86,7 @@ class LoginController extends GetxController {
           await data.write('userEmail', userData['email']);
           await data.write('userName', userData['name']);
           await data.write('userRole', userData['role']);
+          await data.write('userImage', userData['image']);
 
           currentUser = UserModel.fromJson(userData);
 

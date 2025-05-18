@@ -12,34 +12,37 @@ import 'package:http/http.dart' as http;
 
 class Crud extends GetxController {
   getRequest(String url) async {
-    try {
-      // افترض أن لديك التوكن مخزن في مكان ما (مثلاً باستخدام GetStorage)
-      String token = await GetStorage().read('token') ?? '';
+  try {
+    // جلب التوكن من التخزين المحلي
+    String token = GetStorage().read('token') ?? '';
 
-      var response = await http.get(
-        Uri.parse(url),
-        headers: {
-          'Authorization': 'Bearer $token',
-          'Accept': 'application/json',
-        },
-      );
+    var response = await http.get(
+      Uri.parse(url),
+      headers: {
+        'Authorization': 'Bearer $token',
+        'Accept': 'application/json',
+      },
+    );
 
-      if (response.statusCode == 200) {
-        var responseBody = jsonDecode(response.body);
-        return responseBody;
-      } else {
-        print('❌ خطأ في الخادم: ${response.statusCode}');
-        print('📩 الرد: ${response.body}');
-        Get.snackbar(
-            'خطأ', 'غير قادر على الاتصال بالخادم: ${response.statusCode}');
-        return null;
-      }
-    } catch (e) {
-      print('🚨 استثناء: $e');
-      Get.snackbar('خطأ', 'تعذر الاتصال بالخادم');
+    print('📥 رد السيرفر (${response.statusCode}): ${response.body}');
+
+    if (response.statusCode == 200) {
+      return jsonDecode(response.body);
+    } else if (response.statusCode == 404) {
+      // ⚠️ لا يوجد نتائج - نرجع الجسم كما هو (قد يحتوي على status: fail)
+      return jsonDecode(response.body);
+    } else {
+      // ❌ أخطاء أخرى (500، 403، 401، ...إلخ)
+      Get.snackbar('خطأ', 'غير قادر على الاتصال بالخادم: ${response.statusCode}');
       return null;
     }
+  } catch (e) {
+    print('🚨 استثناء أثناء الاتصال: $e');
+    Get.snackbar('خطأ', 'تعذر الاتصال بالخادم');
+    return null;
   }
+}
+
 
   postRequest(String url, Map<String, String> datas) async {
     await Future.delayed(const Duration(milliseconds: 300));

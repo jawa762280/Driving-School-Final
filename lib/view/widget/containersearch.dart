@@ -1,3 +1,4 @@
+import 'package:driving_school/core/constant/appimages.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -14,6 +15,7 @@ class ContainerSearch extends StatelessWidget {
     required this.birthdayText,
     required this.birthday,
   });
+
   final String image;
   final String name;
   final String email;
@@ -26,6 +28,14 @@ class ContainerSearch extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    ImageProvider<Object> buildImageProvider(String imagePath) {
+      if (imagePath.startsWith('http')) {
+        return NetworkImage(imagePath);
+      } else {
+        return AssetImage(AppImages.defaultUser);
+      }
+    }
+
     return Container(
       padding: EdgeInsets.all(16.w),
       decoration: BoxDecoration(
@@ -45,7 +55,9 @@ class ContainerSearch extends StatelessWidget {
             children: [
               CircleAvatar(
                 radius: 25.r,
-                backgroundImage: AssetImage(image), // ضع هنا صورتك
+                backgroundImage: buildImageProvider(image),
+                onBackgroundImageError: (_, __) =>
+                    const Icon(Icons.broken_image),
               ),
               SizedBox(width: 12.w),
               Column(

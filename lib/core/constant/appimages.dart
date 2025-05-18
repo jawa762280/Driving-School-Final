@@ -6,4 +6,5 @@ class AppImages {
       "assets/images/onboardingThree.PNG";
   static const String iconApp = "$rootImage/Icon.png";
   static const String appPhoto = "$rootImage/App_photo.png";
+  static const String defaultUser = "$rootImage/defaultUser.png";
 }

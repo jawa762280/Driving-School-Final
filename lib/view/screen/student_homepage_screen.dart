@@ -12,6 +12,9 @@ class StudentHomePageScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final String? imageUrl = data.read('userImage');
+    final bool isNetworkImage = imageUrl != null && imageUrl.startsWith('http');
+
     Get.put(StudentHomepageController());
 
     return Directionality(
@@ -29,7 +32,11 @@ class StudentHomePageScreen extends StatelessWidget {
                     image: Image.asset(AppImages.appPhoto),
                     widget: CircleAvatar(
                       radius: 25.r,
-                      backgroundImage: AssetImage('${data.read('userName')}'),
+                      backgroundImage: isNetworkImage
+                          ? NetworkImage(imageUrl)
+                          : AssetImage(AppImages.defaultUser) as ImageProvider,
+                      onBackgroundImageError: (_, __) =>
+                          const Icon(Icons.broken_image),
                     ),
                   ),
                   SizedBox(height: 20.h),

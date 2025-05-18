@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class MyAppBar extends StatelessWidget {
-  const MyAppBar({super.key, required this.image, required Widget widget});
+  const MyAppBar({super.key, required this.image, required this.widget});
   final Image image;
+  final Widget widget;
 
   @override
   Widget build(BuildContext context) {
@@ -24,11 +25,7 @@ class MyAppBar extends StatelessWidget {
             ),
             child: image,
           ),
-          CircleAvatar(
-            radius: 24.r,
-            backgroundColor: Colors.blue[100],
-            child: Icon(Icons.person, size: 30.sp, color: Colors.blue),
-          ),
+         widget
         ],
       ),
     );

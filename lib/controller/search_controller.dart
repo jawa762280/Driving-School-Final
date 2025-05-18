@@ -15,27 +15,29 @@ class MySearchController extends GetxController {
   }
 
   void fetchInstructors({String query = ''}) async {
-    // ignore: avoid_print
-    print("🔍 البحث عن: $query");
-
     try {
       final response = await crud.getRequest(
         '${AppLinks.searchTrainers}?first_name=$query',
       );
 
-      if (response != null && response['data'] != null) {
+      if (response != null && response['status'] == 'success') {
+        // ✅ توجد نتائج
         allInstructors.value = response['data'];
         filteredInstructors.value = response['data'];
-        // ignore: avoid_print
         print("✅ تم جلب ${response['data'].length} مدرب");
+      } else if (response != null && response['status'] == 'fail') {
+        // ⚠️ لم يتم العثور على مدربين – بدون خطأ في السيرفر
+        allInstructors.clear();
+        filteredInstructors.clear();
+
+        // ✅ عرض Snackbar مرة واحدة فقط
+        if (query.trim().isNotEmpty) {
+          Get.snackbar("لا يوجد نتائج", "لم يتم العثور على مدربين بهذا الاسم");
+        }
       } else {
-        // ignore: avoid_print
-        print("❌ فشل في جلب البيانات: $response");
         Get.snackbar("خطأ", "فشل في جلب البيانات");
       }
     } catch (e) {
-      // ignore: avoid_print
-      print("🚨 استثناء أثناء الطلب: $e");
       Get.snackbar("خطأ", "تعذر الاتصال بالخادم");
     }
   }

@@ -14,7 +14,7 @@ class SearchScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final MySearchController controller = Get.put(MySearchController());
     return Directionality(
-      textDirection: TextDirection.ltr,
+      textDirection: TextDirection.rtl,
       child: Scaffold(
         backgroundColor: Colors.grey.shade100,
         body: SafeArea(
@@ -46,7 +46,7 @@ class SearchScreen extends StatelessWidget {
                           return Column(
                             children: [
                               ContainerSearch(
-                                image: AppImages.appPhoto,
+                                image: instructor['image'] ?? '',
                                 name:
                                     '${instructor['first_name']} ${instructor['last_name']}',
                                 email: instructor['email'] ?? '',
@@ -55,7 +55,7 @@ class SearchScreen extends StatelessWidget {
                                 phoneText: "رقم الهاتف",
                                 phone: instructor['phone'] ?? '',
                                 birthdayText: "تاريخ الميلاد",
-                                birthday: instructor['birth_date'] ?? '',
+                                birthday: instructor['date_of_Birth'] ?? '',
                               ),
                               SizedBox(height: 15),
                             ],

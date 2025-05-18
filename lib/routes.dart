@@ -16,10 +16,9 @@ import 'package:get/get.dart';
 
 List<GetPage<dynamic>> routes = [
   GetPage(
-    name: "/",
-    page: () => LoginScreen(),
-    middlewares: [AuthMiddleware()]
-  ),
+      name: "/",
+      page: () => LoginScreen(),
+      middlewares: [AuthMiddleware()]),
   GetPage(
     name: AppRouts.loginScreen,
     page: () => LoginScreen(),
