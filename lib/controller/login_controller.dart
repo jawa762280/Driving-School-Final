@@ -78,63 +78,19 @@ class LoginController extends GetxController {
 
         if (response != null && response['status'] == 'success') {
           final userData = response['data']['user'];
-          print('userData: $userData');
-
+          print('userData: ${response['data']}');
           final token = response['data']['token'];
-
-          await myServices.saveToken(token);
-          await data.write('student_id', userData['student_id'].toString());
-          await data.write('userId', userData['user_id'].toString());
-          await data.write('firstName', userData['first_name'] ?? '');
-          await data.write('lastName', userData['last_name'] ?? '');
-          await data.write('dateOfBirth', userData['date_of_Birth'] ?? '');
-          await data.write('gender', userData['gender'] ?? '');
-          await data.write('email', userData['email'] ?? '');
-          await data.write('phone_number', userData['phone_number'] ?? '');
-          await data.write('fullName', userData['name'] ?? '');
-          await data.write('userRole', response['data']['role']);
-          await data.write('address', userData['address'] ?? '');
-
-          await data.write('userToken', response['data']['token']);
-          await data.write('refreshToken', response['data']['refresh_token']);
-          await data.write('tokenType', response['data']['token_type']);
-          await data.write(
-              'expiresIn', response['data']['expires_in'].toString());
-          String imageUrl = userData['image'] ?? '';
-
-// إذا كان الرابط يحتوي على المسار الصحيح داخله، خذ فقط المسار الصحيح
-          final regex = RegExp(r'(storage/ImageStudents/.+\.(jpg|png|jpeg))');
-          final match = regex.firstMatch(imageUrl);
-
-          if (match != null) {
-            // خذ الجزء النظيف من الرابط
-            final cleanPath = match.group(0)!;
-            // أضف IP السيرفر لديك (مرة واحدة فقط)
-            imageUrl = 'http://192.168.1.105:8000/$cleanPath';
-          }
-
-// خزن الرابط النظيف في GetStorage
-          await data.write('userImage', imageUrl);
-
+          myServices.saveToken(token);
+          data.write('user', userData);
+          data.write('role', response['data']['role'].toString());
+          data.write('userToken', response['data']['token']);
+          data.write('refreshToken', response['data']['refresh_token']);
+          data.write('tokenType', response['data']['token_type']);
           currentUser = UserModel.fromJson(userData);
-
-          String? role = response['data']['role'];
           failedAttempts = 0;
-
           Get.snackbar("نجاح", "تم تسجيل الدخول بنجاح");
-
-          if (role == 'student') {
-            await data.write('userId', userData['user_id'].toString());
-            await data.write('userRole', 'student');
-            Get.offAllNamed(AppRouts.studentHomePageScreen,
-                arguments: {"user": currentUser});
-          } else if (role == 'trainer') {
-            await data.write('userId', userData['user_id'].toString());
-            await data.write('userRole', 'trainer');
-            Get.offAllNamed(AppRouts.trainerHomePageScreen,
-                arguments: {"user": currentUser});
-          } else {
-            Get.snackbar("خطأ", "الدور غير معروف أو غير محدد");
+          if (data.read('role') == 'student') {
+            Get.offAllNamed(AppRouts.studentHomePageScreen);
           }
         } else {
           isLoading.value = false;

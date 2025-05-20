@@ -1,10 +1,11 @@
 import 'package:driving_school/controller/profile_controller.dart';
 import 'package:driving_school/controller/user_controller.dart';
 import 'package:driving_school/core/constant/appcolors.dart';
-import 'package:driving_school/view/widget/user_avatar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+
+import '../../main.dart';
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});
@@ -33,14 +34,15 @@ class ProfileScreen extends StatelessWidget {
               const SizedBox(height: 20),
 
               // صورة الملف الشخصي
-              Obx(() {
-                final user = userController.userData;
-                final rawImageUrl = user['image'] ?? '';
-                final imageUrl = userController.sanitizeImageUrl(rawImageUrl);
-                print('📷 الصورة التي سيتم عرضها: $imageUrl'); // للتأكد
-
-                return UserAvatar(imageUrl: imageUrl, radius: 45);
-              }),
+              Container(
+                width: 150,
+                height: 150,
+                decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    image: DecorationImage(
+                        fit: BoxFit.cover,
+                        image: NetworkImage(data.read('user')['image']))),
+              ),
 
               const SizedBox(height: 10),
 

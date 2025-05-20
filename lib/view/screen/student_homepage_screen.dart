@@ -4,7 +4,6 @@ import 'package:driving_school/core/constant/appimages.dart';
 import 'package:driving_school/main.dart';
 import 'package:driving_school/view/widget/my_appbar.dart';
 import 'package:driving_school/view/widget/student_services.dart';
-import 'package:driving_school/view/widget/user_avatar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -31,14 +30,15 @@ class StudentHomePageScreen extends StatelessWidget {
                 children: [
                   MyAppBar(
                     image: Image.asset(AppImages.appPhoto),
-                    widget: Obx(() {
-                      final rawImageUrl =
-                          userController.userData['image'] ?? '';
-                      final imageUrl =
-                          userController.sanitizeImageUrl(rawImageUrl);
-                      print('📷 صورة المستخدم في الرئيسية: $imageUrl');
-                      return UserAvatar(imageUrl: imageUrl, radius: 25);
-                    }),
+                    widget: Container(
+                      width: 50,
+                      height: 50,
+                      decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          image: DecorationImage(
+                              fit: BoxFit.cover,
+                              image: NetworkImage(data.read('user')['image']))),
+                    ),
                   ),
                   SizedBox(height: 40.h),
                   Text(

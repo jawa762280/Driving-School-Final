@@ -107,11 +107,15 @@ class Crud extends GetxController {
   // ✅ الدالة المعدّلة لحل المشكلة
   fileRequest(String url, Map<String, String> data, File? file) async {
     try {
-      var request = http.MultipartRequest('POST', Uri.parse(url));
+      var request = http.MultipartRequest('PUT', Uri.parse(url));
+      String token = GetStorage().read('userToken') ?? '';
 
-      // إضافة الهيدرات
+      print(GetStorage().read('userToken'));
+
+      // ✅ إضافة الهيدرز
       request.headers.addAll({
         'Accept': 'application/json',
+        'Authorization': 'Bearer $token',
         'userLang': 'ar',
       });
 
@@ -238,6 +242,8 @@ class Crud extends GetxController {
 
       // ✅ جلب التوكن من التخزين المحلي
       String token = GetStorage().read('token') ?? '';
+
+      print(GetStorage().read('token'));
 
       // ✅ إضافة الهيدرز
       request.headers.addAll({

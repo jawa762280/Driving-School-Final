@@ -30,8 +30,8 @@ import '../../main.dart';
 class AuthMiddleware extends GetMiddleware {
   @override
   RouteSettings? redirect(String? route) {
-    if (data.read('userId') != null) {
-      if ((data.read('userRole').toString() == 'student')) {
+    if (data.read('user') != null) {
+      if ((data.read('role').toString() == 'student')) {
         return const RouteSettings(name: AppRouts.studentHomePageScreen);
       }
     }
