@@ -1,3 +1,4 @@
+import 'package:driving_school/controller/user_controller.dart';
 import 'package:driving_school/core/services/services.dart';
 import 'package:driving_school/routes.dart';
 import 'package:flutter/material.dart';
@@ -12,6 +13,7 @@ Future<void> initialServices() async {
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await initialServices();
+  Get.put(UserController());
   runApp(const MyApp());
 }
 

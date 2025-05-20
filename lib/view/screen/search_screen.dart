@@ -24,7 +24,10 @@ class SearchScreen extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 MyAppBar(
-                  image: Image.asset(AppImages.appPhoto),
+                  image: Image.asset(
+                    AppImages.appPhoto,
+                    fit: BoxFit.contain,
+                  ),
                   widget: Text(
                     "البحث",
                     style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
@@ -50,12 +53,14 @@ class SearchScreen extends StatelessWidget {
                                 name:
                                     '${instructor['first_name']} ${instructor['last_name']}',
                                 email: instructor['email'] ?? '',
-                                adressText: "العنوان",
-                                adress: instructor['address'] ?? '',
-                                phoneText: "رقم الهاتف",
-                                phone: instructor['phone'] ?? '',
                                 birthdayText: "تاريخ الميلاد",
                                 birthday: instructor['date_of_Birth'] ?? '',
+                                genderText: "الجنس",
+                                gender: instructor['gender'] == 'male'
+                                    ? 'ذكر'
+                                    : instructor['gender'] == 'female'
+                                        ? 'أنثى'
+                                        : 'غير معروف',
                               ),
                               SizedBox(height: 15),
                             ],

@@ -12,7 +12,6 @@ class ForgetPasswordContainer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetBuilder<ForgetPasswordController>(
-      init: ForgetPasswordController(),
       builder: (controller) => Container(
         padding: EdgeInsets.all(20.w),
         decoration: BoxDecoration(

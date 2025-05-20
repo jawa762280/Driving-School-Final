@@ -1,5 +1,6 @@
+import 'package:driving_school/controller/update_information_controller.dart';
 import 'package:driving_school/view/widget/app_logo.dart';
-import 'package:driving_school/view/widget/auth/signup/sign_up_container.dart';
+import 'package:driving_school/view/widget/auth/signup/update_information_container.dart';
 import 'package:driving_school/view/widget/loading.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -10,6 +11,7 @@ class UpdateInformationScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final controller = Get.put(UpdateInformationController());
     return Directionality(
       textDirection: TextDirection.ltr,
       child: Scaffold(
@@ -19,14 +21,14 @@ class UpdateInformationScreen extends StatelessWidget {
             () => Stack(children: [
               SingleChildScrollView(
                 padding: EdgeInsets.all(24.w),
-                child: Column(
+                child: Column(  
                   children: [
                     AppLogo(),
-                    UpdateInformationScreen(),
+                    UpdateInformationContainer(),
                   ],
                 ),
               ),
-              // if (controller.isLoading.value) const Loading(),
+              if (controller.isLoading.value) const Loading(),
             ]),
           ),
         ),

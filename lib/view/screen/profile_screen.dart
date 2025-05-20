@@ -1,15 +1,19 @@
+import 'package:driving_school/controller/profile_controller.dart';
+import 'package:driving_school/controller/user_controller.dart';
 import 'package:driving_school/core/constant/appcolors.dart';
-import 'package:driving_school/core/constant/appimages.dart';
+import 'package:driving_school/view/widget/user_avatar.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});
 
-  final String phoneNumber = "0991817817";
-  final String username = "جوى";
-
   @override
   Widget build(BuildContext context) {
+    final userController = Get.find<UserController>();
+    final controller = Get.put(ProfileController());
+
     return Scaffold(
       body: SafeArea(
         child: SingleChildScrollView(
@@ -27,33 +31,59 @@ class ProfileScreen extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 20),
-              CircleAvatar(
-                radius: 45,
-                backgroundImage: AssetImage(AppImages.defaultUser),
-              ),
+
+              // صورة الملف الشخصي
+              Obx(() {
+                final user = userController.userData;
+                final rawImageUrl = user['image'] ?? '';
+                final imageUrl = userController.sanitizeImageUrl(rawImageUrl);
+                print('📷 الصورة التي سيتم عرضها: $imageUrl'); // للتأكد
+
+                return UserAvatar(imageUrl: imageUrl, radius: 45);
+              }),
+
               const SizedBox(height: 10),
-              Text(
-                username,
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
-              ),
-              const SizedBox(height: 5),
-              Text(
-                phoneNumber,
-                style: TextStyle(color: Colors.grey[700]),
-              ),
+
+              // الاسم الكامل
+              Obx(() {
+                return Text(
+                  userController.fullName,
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
+                );
+              }),
+
+              SizedBox(height: 5.h),
+
+              // رقم الهاتف
+              Obx(() {
+                final phone = userController.userData['phone_number'] ?? '';
+                return Text(
+                  phone,
+                  style: TextStyle(color: Colors.grey[700]),
+                );
+              }),
+
               const SizedBox(height: 15),
+
+              // زر تعديل معلومات الحساب
               OutlinedButton(
-                onPressed: () {},
+                onPressed: () {
+                  controller.goToUpdateInformation();
+                },
                 style: OutlinedButton.styleFrom(
-                  padding: EdgeInsets.symmetric(horizontal: 24, vertical: 10),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 24, vertical: 10),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(25),
                   ),
-                  side: BorderSide(color: Colors.black54),
+                  side: const BorderSide(color: Colors.black54),
                 ),
-                child: Text('تعديل معلومات الحساب'),
+                child: const Text('تعديل معلومات الحساب'),
               ),
+
               const SizedBox(height: 20),
+
+              // القائمة الأولى
               Container(
                 decoration: BoxDecoration(
                   color: Colors.white,
@@ -67,22 +97,25 @@ class ProfileScreen extends StatelessWidget {
                       'جداول التدريب',
                       onTap: () {},
                     ),
-                    Divider(height: 1),
+                    const Divider(height: 1),
                     buildMenuTile(
                       Icons.directions_car,
                       'السيارات',
                       onTap: () {},
                     ),
-                    Divider(height: 1),
+                    const Divider(height: 1),
                     buildMenuTile(
                       Icons.info_outline,
                       'معلومات عنا ',
                       onTap: () {},
-                    )
+                    ),
                   ],
                 ),
               ),
+
               const SizedBox(height: 20),
+
+              // القائمة الثانية
               Container(
                 decoration: BoxDecoration(
                   color: Colors.white,
@@ -96,7 +129,7 @@ class ProfileScreen extends StatelessWidget {
                       'حذف الحساب',
                       onTap: () {},
                     ),
-                    Divider(height: 1),
+                    const Divider(height: 1),
                     buildMenuTile(
                       Icons.logout,
                       'تسجيل خروج',
@@ -119,11 +152,11 @@ class ProfileScreen extends StatelessWidget {
         onTap: onTap ?? () {},
         child: ListTile(
           leading: CircleAvatar(
-            backgroundColor: Color(0xFFE7F3E7),
+            backgroundColor: const Color(0xFFE7F3E7),
             child: Icon(icon, color: AppColors.primaryColor),
           ),
           title: Text(title),
-          trailing: Icon(Icons.arrow_forward_ios, size: 16),
+          trailing: const Icon(Icons.arrow_forward_ios, size: 16),
         ),
       ),
     );

@@ -1,7 +1,7 @@
 class UserModel {
   final String userId;
   final String email;
-  final String name;
+  final String fullName;
   final String? firstName;
   final String? lastName;
   final String? dateOfBirth;
@@ -12,7 +12,7 @@ class UserModel {
   UserModel({
     required this.userId,
     required this.email,
-    required this.name,
+    required this.fullName,
     this.firstName,
     this.lastName,
     this.dateOfBirth,
@@ -25,7 +25,7 @@ class UserModel {
     return UserModel(
       userId: json['user_id'].toString(),
       email: json['email'] ?? '',
-      name: json['name'] ?? '',
+      fullName: json['name'] ?? '',
       firstName: json['first_name'],
       lastName: json['last_name'],
       dateOfBirth: json['date_of_Birth'],
@@ -39,7 +39,7 @@ class UserModel {
     return {
       "user_id": userId,
       "email": email,
-      "name": name,
+      "name": fullName,
       "first_name": firstName,
       "last_name": lastName,
       "date_of_Birth": dateOfBirth,

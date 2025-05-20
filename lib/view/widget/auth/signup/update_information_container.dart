@@ -1,14 +1,15 @@
 import 'dart:io';
 
+import 'package:driving_school/controller/update_information_controller.dart';
 import 'package:driving_school/view/widget/genderchip.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:driving_school/controller/sign_up_controller.dart';
 import 'package:driving_school/core/constant/appcolors.dart';
 import 'package:driving_school/core/functions/validinput.dart'; // استيراد الدالة
 import 'package:driving_school/view/widget/my_button.dart';
 import 'package:driving_school/view/widget/my_textformfield.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 
@@ -17,8 +18,8 @@ class UpdateInformationContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GetBuilder<SignUpController>(
-      init: SignUpController(),
+    final email = GetStorage().read('email');
+    return GetBuilder<UpdateInformationController>(
       builder: (controller) => Container(
         padding: EdgeInsets.all(20.w),
         decoration: BoxDecoration(
@@ -39,7 +40,7 @@ class UpdateInformationContainer extends StatelessWidget {
             children: [
               Center(
                 child: Text(
-                  "تحديث المعلومات ",
+                  " تحديث المعلومات الشخصية ",
                   style:
                       TextStyle(fontSize: 18.sp, fontWeight: FontWeight.bold),
                 ),
@@ -58,7 +59,7 @@ class UpdateInformationContainer extends StatelessWidget {
                 iconColor: AppColors.primaryColor,
                 filled: true,
               ),
-              SizedBox(height: 16.h),
+
               // الاسم الأخير
               Text("الكنية",
                   style: TextStyle(color: Colors.grey[800], fontSize: 11.sp)),
@@ -73,35 +74,29 @@ class UpdateInformationContainer extends StatelessWidget {
                 filled: true,
               ),
               SizedBox(height: 16.h),
-              // البريد الالكتروني
               Text("البريد الالكتروني",
                   style: TextStyle(color: Colors.grey[800], fontSize: 11.sp)),
               SizedBox(height: 15.h),
               MyTextformfield(
-                valid: (val) => validInput(
-                    val, 5, 50, "email"), // تعديل لاستخدام validInput
-                mycontroller: controller.emailController,
-                keyboardType: TextInputType.emailAddress,
+                value: email,
                 prefixIcon: Icons.email,
                 iconColor: AppColors.primaryColor,
-                errorText: controller.emailError,
                 filled: true,
+                readOnly: true,
               ),
               SizedBox(height: 16.h),
+
               // كلمة المرور
               Text("كلمة المرور",
                   style: TextStyle(color: Colors.grey[800], fontSize: 12.sp)),
               SizedBox(height: 15.h),
               MyTextformfield(
-                valid: (val) => validInput(
-                    val, 8, 50, "password"), // تعديل لاستخدام validInput
-                mycontroller: controller.passController,
                 obscureText: controller.isShowPass,
-                keyboardType: TextInputType.visiblePassword,
                 prefixIcon: Icons.visibility,
                 iconColor: AppColors.primaryColor,
                 onTapIcon: () => controller.showPass(),
                 filled: true,
+                readOnly: true,
               ),
               SizedBox(height: 16.h),
               // حقل تاريخ الميلاد
@@ -137,7 +132,7 @@ class UpdateInformationContainer extends StatelessWidget {
               SizedBox(height: 15.h),
               MyTextformfield(
                 valid: (val) => validInput(
-                    val, 10, 20, "phone_number"), // تعديل لاستخدام validInput
+                    val, 10, 10, "phone_number"), // تعديل لاستخدام validInput
                 mycontroller: controller.phoneController,
                 keyboardType: TextInputType.phone,
                 prefixIcon: Icons.phone_android,
@@ -183,19 +178,30 @@ class UpdateInformationContainer extends StatelessWidget {
                   DropdownMenuItem(value: 'trainer', child: Text('مدرب')),
                   DropdownMenuItem(value: 'employee', child: Text('موظف')),
                 ],
-                onChanged: (val) {
-                  controller.roleController.text = val!;
-                  controller.update();
-                },
+                onChanged: (controller.roleController.text == "student" ||
+                        controller.roleController.text == "trainer")
+                    ? null
+                    : (val) {
+                        controller.roleController.text = val!;
+                        controller.update();
+                      },
                 validator: (value) =>
                     value == null || value.isEmpty ? 'يرجى اختيار الدور' : null,
+                disabledHint: Text(
+                  controller.roleController.text == 'student'
+                      ? 'طالب'
+                      : controller.roleController.text == 'trainer'
+                          ? 'مدرب'
+                          : controller.roleController.text,
+                  style: TextStyle(color: Colors.black),
+                ),
               ),
               SizedBox(height: 16.h),
               Text("الجنس",
                   style: TextStyle(color: Colors.grey[800], fontSize: 11.sp)),
               SizedBox(height: 15.h),
 
-              GetBuilder<SignUpController>(
+              GetBuilder<UpdateInformationController>(
                 builder: (controller) => Center(
                   child: Wrap(
                     alignment: WrapAlignment.center,
@@ -229,17 +235,17 @@ class UpdateInformationContainer extends StatelessWidget {
               Text("الصورة الشخصية",
                   style: TextStyle(color: Colors.grey[800], fontSize: 11.sp)),
               SizedBox(height: 15.h),
+
               InkWell(
                 onTap: () async {
                   final picker = ImagePicker();
                   final pickedFile =
                       await picker.pickImage(source: ImageSource.gallery);
-                  controller.update();
                   if (pickedFile != null) {
-                    controller.imageFile = File(pickedFile
-                        .path); // يجب إضافة imageFile داخل Controller كـ File?
+                    controller.imageFile = File(pickedFile.path);
                     controller.imageController.text = pickedFile.path;
                   }
+                  controller.update();
                 },
                 child: Center(
                   child: Container(
@@ -250,30 +256,38 @@ class UpdateInformationContainer extends StatelessWidget {
                       border: Border.all(color: Colors.grey.shade300),
                       borderRadius: BorderRadius.circular(75.r),
                     ),
-                    child: controller.imageFile == null
-                        ? Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Icon(Icons.image,
-                                  size: 50.sp, color: Colors.white),
-                              SizedBox(height: 10.h),
-                              Text(
-                                textAlign: TextAlign.center,
-                                'اضغط لاختيار\n صورة',
-                                style: TextStyle(
-                                    color: Colors.white, fontSize: 14.sp),
-                              ),
-                            ],
-                          )
-                        : ClipRRect(
-                            borderRadius: BorderRadius.circular(12.r),
-                            child: Image.file(
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(75.r),
+                      child: controller.imageFile != null
+                          ? Image.file(
                               controller.imageFile!,
                               fit: BoxFit.cover,
                               width: double.infinity,
                               height: double.infinity,
-                            ),
-                          ),
+                            )
+                          : (controller.imageUrl != null &&
+                                  controller.imageUrl!.isNotEmpty
+                              ? Image.network(
+                                  controller.imageUrl!,
+                                  fit: BoxFit.cover,
+                                  width: double.infinity,
+                                  height: double.infinity,
+                                )
+                              : Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Icon(Icons.image,
+                                        size: 50.sp, color: Colors.white),
+                                    SizedBox(height: 10.h),
+                                    Text(
+                                      'اضغط لاختيار\n صورة',
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                          color: Colors.white, fontSize: 14.sp),
+                                    ),
+                                  ],
+                                )),
+                    ),
                   ),
                 ),
               ),
@@ -281,7 +295,7 @@ class UpdateInformationContainer extends StatelessWidget {
               SizedBox(height: 30.h),
               MyButton(
                 onPressed: () {
-                  controller.signUp();
+                  controller.updateInformation();
                 },
                 text: "حفظ",
               ),

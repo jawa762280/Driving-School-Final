@@ -12,37 +12,37 @@ import 'package:http/http.dart' as http;
 
 class Crud extends GetxController {
   getRequest(String url) async {
-  try {
-    // جلب التوكن من التخزين المحلي
-    String token = GetStorage().read('token') ?? '';
+    try {
+      // جلب التوكن من التخزين المحلي
+      String token = GetStorage().read('token') ?? '';
 
-    var response = await http.get(
-      Uri.parse(url),
-      headers: {
-        'Authorization': 'Bearer $token',
-        'Accept': 'application/json',
-      },
-    );
+      var response = await http.get(
+        Uri.parse(url),
+        headers: {
+          'Authorization': 'Bearer $token',
+          'Accept': 'application/json',
+        },
+      );
 
-    print('📥 رد السيرفر (${response.statusCode}): ${response.body}');
+      print('📥 رد السيرفر (${response.statusCode}): ${response.body}');
 
-    if (response.statusCode == 200) {
-      return jsonDecode(response.body);
-    } else if (response.statusCode == 404) {
-      // ⚠️ لا يوجد نتائج - نرجع الجسم كما هو (قد يحتوي على status: fail)
-      return jsonDecode(response.body);
-    } else {
-      // ❌ أخطاء أخرى (500، 403، 401، ...إلخ)
-      Get.snackbar('خطأ', 'غير قادر على الاتصال بالخادم: ${response.statusCode}');
+      if (response.statusCode == 200) {
+        return jsonDecode(response.body);
+      } else if (response.statusCode == 404) {
+        // ⚠️ لا يوجد نتائج - نرجع الجسم كما هو (قد يحتوي على status: fail)
+        return jsonDecode(response.body);
+      } else {
+        // ❌ أخطاء أخرى (500، 403، 401، ...إلخ)
+        Get.snackbar(
+            'خطأ', 'غير قادر على الاتصال بالخادم: ${response.statusCode}');
+        return null;
+      }
+    } catch (e) {
+      print('🚨 استثناء أثناء الاتصال: $e');
+      Get.snackbar('خطأ', 'تعذر الاتصال بالخادم');
       return null;
     }
-  } catch (e) {
-    print('🚨 استثناء أثناء الاتصال: $e');
-    Get.snackbar('خطأ', 'تعذر الاتصال بالخادم');
-    return null;
   }
-}
-
 
   postRequest(String url, Map<String, String> datas) async {
     await Future.delayed(const Duration(milliseconds: 300));
@@ -230,5 +230,64 @@ class Crud extends GetxController {
     }
 
     update();
+  }
+
+  putFileRequest(String url, Map<String, String> data, File? file) async {
+    try {
+      var request = http.MultipartRequest('PUT', Uri.parse(url));
+
+      // ✅ جلب التوكن من التخزين المحلي
+      String token = GetStorage().read('token') ?? '';
+
+      // ✅ إضافة الهيدرز
+      request.headers.addAll({
+        'Accept': 'application/json',
+        'Authorization': 'Bearer $token',
+        'userLang': 'ar',
+      });
+
+      // ✅ إضافة الملف إن وُجد
+      if (file != null) {
+        var length = await file.length();
+        var stream = http.ByteStream(file.openRead());
+        var multipartFile = http.MultipartFile(
+          'image',
+          stream,
+          length,
+          filename: basename(file.path),
+        );
+        request.files.add(multipartFile);
+      }
+
+      // ✅ إضافة البيانات
+      request.fields.addAll(data);
+
+      // إرسال الطلب
+      var streamedResponse = await request.send();
+      var response = await http.Response.fromStream(streamedResponse);
+
+      print("Status Code (PUT): ${response.statusCode}");
+      print("Response Body (PUT): ${response.body}");
+
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        return jsonDecode(response.body);
+      } else if (response.statusCode == 422) {
+        var errorResponse = jsonDecode(response.body);
+        return {
+          'status': 'error',
+          'message': errorResponse['message'] ?? 'بيانات غير صالحة',
+          'errors': errorResponse['errors'] ?? {},
+        };
+      } else {
+        return {
+          'status': 'error',
+          'message': 'خطأ في الخادم (${response.statusCode})',
+          'body': response.body,
+        };
+      }
+    } catch (e) {
+      print('Error in putFileRequest: $e');
+      return {'status': 'error', 'message': 'فشل الاتصال بالخادم'};
+    }
   }
 }

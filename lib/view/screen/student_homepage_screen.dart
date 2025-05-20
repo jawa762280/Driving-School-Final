@@ -1,8 +1,10 @@
 import 'package:driving_school/controller/student_homepage_controller.dart';
+import 'package:driving_school/controller/user_controller.dart';
 import 'package:driving_school/core/constant/appimages.dart';
 import 'package:driving_school/main.dart';
 import 'package:driving_school/view/widget/my_appbar.dart';
 import 'package:driving_school/view/widget/student_services.dart';
+import 'package:driving_school/view/widget/user_avatar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -12,8 +14,7 @@ class StudentHomePageScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final String? imageUrl = data.read('userImage');
-    final bool isNetworkImage = imageUrl != null && imageUrl.startsWith('http');
+    final userController = Get.find<UserController>();
 
     Get.put(StudentHomepageController());
 
@@ -30,18 +31,18 @@ class StudentHomePageScreen extends StatelessWidget {
                 children: [
                   MyAppBar(
                     image: Image.asset(AppImages.appPhoto),
-                    widget: CircleAvatar(
-                      radius: 25.r,
-                      backgroundImage: isNetworkImage
-                          ? NetworkImage(imageUrl)
-                          : AssetImage(AppImages.defaultUser) as ImageProvider,
-                      onBackgroundImageError: (_, __) =>
-                          const Icon(Icons.broken_image),
-                    ),
+                    widget: Obx(() {
+                      final rawImageUrl =
+                          userController.userData['image'] ?? '';
+                      final imageUrl =
+                          userController.sanitizeImageUrl(rawImageUrl);
+                      print('📷 صورة المستخدم في الرئيسية: $imageUrl');
+                      return UserAvatar(imageUrl: imageUrl, radius: 25);
+                    }),
                   ),
-                  SizedBox(height: 20.h),
+                  SizedBox(height: 40.h),
                   Text(
-                    'مرحباً بك يا ${data.read('userName')}',
+                    'مرحباً بك يا ${userController.fullName}',
                     style: TextStyle(
                       fontSize: 22.sp,
                       fontWeight: FontWeight.bold,

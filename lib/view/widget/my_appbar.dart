@@ -11,21 +11,21 @@ class MyAppBar extends StatelessWidget {
     return Container(
       padding: EdgeInsets.all(10.w),
       width: double.infinity,
-      height: 60.h,
+      height: 70.h,
       decoration: BoxDecoration(
           color: Colors.white, borderRadius: BorderRadius.circular(15)),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Container(
-            width: 55.w,
-            height: 55.h,
+            width: 65.w,
+            height: 65.h,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(6.r),
             ),
             child: image,
           ),
-         widget
+          widget
         ],
       ),
     );

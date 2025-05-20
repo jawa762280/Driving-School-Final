@@ -1,3 +1,4 @@
+import 'package:driving_school/core/constant/appcolors.dart';
 import 'package:driving_school/core/constant/appimages.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -8,23 +9,19 @@ class ContainerSearch extends StatelessWidget {
     required this.image,
     required this.name,
     required this.email,
-    required this.adressText,
-    required this.adress,
-    required this.phone,
-    required this.phoneText,
     required this.birthdayText,
     required this.birthday,
+    required this.genderText,
+    required this.gender,
   });
 
   final String image;
   final String name;
   final String email;
-  final String adressText;
-  final String adress;
-  final String phoneText;
-  final String phone;
   final String birthdayText;
   final String birthday;
+  final String genderText;
+  final String gender;
 
   @override
   Widget build(BuildContext context) {
@@ -44,8 +41,8 @@ class ContainerSearch extends StatelessWidget {
         boxShadow: [
           BoxShadow(
             color: Colors.black12,
-            blurRadius: 4,
-            offset: Offset(0, 2),
+            blurRadius: 6,
+            offset: Offset(0, 4),
           )
         ],
       ),
@@ -54,89 +51,103 @@ class ContainerSearch extends StatelessWidget {
           Row(
             children: [
               CircleAvatar(
-                radius: 25.r,
+                radius: 30.r,
                 backgroundImage: buildImageProvider(image),
-                onBackgroundImageError: (_, __) =>
-                    const Icon(Icons.broken_image),
+                backgroundColor: Colors.grey.shade200,
               ),
-              SizedBox(width: 12.w),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    name,
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 14.sp,
+              SizedBox(width: 16.w),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      name,
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16.sp,
+                        color: Colors.black87,
+                      ),
                     ),
-                  ),
-                  Text(
-                    email,
-                    style: TextStyle(
-                      color: Colors.grey,
-                      fontSize: 12.sp,
+                    SizedBox(height: 4.h),
+                    Text(
+                      email,
+                      style: TextStyle(
+                        color: Colors.grey.shade600,
+                        fontSize: 13.sp,
+                      ),
+                      overflow: TextOverflow.ellipsis,
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
+              Icon(Icons.chevron_right, color: AppColors.primaryColor),
             ],
           ),
-          SizedBox(height: 10.h),
+          SizedBox(height: 14.h),
           Divider(thickness: 1, color: Colors.grey.shade200),
           SizedBox(height: 10.h),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Column(
                 children: [
-                  Text(
-                    adressText,
-                    style: TextStyle(
-                      color: Colors.grey,
-                      fontSize: 15.sp,
-                    ),
-                  ),
+                  Icon(Icons.cake_outlined,
+                      color: AppColors.primaryColor, size: 20.sp),
                   SizedBox(height: 4.h),
-                  Text(
-                    adress,
-                    style: TextStyle(fontSize: 14.sp),
-                  ),
-                ],
-              ),
-              Column(
-                children: [
-                  Text(
-                    phoneText,
-                    style: TextStyle(
-                      color: Colors.grey,
-                      fontSize: 15.sp,
-                    ),
-                  ),
-                  SizedBox(height: 4.h),
-                  Text(
-                    phone,
-                    style: TextStyle(fontSize: 14.sp),
-                  ),
-                ],
-              ),
-              Column(
-                children: [
                   Text(
                     birthdayText,
                     style: TextStyle(
-                      color: Colors.grey,
-                      fontSize: 15.sp,
+                      fontSize: 14.sp,
                     ),
                   ),
-                  SizedBox(height: 4.h),
+                  SizedBox(height: 2.h),
                   Text(
                     birthday,
-                    style: TextStyle(fontSize: 14.sp),
+                    style: TextStyle(
+                      fontSize: 13.sp,
+                      color: Colors.grey,
+                    ),
                   ),
                 ],
               ),
+              Column(
+                children: [
+                  Icon(Icons.person_outline,
+                      color: AppColors.primaryColor, size: 20.sp),
+                  SizedBox(height: 4.h),
+                  Text(
+                    genderText,
+                    style: TextStyle(
+                      fontSize: 14.sp,
+                    ),
+                  ),
+                  SizedBox(height: 2.h),
+                  Text(
+                    gender,
+                    style: TextStyle(
+                      fontSize: 13.sp,
+                      color: Colors.grey,
+                    ),
+                  ),
+                ],
+              ),
+              ElevatedButton.icon(
+                onPressed: () {},
+                icon: Icon(Icons.visibility_outlined, size: 18.sp),
+                label: Text("عرض", style: TextStyle(fontSize: 14.sp)),
+                style: ElevatedButton.styleFrom(
+                  foregroundColor: Colors.white,
+                  backgroundColor: AppColors.primaryColor,
+                  padding:
+                      EdgeInsets.symmetric(horizontal: 14.w, vertical: 6.h),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12.r),
+                  ),
+                ),
+              )
             ],
-          )
+          ),
         ],
       ),
     );

@@ -11,7 +11,6 @@ class VerifycodeContainer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetBuilder<VerifyCodeController>(
-      init: VerifyCodeController(),
       builder: (controller) => Container(
         padding: EdgeInsets.all(20.w),
         decoration: BoxDecoration(

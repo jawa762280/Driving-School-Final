@@ -4,10 +4,10 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 class MyTextformfield extends StatelessWidget {
   const MyTextformfield({
     super.key,
-    required this.mycontroller,
+    this.mycontroller,
     this.keyboardType,
     this.prefixIcon,
-    required this.filled,
+    this.filled,
     this.onTapIcon,
     this.obscureText,
     this.valid,
@@ -15,12 +15,12 @@ class MyTextformfield extends StatelessWidget {
     this.hintText,
     this.readOnly = false,
     this.onTapTextField,
-    this.errorText,
+    this.errorText, this.value,
   });
-  final TextEditingController mycontroller;
+  final TextEditingController? mycontroller;
   final TextInputType? keyboardType;
   final IconData? prefixIcon;
-  final bool filled;
+  final bool? filled;
   final void Function()? onTapIcon;
   final bool? obscureText;
   final String? Function(String?)? valid;
@@ -29,10 +29,12 @@ class MyTextformfield extends StatelessWidget {
   final bool readOnly;
   final String? errorText;
   final void Function()? onTapTextField;
+  final String? value;
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      initialValue: value,
       onTap: onTapTextField,
       obscureText: obscureText == null || obscureText == false ? false : true,
       validator: valid,

@@ -10,6 +10,7 @@ import 'package:driving_school/view/screen/sign_up_screen.dart';
 import 'package:driving_school/view/screen/success_reset_password_screen.dart';
 import 'package:driving_school/view/screen/success_verifycode_signup_screen.dart';
 import 'package:driving_school/view/screen/trainer_homepage_screen.dart';
+import 'package:driving_school/view/screen/update_information_screen.dart';
 import 'package:driving_school/view/screen/verify_code_screen.dart';
 import 'package:driving_school/view/screen/verify_code_sign_up_screen.dart';
 import 'package:driving_school/view/widget/buttomappbarhomestudent.dart';
@@ -17,7 +18,7 @@ import 'package:get/get.dart';
 
 List<GetPage<dynamic>> routes = [
   GetPage(
-      name: "/", page: () => BottomAppbarHomeStudent(), middlewares: [AuthMiddleware()]),
+      name: "/", page: () => LoginScreen(), middlewares: [AuthMiddleware()]),
   GetPage(
     name: AppRouts.loginScreen,
     page: () => LoginScreen(),
@@ -60,5 +61,9 @@ List<GetPage<dynamic>> routes = [
   GetPage(
     name: AppRouts.profileScreen,
     page: () => const ProfileScreen(),
-  )
+  ),
+  GetPage(
+    name: AppRouts.updateInformationScreen,
+    page: () => const UpdateInformationScreen(),
+  ),
 ];

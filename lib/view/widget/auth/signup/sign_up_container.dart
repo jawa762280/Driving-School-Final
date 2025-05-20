@@ -18,7 +18,6 @@ class SignUpContainer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetBuilder<SignUpController>(
-      init: SignUpController(),
       builder: (controller) => Container(
         padding: EdgeInsets.all(20.w),
         decoration: BoxDecoration(
@@ -137,7 +136,7 @@ class SignUpContainer extends StatelessWidget {
               SizedBox(height: 15.h),
               MyTextformfield(
                 valid: (val) => validInput(
-                    val, 10, 20, "phone_number"), // تعديل لاستخدام validInput
+                    val, 10, 10, "phone_number"), // تعديل لاستخدام validInput
                 mycontroller: controller.phoneController,
                 keyboardType: TextInputType.phone,
                 prefixIcon: Icons.phone_android,

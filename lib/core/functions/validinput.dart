@@ -15,9 +15,8 @@ validInput(val, min, max, type) {
 
   // التحقق من نوع المدخلات بناءً على الـ type
   if (type == "username") {
-    // تحقق من أن اسم المستخدم صالح
-    if (!GetUtils.isUsername(val)) {
-      return "اسم المستخدم غير صالح";
+    if (!RegExp(r"^[\u0621-\u064Aa-zA-Z\s]+$").hasMatch(val)) {
+      return "اسم المستخدم يجب أن يحتوي على أحرف فقط (عربية أو إنجليزية)";
     }
   }
   if (type == "email") {

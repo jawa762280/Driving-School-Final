@@ -10,4 +10,7 @@ class AppLinks {
   static const String forgetPassword = '$init/send-reset-code';
   static const String resendVerifyCode = '$init/resend-reset-code';
   static const String searchTrainers = '$init/trainersApprove';
+    static const String updateInformation = '$init/students';
+
+
 }
