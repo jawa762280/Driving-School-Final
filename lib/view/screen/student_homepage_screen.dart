@@ -1,5 +1,4 @@
 import 'package:driving_school/controller/student_homepage_controller.dart';
-import 'package:driving_school/controller/user_controller.dart';
 import 'package:driving_school/core/constant/appimages.dart';
 import 'package:driving_school/main.dart';
 import 'package:driving_school/view/widget/my_appbar.dart';
@@ -13,8 +12,6 @@ class StudentHomePageScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final userController = Get.find<UserController>();
-
     Get.put(StudentHomepageController());
 
     return Directionality(
@@ -37,12 +34,13 @@ class StudentHomePageScreen extends StatelessWidget {
                           shape: BoxShape.circle,
                           image: DecorationImage(
                               fit: BoxFit.cover,
-                              image: NetworkImage(data.read('user')['image']))),
+                              image: NetworkImage(
+                                  'http${data.read('user')['image'].toString().split('http').last}'))),
                     ),
                   ),
                   SizedBox(height: 40.h),
                   Text(
-                    'مرحباً بك يا ${userController.fullName}',
+                    'مرحباً بك يا ${data.read('user')['first_name']}',
                     style: TextStyle(
                       fontSize: 22.sp,
                       fontWeight: FontWeight.bold,

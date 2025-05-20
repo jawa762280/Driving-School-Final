@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:driving_school/controller/user_controller.dart';
 import 'package:driving_school/core/constant/app_api.dart';
 import 'package:driving_school/core/constant/approuts.dart';
 import 'package:driving_school/core/constant/message_service.dart';
@@ -67,12 +66,11 @@ class UpdateInformationController extends GetxController {
       };
 
       var response = await crud.fileRequest(
-        '${AppLinks.updateInformation}/${data.read('user')['student_id'].toString()}',
+        '${AppLinks.updateInformation}/${data.read('user')['student_id']}',
         datas,
         imageFile,
       );
       print('MyData $datas');
-      print('MyFile $imageFile');
       isLoading.value = false;
 
       if (response == null) {
@@ -87,8 +85,6 @@ class UpdateInformationController extends GetxController {
           message: response['message'],
         );
 
-        final userController = Get.find<UserController>();
-        userController.loadUserFromStorage();
         // لو غير الصورة، حدثها محليًا
         if (imageFile != null) {
           if (response['data'] != null && response['data']['image'] != null) {
@@ -137,7 +133,8 @@ class UpdateInformationController extends GetxController {
     phoneController.text = data.read('user')['phone_number'] ?? '';
     roleController.text = data.read('role') ?? '';
     addressController.text = data.read('user')['address'] ?? '';
-    imageUrl = data.read('user')['image'];
+    imageUrl =
+        'http${data.read('user')['image'].toString().split('http').last}';
 
     update();
     super.onInit();

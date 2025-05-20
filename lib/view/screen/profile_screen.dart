@@ -1,5 +1,4 @@
 import 'package:driving_school/controller/profile_controller.dart';
-import 'package:driving_school/controller/user_controller.dart';
 import 'package:driving_school/core/constant/appcolors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -12,7 +11,6 @@ class ProfileScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final userController = Get.find<UserController>();
     final controller = Get.put(ProfileController());
 
     return Scaffold(
@@ -41,29 +39,26 @@ class ProfileScreen extends StatelessWidget {
                     shape: BoxShape.circle,
                     image: DecorationImage(
                         fit: BoxFit.cover,
-                        image: NetworkImage(data.read('user')['image']))),
+                        image: NetworkImage(
+                            'http${data.read('user')['image'].toString().split('http').last}'))),
               ),
 
               const SizedBox(height: 10),
 
               // الاسم الكامل
-              Obx(() {
-                return Text(
-                  userController.fullName,
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
-                );
-              }),
+              Text(
+                data.read('user')['first_name'],
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
+              ),
 
               SizedBox(height: 5.h),
 
               // رقم الهاتف
-              Obx(() {
-                final phone = userController.userData['phone_number'] ?? '';
-                return Text(
-                  phone,
-                  style: TextStyle(color: Colors.grey[700]),
-                );
-              }),
+
+              Text(
+                data.read('user')['phone_number'],
+                style: TextStyle(color: Colors.grey[700]),
+              ),
 
               const SizedBox(height: 15),
 
