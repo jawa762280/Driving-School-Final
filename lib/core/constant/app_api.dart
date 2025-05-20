@@ -11,4 +11,5 @@ class AppLinks {
   static const String resendVerifyCode = '$init/resend-reset-code';
   static const String searchTrainers = '$init/trainersApprove';
   static const String updateInformation = '$init/students';
+  static const String deleteAccount = '$init/students';
 }

@@ -296,4 +296,41 @@ class Crud extends GetxController {
       return {'status': 'error', 'message': 'فشل الاتصال بالخادم'};
     }
   }
+
+  Future<Map<String, dynamic>?> deleteRequest(String url) async {
+    try {
+      final storage = GetStorage();
+      final token = storage.read('userToken') ?? ''; // جلب التوكن
+
+      final response = await http.delete(
+        Uri.parse(url),
+        headers: {
+          'Authorization': 'Bearer $token',
+          'Accept': 'application/json',
+        },
+      );
+
+      print('📤 DELETE Status Code: ${response.statusCode}');
+      print('📤 DELETE Response: ${response.body}');
+
+      if (response.statusCode == 200 || response.statusCode == 204) {
+        return {
+          'status': 'success',
+          'message': 'تم حذف الحساب بنجاح',
+        };
+      } else {
+        final responseBody = jsonDecode(response.body);
+        return {
+          'status': 'error',
+          'message': responseBody['message'] ?? 'حدث خطأ غير متوقع',
+        };
+      }
+    } catch (e) {
+      print('❌ DELETE Error: $e');
+      return {
+        'status': 'error',
+        'message': 'فشل الاتصال بالخادم',
+      };
+    }
+  }
 }

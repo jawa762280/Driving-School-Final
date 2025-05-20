@@ -129,7 +129,9 @@ class ProfileScreen extends StatelessWidget {
                     buildMenuTile(
                       Icons.delete_forever,
                       'حذف الحساب',
-                      onTap: () {},
+                      onTap: () {
+                        controller.showDeleteAccountDialog();
+                      },
                     ),
                     const Divider(height: 1),
                     buildMenuTile(
