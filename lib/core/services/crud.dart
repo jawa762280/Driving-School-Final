@@ -2,6 +2,7 @@
 
 import 'dart:convert';
 import 'dart:io';
+import 'package:driving_school/main.dart';
 import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
@@ -164,18 +165,17 @@ class Crud extends GetxController {
     }
   }
 
-  fileRequestPUT(String url, Map<String, String> data, File? file) async {
+  fileRequestPUT(String url, Map<String, String> datas, File? file) async {
     try {
       var request = http.MultipartRequest('PUT', Uri.parse(url));
-      String token = GetStorage().read('userToken') ?? '';
+      String token = data.read('token').toString();
 
-      print(GetStorage().read('userToken'));
+      print(token);
 
       // ✅ إضافة الهيدرز
       request.headers.addAll({
         'Accept': 'application/json',
         'Authorization': 'Bearer $token',
-        'userLang': 'ar',
       });
 
       // ✅ إضافة الملف فقط إذا كان موجودًا
@@ -192,7 +192,7 @@ class Crud extends GetxController {
       }
 
       // إضافة البيانات
-      request.fields.addAll(data);
+      request.fields.addAll(datas);
 
       // إرسال الطلب
       var response = await request.send();
@@ -391,5 +391,47 @@ class Crud extends GetxController {
         'message': 'فشل الاتصال بالخادم',
       };
     }
+  }
+
+  fileRequest(String url, Map<String, String> data, File? file) async {
+    var request = http.MultipartRequest('POST', Uri.parse(url));
+
+    String token = GetStorage().read('token') ?? '';
+
+    print(GetStorage().read('token'));
+
+    // ✅ إضافة الهيدرز
+    request.headers.addAll({
+      'Accept': 'application/json',
+      'Authorization': 'Bearer $token',
+      'userLang': 'ar',
+    });
+    if (file != null) {
+      var length = await file.length();
+      var stream = http.ByteStream(file.openRead());
+      var multipartFile = http.MultipartFile('image', stream, length,
+          filename: basename(file.path));
+      request.files.add(multipartFile);
+    }
+    data.forEach((key, value) {
+      request.fields[key] = value;
+    });
+    var myRequest = await request.send();
+    var response = await http.Response.fromStream(myRequest);
+    if (response.statusCode == 200) {
+      var responseBody = jsonDecode(response.body);
+      return responseBody;
+    } else {
+      // Get.snackbar('Hata', response.toString());
+      // Get.snackbar('Hata', response.statusCode.toString());
+      // Get.snackbar('Hata', response.body);
+      print(response.statusCode.toString());
+      print(response.body);
+      print(response);
+      var responseBody = jsonDecode(response.body);
+      print(responseBody['status']);
+      print(responseBody['message']);
+    }
+    update();
   }
 }

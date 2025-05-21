@@ -211,7 +211,7 @@ class UpdateInformationContainer extends StatelessWidget {
                       GenderChip(
                           label: "ذكر",
                           icon: Icons.male,
-                          value: "Male",
+                          value: "male",
                           selectedValue: controller.genderController.text,
                           onSelected: (val) {
                             controller.genderController.text = val;
@@ -220,7 +220,7 @@ class UpdateInformationContainer extends StatelessWidget {
                       GenderChip(
                           label: "أنثى",
                           icon: Icons.female,
-                          value: "Female",
+                          value: "female",
                           selectedValue: controller.genderController.text,
                           onSelected: (val) {
                             controller.genderController.text = val;

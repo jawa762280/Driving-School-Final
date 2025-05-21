@@ -73,7 +73,7 @@ class SignUpController extends GetxController {
         Get.snackbar("خطأ", "لا يوجد رد من الخادم");
         return;
       }
-
+      print(response);
       // حالة النجاح
       if (response['status'] == "success") {
         MessageService.showSnackbar(
