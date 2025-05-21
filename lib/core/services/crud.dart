@@ -105,7 +105,66 @@ class Crud extends GetxController {
   }
 
   // ✅ الدالة المعدّلة لحل المشكلة
-  fileRequest(String url, Map<String, String> data, File? file) async {
+  fileRequestPOST(String url, Map<String, String> data, File? file) async {
+    try {
+      var request = http.MultipartRequest('POST', Uri.parse(url));
+      String token = GetStorage().read('userToken') ?? '';
+
+      print(GetStorage().read('userToken'));
+
+      // ✅ إضافة الهيدرز
+      request.headers.addAll({
+        'Accept': 'application/json',
+        'Authorization': 'Bearer $token',
+        'userLang': 'ar',
+      });
+
+      // ✅ إضافة الملف فقط إذا كان موجودًا
+      if (file != null) {
+        var length = await file.length();
+        var stream = http.ByteStream(file.openRead());
+        var multipartFile = http.MultipartFile(
+          'image',
+          stream,
+          length,
+          filename: basename(file.path),
+        );
+        request.files.add(multipartFile);
+      }
+
+      // إضافة البيانات
+      request.fields.addAll(data);
+
+      // إرسال الطلب
+      var response = await request.send();
+      var responseBody = await http.Response.fromStream(response);
+
+      print('Status Code: ${response.statusCode}');
+      print('Response Body: ${responseBody.body}');
+
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        return jsonDecode(responseBody.body);
+      } else if (response.statusCode == 422) {
+        var errorResponse = jsonDecode(responseBody.body);
+        return {
+          'status': 'error',
+          'message': errorResponse['message'] ?? 'بيانات غير صالحة',
+          'errors': errorResponse['errors'] ?? {}
+        };
+      } else {
+        return {
+          'status': 'error',
+          'message': 'خطأ في الخادم (${response.statusCode})',
+          'body': responseBody.body
+        };
+      }
+    } catch (e) {
+      print('Error in fileRequest: $e');
+      return {'status': 'error', 'message': 'فشل الاتصال بالخادم'};
+    }
+  }
+
+  fileRequestPUT(String url, Map<String, String> data, File? file) async {
     try {
       var request = http.MultipartRequest('PUT', Uri.parse(url));
       String token = GetStorage().read('userToken') ?? '';

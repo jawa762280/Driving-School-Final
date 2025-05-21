@@ -65,7 +65,7 @@ class UpdateInformationController extends GetxController {
         'gender': genderController.text,
       };
 
-      var response = await crud.fileRequest(
+      var response = await crud.fileRequestPUT(
         '${AppLinks.updateInformation}/${data.read('user')['student_id']}',
         datas,
         imageFile,

@@ -64,7 +64,8 @@ class SignUpController extends GetxController {
       };
 
       // إرسال الطلب
-      var response = await crud.fileRequest(AppLinks.signUp, data, imageFile);
+      var response =
+          await crud.fileRequestPOST(AppLinks.signUp, data, imageFile);
       isLoading.value = false;
 
       // معالجة الرد
