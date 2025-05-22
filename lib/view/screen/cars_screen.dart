@@ -1,6 +1,7 @@
 import 'package:driving_school/controller/cars_controller.dart';
 import 'package:driving_school/core/constant/appcolors.dart';
 import 'package:driving_school/view/widget/car_card.dart';
+import 'package:driving_school/view/widget/filter_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -45,19 +46,19 @@ class CarsScreen extends StatelessWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  _FilterButton(
+                  FilterButton(
                     title: "الكل",
                     icon: Icons.view_list,
                     selected: filter.value == CarFilter.all,
                     onTap: () => filter.value = CarFilter.all,
                   ),
-                  _FilterButton(
+                  FilterButton(
                     title: "عادية",
                     icon: Icons.directions_car,
                     selected: filter.value == CarFilter.normal,
                     onTap: () => filter.value = CarFilter.normal,
                   ),
-                  _FilterButton(
+                  FilterButton(
                     title: "احتياجات",
                     icon: Icons.accessible,
                     selected: filter.value == CarFilter.special,
@@ -80,54 +81,6 @@ class CarsScreen extends StatelessWidget {
           ],
         );
       }),
-    );
-  }
-}
-
-class _FilterButton extends StatelessWidget {
-  final String title;
-  final IconData icon;
-  final bool selected;
-  final VoidCallback onTap;
-
-  const _FilterButton({
-    required this.title,
-    required this.icon,
-    required this.selected,
-    required this.onTap,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onTap,
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 250),
-        padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 8.h),
-        decoration: BoxDecoration(
-          color: selected
-              ? AppColors.primaryColor.withAlpha((0.1 * 255).toInt())
-              : Colors.white,
-          border: Border.all(
-              color: selected ? AppColors.primaryColor : Colors.grey.shade300),
-          borderRadius: BorderRadius.circular(12.r),
-        ),
-        child: Row(
-          children: [
-            Icon(icon,
-                size: 18.sp,
-                color: selected ? AppColors.primaryColor : Colors.grey),
-            SizedBox(width: 6.w),
-            Text(
-              title,
-              style: TextStyle(
-                fontWeight: FontWeight.w600,
-                color: selected ? AppColors.primaryColor : Colors.black,
-              ),
-            ),
-          ],
-        ),
-      ),
     );
   }
 }
