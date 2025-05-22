@@ -45,7 +45,7 @@ class UpdateInformationController extends GetxController {
     update();
     var response = await crud.fileRequest(
       '${AppLinks.updateInformation}/${data.read('user')['student_id']}',
-      {
+      { 
         '_method': 'PUT',
         'first_name': firstNameController.text,
         'last_name': lastNameController.text,

@@ -1,5 +1,6 @@
 import 'package:driving_school/core/constant/approuts.dart';
 import 'package:driving_school/core/middleware/mymiddleware.dart';
+import 'package:driving_school/view/screen/cars_screen.dart';
 import 'package:driving_school/view/screen/login_screen.dart';
 import 'package:driving_school/view/screen/onboarding_screen.dart';
 import 'package:driving_school/view/screen/forget_password_screen.dart';
@@ -65,5 +66,9 @@ List<GetPage<dynamic>> routes = [
   GetPage(
     name: AppRouts.updateInformationScreen,
     page: () => const UpdateInformationScreen(),
+  ),
+   GetPage(
+    name: AppRouts.carsScreen,
+    page: () =>  CarsScreen(),
   ),
 ];

@@ -4,12 +4,17 @@ import 'package:driving_school/core/services/crud.dart';
 import 'package:driving_school/main.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get_storage/get_storage.dart';
 
 class ProfileController extends GetxController {
   Crud crud = Crud();
+  var isLoading = false.obs;
+
   goToUpdateInformation() {
     Get.toNamed(AppRouts.updateInformationScreen);
+  }
+
+  goToCarsScreen() {
+    Get.toNamed(AppRouts.carsScreen);
   }
 
   void showDeleteAccountDialog() {
@@ -77,6 +82,77 @@ class ProfileController extends GetxController {
           SizedBox(height: 10),
         ],
       ),
+    );
+  }
+
+  void logout() async {
+    isLoading.value = true;
+    try {
+      String token = data.read('token') ?? '';
+
+      // if (token.isEmpty) {
+      //   await data.erase();
+      //   Get.offAllNamed('/login');
+      //   return;
+      // }
+
+      var response = await crud.logout(token, AppLinks.logout);
+
+      if (response != null &&
+          (response['status'] == 'success' || response['message'] != null)) {
+        Get.snackbar('نجاح', response['message'] ?? 'تم تسجيل الخروج بنجاح');
+        await data.erase();
+        Get.offAllNamed('/login');
+      } else {
+        Get.snackbar('خطأ', 'فشل تسجيل الخروج، حاول مرة أخرى');
+      }
+    } catch (e) {
+      Get.snackbar('خطأ', 'حدث خطأ: $e');
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
+  void showLogoutDialog() {
+    isLoading.value = false;
+
+    Get.dialog(
+      Obx(() => AlertDialog(
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+            title: const Text(
+              'تأكيد تسجيل الخروج',
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
+            content: const Text(
+              'هل أنت متأكد أنك تريد تسجيل الخروج من الحساب؟',
+              textAlign: TextAlign.center,
+            ),
+            actionsAlignment: MainAxisAlignment.spaceBetween,
+            actions: [
+              TextButton(
+                onPressed: isLoading.value ? null : () => Get.back(),
+                child: const Text('إلغاء'),
+              ),
+              ElevatedButton(
+                onPressed: () {
+                  logout();
+                },
+                style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
+                child: isLoading.value
+                    ? const SizedBox(
+                        width: 20,
+                        height: 20,
+                        child: CircularProgressIndicator(
+                          color: Colors.white,
+                          strokeWidth: 2,
+                        ),
+                      )
+                    : const Text('تأكيد'),
+              ),
+            ],
+          )),
+      barrierDismissible: false,
     );
   }
 }

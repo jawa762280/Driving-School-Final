@@ -12,4 +12,7 @@ class AppLinks {
   static const String searchTrainers = '$init/trainersApprove';
   static const String updateInformation = '$init/students';
   static const String deleteAccount = '$init/students';
+  static const String refreshToken = '$init/refresh';
+  static const String cars = '$init/cars';
+  static const String logout = '$init/logout';
 }

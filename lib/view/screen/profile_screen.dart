@@ -97,8 +97,10 @@ class ProfileScreen extends StatelessWidget {
                     const Divider(height: 1),
                     buildMenuTile(
                       Icons.directions_car,
-                      'السيارات',
-                      onTap: () {},
+                      ' عرض السيارات',
+                      onTap: () {
+                        controller.goToCarsScreen();
+                      },
                     ),
                     const Divider(height: 1),
                     buildMenuTile(
@@ -122,17 +124,19 @@ class ProfileScreen extends StatelessWidget {
                 child: Column(
                   children: [
                     buildMenuTile(
+                      Icons.logout,
+                      'تسجيل خروج',
+                      onTap: () {
+                        controller.showLogoutDialog();
+                      },
+                    ),
+                    const Divider(height: 1),
+                    buildMenuTile(
                       Icons.delete_forever,
                       'حذف الحساب',
                       onTap: () {
                         controller.showDeleteAccountDialog();
                       },
-                    ),
-                    const Divider(height: 1),
-                    buildMenuTile(
-                      Icons.logout,
-                      'تسجيل خروج',
-                      onTap: () {},
                     ),
                   ],
                 ),
