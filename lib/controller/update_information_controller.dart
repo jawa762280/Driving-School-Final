@@ -45,7 +45,7 @@ class UpdateInformationController extends GetxController {
     update();
     var response = await crud.fileRequest(
       '${AppLinks.updateInformation}/${data.read('user')['student_id']}',
-      { 
+      {
         '_method': 'PUT',
         'first_name': firstNameController.text,
         'last_name': lastNameController.text,
@@ -75,6 +75,7 @@ class UpdateInformationController extends GetxController {
   @override
   void onInit() {
     print(data.read('user'));
+    print('REFRESHTOKEN ${data.read('refreshToken')}');
     firstNameController.text = data.read('user')['first_name'] ?? '';
     lastNameController.text = data.read('user')['last_name'] ?? '';
     birthDateController.text = data.read('user')['date_of_Birth'] ?? '';

@@ -62,12 +62,13 @@ class SignUpController extends GetxController {
         'address': addressController.text,
         'role': roleController.text.toLowerCase(),
       };
-
+      String selectedRole = roleController.text.toLowerCase();
+      String apiUrl = selectedRole == "trainer"
+          ? AppLinks.signUpTrainer
+          : AppLinks.signUpStudent;
       // إرسال الطلب
-      var response =
-          await crud.fileRequestPOST(AppLinks.signUp, data, imageFile);
+      var response = await crud.fileRequestPOST(apiUrl, data, imageFile);
       isLoading.value = false;
-
       // معالجة الرد
       if (response == null) {
         Get.snackbar("خطأ", "لا يوجد رد من الخادم");

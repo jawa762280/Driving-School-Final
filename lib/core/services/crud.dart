@@ -299,11 +299,11 @@ class Crud extends GetxController {
     });
   }
 
-  fileRequest(String url, Map<String, String> data, File? file) async {
+  fileRequest(String url, Map<String, String> datas, File? file) async {
     return await retryOnUnauthorized(() async {
       var request = http.MultipartRequest('POST', Uri.parse(url));
 
-      String token = GetStorage().read('token') ?? '';
+      String token = data.read('token') ?? '';
 
       print(GetStorage().read('token'));
 
@@ -322,7 +322,7 @@ class Crud extends GetxController {
         request.files.add(multipartFile);
       }
 
-      data.forEach((key, value) {
+      datas.forEach((key, value) {
         request.fields[key] = value;
       });
 

@@ -1,17 +1,15 @@
-import 'package:driving_school/data/model/student_servrice_model.dart';
+import 'package:driving_school/data/model/trainer_service_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-class StudentServices extends StatelessWidget {
-  const StudentServices({super.key});
+class TrainerServices extends StatelessWidget {
+  const TrainerServices({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(24)
-      ),
+          color: Colors.white, borderRadius: BorderRadius.circular(24)),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -34,9 +32,9 @@ class StudentServices extends StatelessWidget {
                 return GridView.builder(
                   shrinkWrap: true,
                   physics: const NeverScrollableScrollPhysics(),
-                  itemCount: studentServices.length,
+                  itemCount: trainerServices.length,
                   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2,
+                    crossAxisCount: 1,
                     crossAxisSpacing: 10.w,
                     mainAxisSpacing: 10.h,
                     childAspectRatio: 0.8,
@@ -61,14 +59,14 @@ class StudentServices extends StatelessWidget {
                                 backgroundColor: Colors.white,
                                 radius: 20.r,
                                 child: Icon(
-                                  studentServices[index].icon,
+                                  trainerServices[index].icon,
                                   color: Colors.green,
                                   size: 24.sp,
                                 ),
                               ),
                               SizedBox(height: 10.h),
                               Text(
-                                studentServices[index].title,
+                                trainerServices[index].title,
                                 textAlign: TextAlign.center,
                                 style: TextStyle(
                                   fontWeight: FontWeight.bold,

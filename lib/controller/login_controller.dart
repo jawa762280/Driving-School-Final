@@ -83,7 +83,7 @@ class LoginController extends GetxController {
           myServices.saveToken(token);
           data.write('user', userData);
           data.write('role', response['data']['role'].toString());
-          data.write('userToken', response['data']['token']);
+          data.write('token', response['data']['token']);
           data.write('refreshToken', response['data']['refresh_token']);
           data.write('tokenType', response['data']['token_type']);
           currentUser = UserModel.fromJson(userData);
@@ -91,6 +91,8 @@ class LoginController extends GetxController {
           Get.snackbar("نجاح", "تم تسجيل الدخول بنجاح");
           if (data.read('role') == 'student') {
             Get.offAllNamed(AppRouts.studentHomePageScreen);
+          } else if (data.read('role') == 'trainer') {
+            Get.offAllNamed(AppRouts.trainerHomePageScreen);
           }
         } else {
           isLoading.value = false;

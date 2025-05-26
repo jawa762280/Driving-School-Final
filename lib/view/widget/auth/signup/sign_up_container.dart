@@ -50,7 +50,7 @@ class SignUpContainer extends StatelessWidget {
               SizedBox(height: 15.h),
               MyTextformfield(
                 valid: (val) => validInput(
-                    val, 2, 30, "username"), // تعديل لاستخدام validInput
+                    val, 2, 30, "username"),  // تعديل لاستخدام validInput
                 mycontroller: controller.firstNameController,
                 keyboardType: TextInputType.name,
                 prefixIcon: Icons.person,

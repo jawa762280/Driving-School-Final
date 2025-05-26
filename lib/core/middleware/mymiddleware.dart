@@ -33,6 +33,9 @@ class AuthMiddleware extends GetMiddleware {
     if (data.read('user') != null) {
       if ((data.read('role').toString() == 'student')) {
         return const RouteSettings(name: AppRouts.studentHomePageScreen);
+      } else if ("role" == 'trainer') {
+        // هنا توجيه مدرب للصفحة المناسبة
+        return const RouteSettings(name: AppRouts.trainerHomePageScreen);
       }
     }
     return null;
