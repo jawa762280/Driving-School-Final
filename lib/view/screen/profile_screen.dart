@@ -1,5 +1,6 @@
 import 'package:driving_school/controller/profile_controller.dart';
 import 'package:driving_school/core/constant/appcolors.dart';
+import 'package:driving_school/core/constant/approuts.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -91,8 +92,10 @@ class ProfileScreen extends StatelessWidget {
                   children: [
                     buildMenuTile(
                       Icons.schedule,
-                      'جداول التدريب',
-                      onTap: () {},
+                      'جلسات التدريب',
+                      onTap: () {
+                        Get.toNamed(AppRouts.trainingSessionsScreen);
+                      },
                     ),
                     const Divider(height: 1),
                     buildMenuTile(

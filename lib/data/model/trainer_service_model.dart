@@ -11,5 +11,8 @@ class TrainerServiceModel {
 }
 
 final List<TrainerServiceModel> trainerServices = [
-  TrainerServiceModel(icon: Icons.directions_car, title: "مواعيد التدريب"),
+  TrainerServiceModel(
+      icon: Icons.directions_car, title: "انشاء جداول التدريب "),
+  TrainerServiceModel(
+      icon: Icons.schedule_outlined, title: "عرض جداولي التدريب ")
 ];

@@ -17,4 +17,8 @@ class AppLinks {
   static const String refreshToken = '$init/refresh';
   static const String cars = '$init/cars';
   static const String logout = '$init/logout';
+  static const String createSchedule = '$init/training-schedules';
+  static const String showTRainingSchedules = '$init/trainer';
+    static const String trainingSessions = '$init/trainer-sessions';
+
 }

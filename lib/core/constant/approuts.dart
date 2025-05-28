@@ -16,4 +16,7 @@ class AppRouts {
   static const String profileScreen = "/profile_screen";
   static const String updateInformationScreen = "/update_information_screen";
   static const String carsScreen = "/cars_screen";
+  static const String trainerScheduleScreen = "/trainer_schedule_screen";
+  static const String showTRainingSchedulesScreen = "/show_training_schedules";
+  static const String trainingSessionsScreen = "/training_sessions_screen";
 }

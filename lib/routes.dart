@@ -7,9 +7,12 @@ import 'package:driving_school/view/screen/forget_password_screen.dart';
 import 'package:driving_school/view/screen/profile_screen.dart';
 import 'package:driving_school/view/screen/reset_password_screen.dart';
 import 'package:driving_school/view/screen/search_screen.dart';
+import 'package:driving_school/view/screen/show_training_schedules_screen.dart';
 import 'package:driving_school/view/screen/sign_up_screen.dart';
 import 'package:driving_school/view/screen/success_reset_password_screen.dart';
 import 'package:driving_school/view/screen/success_verifycode_signup_screen.dart';
+import 'package:driving_school/view/screen/trainer_schedule_screen.dart';
+import 'package:driving_school/view/screen/training_sessions_screen.dart';
 import 'package:driving_school/view/screen/update_information_screen.dart';
 import 'package:driving_school/view/screen/verify_code_screen.dart';
 import 'package:driving_school/view/screen/verify_code_sign_up_screen.dart';
@@ -70,5 +73,17 @@ List<GetPage<dynamic>> routes = [
   GetPage(
     name: AppRouts.carsScreen,
     page: () => CarsScreen(),
+  ),
+  GetPage(
+    name: AppRouts.trainerScheduleScreen,
+    page: () => TrainerScheduleScreen(),
+  ),
+  GetPage(
+    name: AppRouts.showTRainingSchedulesScreen,
+    page: () => ShowTRainingSchedulesScreen(),
+  ),
+  GetPage(
+    name: AppRouts.trainingSessionsScreen,
+    page: () => TrainingSessionsScreen(),
   ),
 ];

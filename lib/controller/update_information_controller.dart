@@ -74,7 +74,9 @@ class UpdateInformationController extends GetxController {
 
   @override
   void onInit() {
+    // ignore: avoid_print
     print(data.read('user'));
+    // ignore: avoid_print
     print('REFRESHTOKEN ${data.read('refreshToken')}');
     firstNameController.text = data.read('user')['first_name'] ?? '';
     lastNameController.text = data.read('user')['last_name'] ?? '';

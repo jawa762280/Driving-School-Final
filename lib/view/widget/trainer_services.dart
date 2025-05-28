@@ -1,6 +1,8 @@
+import 'package:driving_school/core/constant/approuts.dart';
 import 'package:driving_school/data/model/trainer_service_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
 
 class TrainerServices extends StatelessWidget {
   const TrainerServices({super.key});
@@ -46,36 +48,45 @@ class TrainerServices extends StatelessWidget {
                       ),
                       child: Padding(
                         padding: const EdgeInsets.only(bottom: 15),
-                        child: Container(
-                          decoration: BoxDecoration(
-                            color: Colors.green.shade100,
-                            borderRadius: BorderRadius.circular(25.r),
-                          ),
-                          padding: EdgeInsets.all(12.w),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              CircleAvatar(
-                                backgroundColor: Colors.white,
-                                radius: 20.r,
-                                child: Icon(
-                                  trainerServices[index].icon,
-                                  color: Colors.green,
-                                  size: 24.sp,
+                        child: GestureDetector(
+                          onTap: () {
+                            if (index == 0) {
+                              Get.toNamed(AppRouts.trainerScheduleScreen);
+                            } else if (index == 1) {
+                              Get.toNamed(AppRouts.showTRainingSchedulesScreen);
+                            }
+                          },
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: Colors.green.shade100,
+                              borderRadius: BorderRadius.circular(25.r),
+                            ),
+                            padding: EdgeInsets.all(12.w),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                CircleAvatar(
+                                  backgroundColor: Colors.white,
+                                  radius: 20.r,
+                                  child: Icon(
+                                    trainerServices[index].icon,
+                                    color: Colors.green,
+                                    size: 24.sp,
+                                  ),
                                 ),
-                              ),
-                              SizedBox(height: 10.h),
-                              Text(
-                                trainerServices[index].title,
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 12.sp,
-                                  height: 1.2,
-                                  color: Colors.black87,
+                                SizedBox(height: 10.h),
+                                Text(
+                                  trainerServices[index].title,
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 12.sp,
+                                    height: 1.2,
+                                    color: Colors.black87,
+                                  ),
                                 ),
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
                         ),
                       ),

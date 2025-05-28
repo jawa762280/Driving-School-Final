@@ -19,7 +19,7 @@ class SignUpScreen extends StatelessWidget {
         backgroundColor: const Color(0xFFF8FAFB),
         body: SafeArea(
           child: Obx(
-            () => Stack(children: [
+            () => Stack(children  : [
               SingleChildScrollView(
                 padding: EdgeInsets.all(24.w),
                 child: Column(

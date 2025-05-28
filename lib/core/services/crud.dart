@@ -55,61 +55,87 @@ class Crud extends GetxController {
     return response;
   }
 
-  Future<dynamic> getRequest(String url) async {
-    return await retryOnUnauthorized(() async {
-      try {
-        String token = data.read('token') ?? '';
+ Future<dynamic> getRequest(String url) async {
+  return await retryOnUnauthorized(() async {
+    try {
+      String token = data.read('token') ?? '';
 
-        var response = await http.get(
-          Uri.parse(url),
-          headers: {
-            'Authorization': 'Bearer $token',
-            'Accept': 'application/json',
-          },
-        );
+      var response = await http.get(
+        Uri.parse(url),
+        headers: {
+          'Authorization': 'Bearer $token',
+          'Accept': 'application/json',
+        },
+      );
 
-        if (response.statusCode == 200 || response.statusCode == 404) {
-          return jsonDecode(response.body);
-        } else if (response.statusCode == 401) {
-          return {'statusCode': 401};
-        } else {
-          return null;
-        }
-      } catch (e) {
-        print('Exception in getRequest: $e');
-        return null;
+      print("🔵 [GET] URL: $url");
+      print("🟡 Status Code: ${response.statusCode}");
+      print("📦 Response Body: ${response.body}");
+
+      if (response.statusCode == 200 || response.statusCode == 404) {
+        return jsonDecode(response.body);
+      } else if (response.statusCode == 401) {
+        print("🔴 Unauthorized (401)");
+        return {'statusCode': 401};
+      } else {
+        print("❗Unhandled Status Code: ${response.statusCode}");
+        return {
+          'statusCode': response.statusCode,
+          'body': response.body,
+        };
       }
-    });
-  }
+    } catch (e) {
+      print('❌ Exception in getRequest: $e');
+      return {'error': e.toString()};
+    }
+  });
+}
+
 
   Future<dynamic> postRequest(String url, Map<String, dynamic> data) async {
-    return await retryOnUnauthorized(() async {
-      try {
-        String token = GetStorage().read('token') ?? '';
+  return await retryOnUnauthorized(() async {
+    try {
+      String token = GetStorage().read('token') ?? '';
 
-        var response = await http.post(
-          Uri.parse(url),
-          headers: {
-            'Authorization': 'Bearer $token',
-            'Accept': 'application/json',
-            'Content-Type': 'application/json',
-          },
-          body: jsonEncode(data),
-        );
+      var response = await http.post(
+        Uri.parse(url),
+        headers: {
+          'Authorization': 'Bearer $token',
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+        },
+        body: jsonEncode(data),
+      );
 
-        if (response.statusCode == 200 || response.statusCode == 201) {
-          return jsonDecode(response.body);
-        } else if (response.statusCode == 401) {
-          return {'statusCode': 401};
-        } else {
-          return null;
-        }
-      } catch (e) {
-        print('Exception in postRequest: $e');
-        return null;
+      print("🔗 POST to: $url");
+      print("📦 Data: $data");
+      print("📬 Status Code: ${response.statusCode}");
+      print("📬 Response Body: ${response.body}");
+
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        return jsonDecode(response.body);
+      } else if (response.statusCode == 401) {
+        return {'statusCode': 401};
+      } else {
+        // طباعة الخطأ حتى نعرف السبب
+        return {
+          'status': false,
+          'message': 'Unexpected error',
+          'statusCode': response.statusCode,
+          'body': response.body
+        };
       }
-    });
-  }
+    } catch (e) {
+      print('⚠️ Exception in postRequest: $e');
+      return {
+        'status': false,
+        'message': 'Exception',
+        'error': e.toString(),
+      };
+    }
+  });
+}
+
 
   // ✅ الدالة المعدّلة لحل المشكلة
   fileRequestPOST(String url, Map<String, String> data, File? file) async {
