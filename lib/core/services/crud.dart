@@ -3,7 +3,6 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:driving_school/core/constant/app_api.dart';
-import 'package:driving_school/main.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:image_picker/image_picker.dart';
@@ -12,32 +11,36 @@ import 'package:path/path.dart';
 import 'package:http/http.dart' as http;
 
 class Crud extends GetxController {
+  final data = GetStorage(); // توحيد متغير التخزين
+
   Future<bool> refreshToken() async {
-    try {
-      String? refreshToken = data.read('refreshToken');
-      if (refreshToken == null) return false;
+    String? refreshToken = data.read('refreshToken');
+    if (refreshToken == null) {
+      print("❌ لا يوجد refresh token مخزن");
+      return false;
+    }
 
-      var response = await http.post(
-        Uri.parse(AppLinks.refreshToken),
-        headers: {
-          'Accept': 'application/json',
-        },
-        body: {
-          'refresh_token': refreshToken,
-        },
-      );
+    var response = await http.post(
+      Uri.parse(AppLinks.refreshToken),
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: jsonEncode({'refresh_token': refreshToken}),
+    );
 
-      if (response.statusCode == 200) {
-        var responseData = jsonDecode(response.body);
-        String newToken = responseData['data']['token'];
-        data.write('token', newToken);
-        return true;
-      } else {
-        print('❌ فشل تجديد التوكن: ${response.statusCode}');
-        return false;
-      }
-    } catch (e) {
-      print('🚨 Exception in refreshToken: $e');
+    print("🔄 Refresh Token Response: ${response.body}");
+
+    if (response.statusCode == 200) {
+      var jsonResponse = jsonDecode(response.body);
+
+      String newToken = jsonResponse['data']['token'];
+      data.write('token', newToken);
+
+      print("✅ Token refreshed successfully");
+      return true;
+    } else {
+      print("❌ Failed to refresh token: ${response.body}");
       return false;
     }
   }
@@ -46,113 +49,119 @@ class Crud extends GetxController {
   Future<T?> retryOnUnauthorized<T>(Future<T?> Function() requestFn) async {
     T? response = await requestFn();
 
+    // إذا كانت الاستجابة عبارة عن Map وجاء كود الحالة 401
     if (response is Map && response['statusCode'] == 401) {
       bool refreshed = await refreshToken();
       if (refreshed) {
+        // إذا نجح تجديد التوكن، أعيد تنفيذ الطلب مرة ثانية
         return await requestFn();
       }
     }
     return response;
   }
 
- Future<dynamic> getRequest(String url) async {
-  return await retryOnUnauthorized(() async {
-    try {
-      String token = data.read('token') ?? '';
+  Future<dynamic> getRequest(String url) async {
+    return await retryOnUnauthorized(() async {
+      try {
+        String token = data.read('token') ?? '';
 
-      var response = await http.get(
-        Uri.parse(url),
-        headers: {
-          'Authorization': 'Bearer $token',
-          'Accept': 'application/json',
-        },
-      );
+        var response = await http.get(
+          Uri.parse(url),
+          headers: {
+            'Authorization': 'Bearer $token',
+            'Accept': 'application/json',
+          },
+        );
 
-      print("🔵 [GET] URL: $url");
-      print("🟡 Status Code: ${response.statusCode}");
-      print("📦 Response Body: ${response.body}");
+        print("🔵 [GET] URL: $url");
+        print("🟡 Status Code: ${response.statusCode}");
+        print("📦 Response Body: ${response.body}");
 
-      if (response.statusCode == 200 || response.statusCode == 404) {
-        return jsonDecode(response.body);
-      } else if (response.statusCode == 401) {
-        print("🔴 Unauthorized (401)");
-        return {'statusCode': 401};
-      } else {
-        print("❗Unhandled Status Code: ${response.statusCode}");
-        return {
-          'statusCode': response.statusCode,
-          'body': response.body,
-        };
+        if (response.statusCode == 200 || response.statusCode == 404) {
+          return jsonDecode(response.body);
+        } else if (response.statusCode == 401) {
+          print("🔴 Unauthorized (401)");
+          return {'statusCode': 401};
+        } else {
+          print("❗Unhandled Status Code: ${response.statusCode}");
+          return {
+            'statusCode': response.statusCode,
+            'body': response.body,
+          };
+        }
+      } catch (e) {
+        print('❌ Exception in getRequest: $e');
+        return {'error': e.toString()};
       }
-    } catch (e) {
-      print('❌ Exception in getRequest: $e');
-      return {'error': e.toString()};
-    }
-  });
-}
+    });
+  }
 
+  Future<dynamic> postRequest(String url, Map<String, dynamic> dataMap) async {
+    return await retryOnUnauthorized(() async {
+      try {
+        String token = data.read('token') ?? '';
 
-  Future<dynamic> postRequest(String url, Map<String, dynamic> data) async {
-  return await retryOnUnauthorized(() async {
-    try {
-      String token = GetStorage().read('token') ?? '';
+        var response = await http.post(
+          Uri.parse(url),
+          headers: {
+            'Authorization': 'Bearer $token',
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+          },
+          body: jsonEncode(dataMap),
+        );
 
-      var response = await http.post(
-        Uri.parse(url),
-        headers: {
-          'Authorization': 'Bearer $token',
-          'Accept': 'application/json',
-          'Content-Type': 'application/json',
-        },
-        body: jsonEncode(data),
-      );
+        print("🔗 POST to: $url");
+        print("📦 Data: $dataMap");
+        print("📬 Status Code: ${response.statusCode}");
+        print("📬 Response Body: ${response.body}");
 
-      print("🔗 POST to: $url");
-      print("📦 Data: $data");
-      print("📬 Status Code: ${response.statusCode}");
-      print("📬 Response Body: ${response.body}");
-
-      if (response.statusCode == 200 || response.statusCode == 201) {
-        return jsonDecode(response.body);
-      } else if (response.statusCode == 401) {
-        return {'statusCode': 401};
-      } else {
-        // طباعة الخطأ حتى نعرف السبب
+        if (response.statusCode == 200 || response.statusCode == 201) {
+          return jsonDecode(response.body);
+        } else if (response.statusCode == 401) {
+          return {'statusCode': 401};
+        } else if (response.statusCode == 422) {
+          return {
+            'status': false,
+            'message':
+                jsonDecode(response.body)['message'] ?? 'بيانات غير صالحة',
+            'errors': jsonDecode(response.body)['errors'] ?? {}
+          };
+        } else {
+          return {
+            'status': false,
+            'message': 'Unexpected error',
+            'statusCode': response.statusCode,
+            'body': response.body
+          };
+        }
+      } catch (e) {
+        print('⚠️ Exception in postRequest: $e');
         return {
           'status': false,
-          'message': 'Unexpected error',
-          'statusCode': response.statusCode,
-          'body': response.body
+          'message': 'Exception',
+          'error': e.toString(),
         };
       }
-    } catch (e) {
-      print('⚠️ Exception in postRequest: $e');
-      return {
-        'status': false,
-        'message': 'Exception',
-        'error': e.toString(),
-      };
-    }
-  });
-}
+    });
+  }
 
-
-  // ✅ الدالة المعدّلة لحل المشكلة
-  fileRequestPOST(String url, Map<String, String> data, File? file) async {
+  // دالة رفع ملف مع بيانات (POST)
+  fileRequestPOST(String url, Map<String, String> dataMap, File? file) async {
     try {
       var request = http.MultipartRequest('POST', Uri.parse(url));
-      String token = GetStorage().read('token') ?? '';
+      String token = data.read('token') ?? '';
 
-      print(GetStorage().read('token'));
+      print(token);
 
-      // ✅ إضافة الهيدرز
+      // إضافة الهيدرز
       request.headers.addAll({
         'Accept': 'application/json',
         'Authorization': 'Bearer $token',
         'userLang': 'ar',
       });
 
-      // ✅ إضافة الملف فقط إذا كان موجودًا
+      // إضافة الملف إذا موجود
       if (file != null) {
         var length = await file.length();
         var stream = http.ByteStream(file.openRead());
@@ -166,7 +175,7 @@ class Crud extends GetxController {
       }
 
       // إضافة البيانات
-      request.fields.addAll(data);
+      request.fields.addAll(dataMap);
 
       // إرسال الطلب
       var response = await request.send();
@@ -197,6 +206,7 @@ class Crud extends GetxController {
     }
   }
 
+  // دوال ملفات متعددة ...
   multiFileRequestMoreImagePath(String url, Map<String, String> datas,
       List<XFile> files, List<String> imagePaths) async {
     var request = http.MultipartRequest('POST', Uri.parse(url));
@@ -301,7 +311,7 @@ class Crud extends GetxController {
   Future<dynamic> deleteRequest(String url) async {
     return await retryOnUnauthorized(() async {
       try {
-        String token = GetStorage().read('token') ?? '';
+        String token = data.read('token') ?? '';
 
         var response = await http.delete(
           Uri.parse(url),
@@ -331,9 +341,9 @@ class Crud extends GetxController {
 
       String token = data.read('token') ?? '';
 
-      print(GetStorage().read('token'));
+      print(token);
 
-      // ✅ إضافة الهيدرز
+      // إضافة الهيدرز
       request.headers.addAll({
         'Accept': 'application/json',
         'Authorization': 'Bearer $token',
@@ -359,7 +369,6 @@ class Crud extends GetxController {
         var responseBody = jsonDecode(response.body);
         return responseBody;
       } else if (response.statusCode == 401) {
-        // 401 سيتم معالجتها تلقائيًا من خلال retryOnUnauthorized
         return {'statusCode': 401};
       } else {
         print(response.statusCode.toString());
@@ -384,10 +393,8 @@ class Crud extends GetxController {
       );
 
       if (response.statusCode == 200 || response.statusCode == 401) {
-        // نرجع البيانات json على شكل Map
         return jsonDecode(response.body);
       } else {
-        // حالة الخطأ، ممكن ترجع null أو رسالة خطأ هنا
         return null;
       }
     } catch (e) {

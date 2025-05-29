@@ -3,7 +3,7 @@ import 'package:driving_school/core/services/crud.dart';
 import 'package:driving_school/main.dart';
 import 'package:get/get.dart';
 
-class TrainingScheduleController extends GetxController {
+class TrainingSessionsController extends GetxController {
   var isLoading = true.obs;
   var sessionsData = <dynamic>[].obs;
   var errorMessage = ''.obs;

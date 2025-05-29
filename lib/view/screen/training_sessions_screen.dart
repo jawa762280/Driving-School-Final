@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:driving_school/controller/training_schedule_controller.dart';
+import 'package:driving_school/controller/training_sessions_controller.dart';
 import 'package:driving_school/core/constant/appcolors.dart';
 
 class TrainingSessionsScreen extends StatelessWidget {
-  final controller = Get.put(TrainingScheduleController());
+  final controller = Get.put(TrainingSessionsController());
 
   TrainingSessionsScreen({super.key});
 
@@ -113,7 +113,7 @@ class TrainingSessionsScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildSessionsTable(TrainingScheduleController controller) {
+  Widget _buildSessionsTable(TrainingSessionsController controller) {
     final day = controller.sessionsData[controller.selectedDayIndex.value];
     final sessions = day['sessions'] as List<dynamic>;
 

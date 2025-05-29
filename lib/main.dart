@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:intl/date_symbol_data_local.dart';
 
 Future<void> initialServices() async {
   await Get.putAsync(() async => await MyServices().init());
@@ -12,6 +13,8 @@ Future<void> initialServices() async {
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await initialServices();
+  await initializeDateFormatting('ar');
+
   runApp(const MyApp());
 }
 

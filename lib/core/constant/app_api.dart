@@ -19,6 +19,7 @@ class AppLinks {
   static const String logout = '$init/logout';
   static const String createSchedule = '$init/training-schedules';
   static const String showTRainingSchedules = '$init/trainer';
-    static const String trainingSessions = '$init/trainer-sessions';
-
+  static const String trainingSessions = '$init/trainer-sessions';
+  static const String trainerVacation = '$init/schedule-exceptions';
 }
+  

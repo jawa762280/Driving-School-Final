@@ -19,4 +19,5 @@ class AppRouts {
   static const String trainerScheduleScreen = "/trainer_schedule_screen";
   static const String showTRainingSchedulesScreen = "/show_training_schedules";
   static const String trainingSessionsScreen = "/training_sessions_screen";
+  static const String vacationScreen = "/vacation_screen";
 }
