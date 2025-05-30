@@ -8,6 +8,7 @@ import 'package:driving_school/view/screen/profile_screen.dart';
 import 'package:driving_school/view/screen/reset_password_screen.dart';
 import 'package:driving_school/view/screen/search_screen.dart';
 import 'package:driving_school/view/screen/show_training_schedules_screen.dart';
+import 'package:driving_school/view/screen/show_vacations_screen.dart';
 import 'package:driving_school/view/screen/sign_up_screen.dart';
 import 'package:driving_school/view/screen/success_reset_password_screen.dart';
 import 'package:driving_school/view/screen/success_verifycode_signup_screen.dart';
@@ -90,5 +91,9 @@ List<GetPage<dynamic>> routes = [
   GetPage(
     name: AppRouts.vacationScreen,
     page: () => VacationScreen(),
+  ),
+  GetPage(
+    name: AppRouts.showVacationsScreen,
+    page: () => ShowVacationsScreen(),
   ),
 ];

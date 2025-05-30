@@ -15,7 +15,9 @@ class MyTextformfield extends StatelessWidget {
     this.hintText,
     this.readOnly = false,
     this.onTapTextField,
-    this.errorText, this.value,
+    this.errorText,
+    this.value,
+    this.maxLines,
   });
   final TextEditingController? mycontroller;
   final TextInputType? keyboardType;
@@ -30,10 +32,12 @@ class MyTextformfield extends StatelessWidget {
   final String? errorText;
   final void Function()? onTapTextField;
   final String? value;
+  final int? maxLines;
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      maxLines: maxLines ?? 1,
       initialValue: value,
       onTap: onTapTextField,
       obscureText: obscureText == null || obscureText == false ? false : true,

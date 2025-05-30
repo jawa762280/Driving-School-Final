@@ -56,6 +56,8 @@ class TrainerServices extends StatelessWidget {
                               Get.toNamed(AppRouts.showTRainingSchedulesScreen);
                             } else if (index == 2) {
                               Get.toNamed(AppRouts.vacationScreen);
+                            } else if (index == 3) {
+                              Get.toNamed(AppRouts.showVacationsScreen);
                             }
                           },
                           child: Container(

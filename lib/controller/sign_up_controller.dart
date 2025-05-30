@@ -14,18 +14,21 @@ class SignUpController extends GetxController {
   File? imageFile;
   String? emailError;
   String? phoneError;
+  late TextEditingController firstNameController;
+  late TextEditingController lastNameController;
+  late TextEditingController emailController;
+  late TextEditingController passController;
+  late TextEditingController birthDateController;
+  late TextEditingController genderController;
   TextEditingController phoneController = TextEditingController();
   TextEditingController addressController = TextEditingController();
   TextEditingController roleController = TextEditingController();
 
-  late TextEditingController passController;
-  late TextEditingController emailController;
-  late TextEditingController firstNameController;
-  late TextEditingController lastNameController;
-
-  late TextEditingController birthDateController;
-  late TextEditingController genderController;
   late TextEditingController imageController;
+  late TextEditingController licenseNumber;
+  late TextEditingController licenseExpiryDate;
+  late TextEditingController trainingType;
+  late TextEditingController experience;
 
   showPass() {
     isShowPass = !isShowPass;
@@ -61,6 +64,10 @@ class SignUpController extends GetxController {
         'phone_number': phoneController.text,
         'address': addressController.text,
         'role': roleController.text.toLowerCase(),
+        'license_number': licenseNumber.text,
+        'license_expiry_date': licenseExpiryDate.text,
+        'training_type': trainingType.text,
+        'experience': experience.text,
       };
       String selectedRole = roleController.text.toLowerCase();
       String apiUrl = selectedRole == "trainer"
@@ -115,7 +122,6 @@ class SignUpController extends GetxController {
         );
       }
     } catch (e) {
-      isLoading.value = false;
       MessageService.showSnackbar(
         title: "خطأ",
         message: "حدث خطأ أثناء الاتصال: ${e.toString()}",
@@ -132,6 +138,10 @@ class SignUpController extends GetxController {
     birthDateController = TextEditingController();
     genderController = TextEditingController();
     imageController = TextEditingController();
+    licenseNumber = TextEditingController();
+    licenseExpiryDate = TextEditingController();
+    trainingType = TextEditingController();
+    experience = TextEditingController();
     super.onInit();
   }
 
@@ -144,6 +154,10 @@ class SignUpController extends GetxController {
     birthDateController.dispose();
     genderController.dispose();
     imageController.dispose();
+    licenseNumber.dispose();
+    licenseExpiryDate.dispose();
+    trainingType.dispose();
+    experience.dispose();
     super.onClose();
   }
 }
