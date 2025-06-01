@@ -2,54 +2,58 @@ import 'package:driving_school/core/constant/app_api.dart';
 import 'package:driving_school/core/services/crud.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
-import 'package:flutter/widgets.dart';
 
-class ShowTRainingSchedulesController extends GetxController {
-  Crud crud = Crud();
+class ShowTrainingSchedulesController extends GetxController {
+  final Crud crud = Crud();
   final GetStorage data = GetStorage();
 
   List<Map<String, dynamic>> scheduleList = [];
   bool isLoading = true;
 
+  int? externalTrainerId;
+
+  void setTrainerId(int id) {
+    externalTrainerId = id;
+    fetchTrainerSchedule();
+  }
+
   @override
   void onInit() {
     super.onInit();
-    fetchTrainerSchedule();
+
+    // في حالة تم استدعاؤه بدون تمرير ID خارجي (يعني من مدرب نفسه)
+    if (externalTrainerId == null) {
+      fetchTrainerSchedule();
+    }
   }
 
   void fetchTrainerSchedule() async {
     isLoading = true;
     update();
 
-    final user = data.read('user'); // لو بدك بيانات المستخدم
-
-    if (user == null) {
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        Get.snackbar("خطأ", "لم يتم العثور على بيانات المستخدم");
-      });
-      isLoading = false;
-      update();
-      return;
-    }
-
-    // هنا نقرأ الدور من بيانات المستخدم مباشرة
+    final user = data.read('user');
     final role = data.read('role') ?? '';
 
-    if (role == null || (role != 'trainer' && role != 'student')) {
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        Get.snackbar("خطأ", "دور المستخدم غير معروف");
-      });
+    if (user == null) {
+      Get.snackbar("خطأ", "لم يتم العثور على بيانات المستخدم");
       isLoading = false;
       update();
       return;
     }
 
-    final trainerId = user['trainer_id']?.toString();
-    final studentId = user['student_id']?.toString();
+    // نحدد المعرف حسب الدور
+    final trainerId = role == 'trainer'
+        ? user['trainer_id']?.toString()
+        : externalTrainerId?.toString();
 
-    final url = role == 'trainer'
-        ? "${AppLinks.showTRainingSchedules}/$trainerId/schedules"
-        : "${AppLinks.showTRainingSchedules}/$studentId/schedules";
+    if (trainerId == null) {
+      Get.snackbar("خطأ", "معرف المدرب غير متوفر");
+      isLoading = false;
+      update();
+      return;
+    }
+
+    final url = "${AppLinks.showTRainingSchedules}/$trainerId/schedules";
 
     final response = await crud.getRequest(url);
 
@@ -58,9 +62,7 @@ class ShowTRainingSchedulesController extends GetxController {
         response['data'].where((e) => e is Map<String, dynamic>),
       );
     } else {
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        Get.snackbar("خطأ", "فشل في تحميل الجداول");
-      });
+      Get.snackbar("خطأ", "فشل في تحميل الجداول");
     }
 
     isLoading = false;

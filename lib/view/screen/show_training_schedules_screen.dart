@@ -10,11 +10,10 @@ class ShowTRainingSchedulesScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // ضع الـ controller هنا
-    Get.put(ShowTRainingSchedulesController());
+    Get.put(ShowTrainingSchedulesController());
 
-    return GetBuilder<ShowTRainingSchedulesController>(
+    return GetBuilder<ShowTrainingSchedulesController>(
       builder: (controller) {
-        // اقرأ الدور من بيانات المستخدم
         final role = controller.data.read('role') ?? '';
 
         final isTrainer = role == 'trainer';
@@ -22,9 +21,13 @@ class ShowTRainingSchedulesScreen extends StatelessWidget {
         return Scaffold(
           backgroundColor: Colors.grey[100],
           appBar: AppBar(
-            title: const Text("جداول التدريب"),
+            title: const Text(
+              "جداول التدريب",
+              style: TextStyle(color: Colors.white),
+            ),
             backgroundColor: AppColors.primaryColor,
             centerTitle: true,
+            iconTheme: IconThemeData(color: Colors.white), // <-- هنا لون السهم
           ),
           body: controller.isLoading
               ? const Center(child: CircularProgressIndicator())
@@ -62,7 +65,7 @@ class ShowTRainingSchedulesScreen extends StatelessWidget {
         ),
         boxShadow: [
           BoxShadow(
-            color: Colors.black12.withOpacity(0.1),
+            color: Colors.black12.withAlpha((0.1 * 255).toInt()),
             blurRadius: 8,
             offset: const Offset(0, 4),
           ),
@@ -152,7 +155,7 @@ class ShowTRainingSchedulesScreen extends StatelessWidget {
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: Colors.black12.withOpacity(0.1),
+            color: Colors.black12.withAlpha((0.1 * 255).toInt()),
             blurRadius: 8,
             offset: const Offset(0, 4),
           ),

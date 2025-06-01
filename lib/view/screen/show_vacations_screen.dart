@@ -16,6 +16,8 @@ class ShowVacationsScreen extends StatelessWidget {
       appBar: AppBar(
         title: const Text("إجازاتي", style: TextStyle(color: Colors.white)),
         centerTitle: true,
+        iconTheme: IconThemeData(color: Colors.white), 
+
         backgroundColor: AppColors.primaryColor,
         elevation: 3,
       ),

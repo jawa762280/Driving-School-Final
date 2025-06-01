@@ -15,9 +15,12 @@ class TrainingSessionsScreen extends StatelessWidget {
       appBar: AppBar(
         title: const Text(
           "جدول الجلسات",
-          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 22),
+          style: TextStyle(
+              fontWeight: FontWeight.bold, fontSize: 22, color: Colors.white),
         ),
         centerTitle: true,
+        iconTheme: IconThemeData(color: Colors.white), // <-- هنا لون السهم
+
         backgroundColor: AppColors.primaryColor,
         elevation: 0,
       ),
@@ -131,8 +134,9 @@ class TrainingSessionsScreen extends StatelessWidget {
         final end = session['end_time'].substring(0, 5);
 
         return GestureDetector(
-          onTap: available
+          onTap: (!controller.isTrainer && available)
               ? () {
+                  // فقط الطالب يمكنه الضغط على جلسة متاحة
                   Get.snackbar(
                     "تم اختيار الجلسة",
                     "من $start إلى $end",
@@ -156,7 +160,7 @@ class TrainingSessionsScreen extends StatelessWidget {
                 width: 1.4,
               ),
               boxShadow: [
-                if (available)
+                if (available && !controller.isTrainer)
                   BoxShadow(
                     color:
                         AppColors.primaryColor.withAlpha((0.1 * 255).toInt()),

@@ -20,6 +20,8 @@ class VacationScreen extends StatelessWidget {
       appBar: AppBar(
         title: const Text("طلب إجازة", style: TextStyle(color: Colors.white)),
         centerTitle: true,
+        iconTheme: IconThemeData(color: Colors.white), // <-- هنا لون السهم
+
         backgroundColor: AppColors.primaryColor,
       ),
       body: Obx(() {
