@@ -25,6 +25,10 @@ class UpdateInformationController extends GetxController {
   late TextEditingController birthDateController = TextEditingController();
   late TextEditingController genderController = TextEditingController();
   late TextEditingController imageController = TextEditingController();
+  TextEditingController licenseNumber = TextEditingController();
+  TextEditingController licenseExpiryDate = TextEditingController();
+  TextEditingController trainingType = TextEditingController();
+  TextEditingController experience = TextEditingController();
 
   void showPass() {
     isShowPass = !isShowPass;
@@ -41,22 +45,34 @@ class UpdateInformationController extends GetxController {
   }
 
   updateInformation() async {
+    Map<String, String> datas = {
+      '_method': 'PUT',
+      'first_name': firstNameController.text,
+      'last_name': lastNameController.text,
+      'date_of_Birth': birthDateController.text,
+      data.read('user')['phone_number'].toString() == phoneController.text
+          ? ''
+          : 'phone_number': phoneController.text,
+      'address': addressController.text,
+      'role': data.read('role').toString(),
+      'gender': genderController.text,
+    };
+    data.read('role').toString() == 'trainer'
+        ? datas.addAll({
+            'license_number': licenseNumber.text,
+            'license_expiry_date': licenseExpiryDate.text,
+            'training_type': trainingType.text,
+            'experience': experience.text,
+          })
+        : null;
+    String apiLink = data.read('role').toString() == 'trainer'
+        ? '${AppLinks.trainers}/${data.read('user')['trainer_id']}'
+        : '${AppLinks.updateInformation}/${data.read('user')['student_id']}';
     isLoading.value = true;
     update();
     var response = await crud.fileRequest(
-      '${AppLinks.updateInformation}/${data.read('user')['student_id']}',
-      {
-        '_method': 'PUT',
-        'first_name': firstNameController.text,
-        'last_name': lastNameController.text,
-        'date_of_Birth': birthDateController.text,
-        data.read('user')['phone_number'].toString() == phoneController.text
-            ? ''
-            : 'phone_number': phoneController.text,
-        'address': addressController.text,
-        'role': data.read('role').toString(),
-        'gender': genderController.text,
-      },
+      apiLink,
+      datas,
       imageFile,
     );
     isLoading.value = false;
@@ -85,6 +101,10 @@ class UpdateInformationController extends GetxController {
     phoneController.text = data.read('user')['phone_number'] ?? '';
     roleController.text = data.read('role') ?? '';
     addressController.text = data.read('user')['address'] ?? '';
+    licenseNumber.text = data.read('user')['license_number'] ?? '';
+    licenseExpiryDate.text = data.read('user')['license_expiry_date'] ?? '';
+    trainingType.text = data.read('user')['training_type'] ?? '';
+    experience.text = data.read('user')['experience'] ?? '';
     imageUrl =
         'http${data.read('user')['image'].toString().split('http').last}';
 

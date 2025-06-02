@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:driving_school/controller/update_information_controller.dart';
+import 'package:driving_school/main.dart';
 import 'package:driving_school/view/widget/genderchip.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -230,6 +231,107 @@ class UpdateInformationContainer extends StatelessWidget {
                   ),
                 ),
               ),
+              SizedBox(height: 20.h),
+              data.read('role') == 'trainer'
+                  ? Column(
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: [
+                        Text("رقم الرخصة",
+                            style: TextStyle(
+                                color: Colors.grey[800], fontSize: 11.sp)),
+                        SizedBox(height: 15.h),
+                        MyTextformfield(
+                          valid: (val) =>
+                              validInput(val, 7, 255, "License Number"),
+                          mycontroller: controller.licenseNumber,
+                          keyboardType: TextInputType.number,
+                          prefixIcon: Icons.credit_card_outlined,
+                          iconColor: AppColors.primaryColor,
+                          filled: true,
+                        ),
+                        SizedBox(height: 16.h),
+                        Text("تاريخ انتهاء الرخصة",
+                            style: TextStyle(
+                                color: Colors.grey[800], fontSize: 11.sp)),
+                        SizedBox(height: 15.h),
+                        MyTextformfield(
+                          valid: (val) =>
+                              validInput(val, 8, 10, "date_of_expiry"),
+                          mycontroller: controller.licenseExpiryDate,
+                          keyboardType: TextInputType.datetime,
+                          prefixIcon: Icons.calendar_today,
+                          iconColor: AppColors.primaryColor,
+                          filled: true,
+                          readOnly: true,
+                          onTapTextField: () async {
+                            DateTime? pickedDate = await showDatePicker(
+                              context: context,
+                              initialDate: DateTime.now(),
+                              firstDate: DateTime.now(),
+                              lastDate: DateTime(21000),
+                            );
+
+                            if (pickedDate != null) {
+                              String formattedDate =
+                                  DateFormat("yyyy-MM-dd").format(pickedDate);
+                              controller.licenseExpiryDate.text = formattedDate;
+                            }
+                          },
+                        ),
+                        SizedBox(height: 16.h),
+                        Text("نوع التدريب",
+                            style: TextStyle(
+                                color: Colors.grey[800], fontSize: 11.sp)),
+                        SizedBox(height: 15.h),
+                        DropdownButtonFormField<String>(
+                          decoration: InputDecoration(
+                            filled: true,
+                            fillColor: Colors.grey[100],
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(12.r),
+                              borderSide: BorderSide.none,
+                            ),
+                            contentPadding: EdgeInsets.symmetric(
+                                horizontal: 12.w, vertical: 14.h),
+                          ),
+                          value: controller.trainingType.text.isNotEmpty
+                              ? controller.trainingType.text
+                              : null,
+                          items: const [
+                            DropdownMenuItem(
+                                value: 'normal', child: Text('عادي')),
+                            DropdownMenuItem(
+                                value: 'special_needs',
+                                child: Text('ذوي الاحتياجات الخاصة')),
+                          ],
+                          onChanged: (val) {
+                            controller.trainingType.text = val!;
+                            controller.update();
+                          },
+                          validator: (value) => value == null || value.isEmpty
+                              ? 'يرجى اختيار نوع التدريب'
+                              : null,
+                        ),
+                        SizedBox(height: 16.h),
+                        Text("الخبرات ",
+                            style: TextStyle(
+                                color: Colors.grey[800], fontSize: 11.sp)),
+                        SizedBox(
+                          height: 15.h,
+                        ),
+                        MyTextformfield(
+                          valid: (val) => validInput(val, 2, 30,
+                              "username"), // تعديل لاستخدام validInput
+                          mycontroller: controller.experience,
+                          maxLines: 3,
+                          keyboardType: TextInputType.text,
+                          prefixIcon: Icons.workspace_premium_outlined,
+                          iconColor: AppColors.primaryColor,
+                          filled: true,
+                        ),
+                      ],
+                    )
+                  : SizedBox(),
               SizedBox(height: 20.h),
 
               Text("الصورة الشخصية",
