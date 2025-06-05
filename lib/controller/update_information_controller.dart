@@ -29,6 +29,7 @@ class UpdateInformationController extends GetxController {
   TextEditingController licenseExpiryDate = TextEditingController();
   TextEditingController trainingType = TextEditingController();
   TextEditingController experience = TextEditingController();
+  TextEditingController password = TextEditingController();
 
   void showPass() {
     isShowPass = !isShowPass;
@@ -50,13 +51,16 @@ class UpdateInformationController extends GetxController {
       'first_name': firstNameController.text,
       'last_name': lastNameController.text,
       'date_of_Birth': birthDateController.text,
-      data.read('user')['phone_number'].toString() == phoneController.text
-          ? ''
-          : 'phone_number': phoneController.text,
+      'phone_number': phoneController.text,
       'address': addressController.text,
       'role': data.read('role').toString(),
       'gender': genderController.text,
     };
+    password.text.isNotEmpty
+        ? datas.addAll({
+            'password': password.text,
+          })
+        : null;
     data.read('role').toString() == 'trainer'
         ? datas.addAll({
             'license_number': licenseNumber.text,
