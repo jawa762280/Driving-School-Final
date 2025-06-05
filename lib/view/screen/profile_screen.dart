@@ -39,7 +39,7 @@ class ProfileScreen extends StatelessWidget {
                 decoration: BoxDecoration(
                     shape: BoxShape.circle,
                     image: DecorationImage(
-                        fit: BoxFit.cover,
+                        fit: BoxFit.fill,
                         image: NetworkImage(
                             'http${data.read('user')['image'].toString().split('http').last}'))),
               ),

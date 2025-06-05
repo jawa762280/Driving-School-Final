@@ -88,7 +88,9 @@ class UpdateInformationController extends GetxController {
         title: "نجاح",
         message: response['message'],
       );
-      Get.offAllNamed(AppRouts.studentHomePageScreen);
+      data.read('role').toString() == 'student'
+          ? Get.offAllNamed(AppRouts.studentHomePageScreen)
+          : Get.offAllNamed(AppRouts.trainerHomePageScreen);
     }
   }
 
