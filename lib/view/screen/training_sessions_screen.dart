@@ -1,3 +1,4 @@
+import 'package:driving_school/core/constant/approuts.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:driving_school/controller/training_sessions_controller.dart';
@@ -19,8 +20,7 @@ class TrainingSessionsScreen extends StatelessWidget {
               fontWeight: FontWeight.bold, fontSize: 22, color: Colors.white),
         ),
         centerTitle: true,
-        iconTheme: IconThemeData(color: Colors.white), // <-- هنا لون السهم
-
+        iconTheme: IconThemeData(color: Colors.white),
         backgroundColor: AppColors.primaryColor,
         elevation: 0,
       ),
@@ -46,12 +46,12 @@ class TrainingSessionsScreen extends StatelessWidget {
           child: Column(
             children: [
               const SizedBox(height: 15),
-              _buildDaySelector(),
+              buildDaySelector(),
               const SizedBox(height: 15),
               Expanded(
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 16),
-                  child: _buildSessionsTable(controller),
+                  child: buildSessionsTable(controller),
                 ),
               ),
             ],
@@ -61,7 +61,7 @@ class TrainingSessionsScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildDaySelector() {
+  Widget buildDaySelector() {
     return SizedBox(
       height: 60,
       child: ListView.separated(
@@ -116,7 +116,7 @@ class TrainingSessionsScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildSessionsTable(TrainingSessionsController controller) {
+  Widget buildSessionsTable(TrainingSessionsController controller) {
     final day = controller.sessionsData[controller.selectedDayIndex.value];
     final sessions = day['sessions'] as List<dynamic>;
 
@@ -129,13 +129,20 @@ class TrainingSessionsScreen extends StatelessWidget {
       separatorBuilder: (_, __) => const SizedBox(height: 14),
       itemBuilder: (context, index) {
         final session = sessions[index];
+
         final available = session['status'] == 'available';
+        final booked = session['status'] == 'booked';
+
         final start = session['start_time'].substring(0, 5);
         final end = session['end_time'].substring(0, 5);
 
         return GestureDetector(
           onTap: (!controller.isTrainer && available)
               ? () {
+                  Get.toNamed(AppRouts.carsScreen, arguments: {
+                    'mode': 'booking',
+                    'session_id': session['id'],
+                  });
                   // فقط الطالب يمكنه الضغط على جلسة متاحة
                   Get.snackbar(
                     "تم اختيار الجلسة",
@@ -189,18 +196,28 @@ class TrainingSessionsScreen extends StatelessWidget {
                   decoration: BoxDecoration(
                     color: available
                         ? AppColors.primaryColor.withAlpha((0.15 * 255).toInt())
-                        : Colors.grey.shade400,
+                        : booked
+                            ? Colors.grey.shade400
+                            : Colors.grey.shade200,
                     borderRadius: BorderRadius.circular(12),
                   ),
                   child: Text(
-                    available ? "متاح" : "محجوز",
+                    available
+                        ? "متاح"
+                        : booked
+                            ? "محجوز"
+                            : "عطلة",
                     style: TextStyle(
                       fontSize: 12,
                       fontWeight: FontWeight.bold,
-                      color: available ? AppColors.primaryColor : Colors.white,
+                      color: available
+                          ? AppColors.primaryColor
+                          : booked
+                              ? Colors.white
+                              : Colors.yellow.shade600,
                     ),
                   ),
-                ),
+                )
               ],
             ),
           ),

@@ -2,10 +2,9 @@ import 'package:driving_school/core/constant/app_api.dart';
 import 'package:driving_school/core/services/crud.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
-import 'package:flutter/widgets.dart';
 
 class TrainingSessionsController extends GetxController {
-  Crud crud = Crud();
+  final Crud crud = Crud();
   final GetStorage data = GetStorage();
 
   var isLoading = true.obs;
@@ -15,15 +14,40 @@ class TrainingSessionsController extends GetxController {
 
   late final bool isTrainer;
   String? trainerId;
-  String? studentId;
 
   void selectDay(int index) {
     selectedDayIndex.value = index;
   }
 
+  void setTrainerId(int id) {
+    trainerId = id.toString();
+    fetchTrainingSessions();
+  }
+
   @override
   void onInit() {
     super.onInit();
+    initTrainerIdAndFetch();
+  }
+
+  void initTrainerIdAndFetch() {
+    final user = data.read('user');
+    final role = data.read('role') ?? '';
+
+    isTrainer = role == 'trainer';
+
+    // أولاً: إذا تم تمرير trainer_id عبر arguments
+    trainerId = Get.arguments?['trainer_id']?.toString();
+
+    // ثانياً: إذا لم يتم تمريره، نحاول من التخزين المحلي
+    trainerId ??= user?['trainer_id']?.toString();
+
+    if (trainerId == null) {
+      errorMessage.value = 'لم يتم تحديد المدرب';
+      isLoading.value = false;
+      return;
+    }
+
     fetchTrainingSessions();
   }
 
@@ -31,33 +55,7 @@ class TrainingSessionsController extends GetxController {
     isLoading.value = true;
     errorMessage.value = '';
 
-    final user = data.read('user');
-    final role = data.read('role') ?? '';
-
-    if (user == null) {
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        Get.snackbar("خطأ", "لم يتم العثور على بيانات المستخدم");
-      });
-      isLoading.value = false;
-      return;
-    }
-
-    if (role != 'trainer' && role != 'student') {
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        Get.snackbar("خطأ", "دور المستخدم غير معروف");
-      });
-      isLoading.value = false;
-      return;
-    }
-
-    isTrainer = role == 'trainer';
-    trainerId = user['trainer_id']?.toString();
-    studentId = user['student_id']?.toString();
-
-    // نستخدم trainer_id فقط سواء كان المدرب أو الطالب، لأن الجدول مبني على المدرب
-    final idToUse = isTrainer ? trainerId : trainerId; // أو من عند الطالب: user['trainer_id']
-
-    final url = "${AppLinks.trainingSessions}?trainer_id=$idToUse";
+    final url = "${AppLinks.trainingSessions}?trainer_id=$trainerId";
     final response = await crud.getRequest(url);
 
     if (response != null && response['data'] != null) {

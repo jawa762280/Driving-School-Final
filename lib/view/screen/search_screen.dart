@@ -46,6 +46,7 @@ class SearchScreen extends StatelessWidget {
                         itemBuilder: (context, index) {
                           final instructor =
                               controller.filteredInstructors[index];
+
                           return Column(
                             children: [
                               ContainerSearch(
@@ -53,14 +54,7 @@ class SearchScreen extends StatelessWidget {
                                 name:
                                     '${instructor['first_name']} ${instructor['last_name']}',
                                 email: instructor['email'] ?? '',
-                                birthdayText: "تاريخ الميلاد",
-                                birthday: instructor['date_of_Birth'] ?? '',
-                                genderText: "الجنس",
-                                gender: instructor['gender'] == 'male'
-                                    ? 'ذكر'
-                                    : instructor['gender'] == 'female'
-                                        ? 'أنثى'
-                                        : 'غير معروف',
+                                trainerId: instructor['trainer_id'],
                               ),
                               SizedBox(height: 15),
                             ],

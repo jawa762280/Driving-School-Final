@@ -1,7 +1,10 @@
+import 'package:driving_school/controller/show_training_schedules_controller.dart';
 import 'package:driving_school/core/constant/appcolors.dart';
 import 'package:driving_school/core/constant/appimages.dart';
+import 'package:driving_school/core/constant/approuts.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
 
 class ContainerSearch extends StatelessWidget {
   const ContainerSearch({
@@ -9,19 +12,13 @@ class ContainerSearch extends StatelessWidget {
     required this.image,
     required this.name,
     required this.email,
-    required this.birthdayText,
-    required this.birthday,
-    required this.genderText,
-    required this.gender,
+    required this.trainerId, // 👈 أضف هذا
   });
 
   final String image;
   final String name;
   final String email;
-  final String birthdayText;
-  final String birthday;
-  final String genderText;
-  final String gender;
+  final int trainerId; // 👈 أضف هذا
 
   @override
   Widget build(BuildContext context) {
@@ -86,66 +83,49 @@ class ContainerSearch extends StatelessWidget {
           SizedBox(height: 14.h),
           Divider(thickness: 1, color: Colors.grey.shade200),
           SizedBox(height: 10.h),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            crossAxisAlignment: CrossAxisAlignment.start,
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              Column(
-                children: [
-                  Icon(Icons.cake_outlined,
-                      color: AppColors.primaryColor, size: 20.sp),
-                  SizedBox(height: 4.h),
-                  Text(
-                    birthdayText,
-                    style: TextStyle(
-                      fontSize: 14.sp,
-                    ),
-                  ),
-                  SizedBox(height: 2.h),
-                  Text(
-                    birthday,
-                    style: TextStyle(
-                      fontSize: 13.sp,
-                      color: Colors.grey,
-                    ),
-                  ),
-                ],
-              ),
-              Column(
-                children: [
-                  Icon(Icons.person_outline,
-                      color: AppColors.primaryColor, size: 20.sp),
-                  SizedBox(height: 4.h),
-                  Text(
-                    genderText,
-                    style: TextStyle(
-                      fontSize: 14.sp,
-                    ),
-                  ),
-                  SizedBox(height: 2.h),
-                  Text(
-                    gender,
-                    style: TextStyle(
-                      fontSize: 13.sp,
-                      color: Colors.grey,
-                    ),
-                  ),
-                ],
-              ),
               ElevatedButton.icon(
-                onPressed: () {},
-                icon: Icon(Icons.visibility_outlined, size: 18.sp),
-                label: Text("عرض", style: TextStyle(fontSize: 14.sp)),
+                onPressed: () {
+                  final controller = Get.put(ShowTrainingSchedulesController());
+                  controller.setTrainerId(trainerId); // ✅ نستخدم القيمة الممررة
+
+                  Get.toNamed(AppRouts.showTRainingSchedulesScreen);
+                },
+                icon: Icon(Icons.table_chart_outlined, size: 18.sp),
+                label: Text("عرض جداول التدريب",
+                    style: TextStyle(fontSize: 13.sp)),
                 style: ElevatedButton.styleFrom(
                   foregroundColor: Colors.white,
                   backgroundColor: AppColors.primaryColor,
                   padding:
-                      EdgeInsets.symmetric(horizontal: 14.w, vertical: 6.h),
+                      EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.h),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12.r),
                   ),
                 ),
-              )
+              ),
+              SizedBox(height: 10.h),
+              ElevatedButton.icon(
+                onPressed: () {
+                  Get.toNamed(AppRouts.trainingSessionsScreen, arguments: {
+                    'trainer_id': trainerId,
+                  });
+                },
+                icon: Icon(Icons.event_available_outlined, size: 18.sp),
+                label:
+                    Text("حجز جلسة تدريب", style: TextStyle(fontSize: 13.sp)),
+                style: ElevatedButton.styleFrom(
+                  foregroundColor: Colors.white,
+                  backgroundColor: AppColors.primaryColor,
+                  padding:
+                      EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.h),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12.r),
+                  ),
+                ),
+              ),
             ],
           ),
         ],

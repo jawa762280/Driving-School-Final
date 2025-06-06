@@ -46,13 +46,6 @@ class ShowTrainingSchedulesController extends GetxController {
         ? user['trainer_id']?.toString()
         : externalTrainerId?.toString();
 
-    if (trainerId == null) {
-      Get.snackbar("خطأ", "معرف المدرب غير متوفر");
-      isLoading = false;
-      update();
-      return;
-    }
-
     final url = "${AppLinks.showTRainingSchedules}/$trainerId/schedules";
 
     final response = await crud.getRequest(url);

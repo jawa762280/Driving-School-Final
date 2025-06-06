@@ -14,7 +14,7 @@ class ProfileController extends GetxController {
   }
 
   goToCarsScreen() {
-    Get.toNamed(AppRouts.carsScreen);
+    Get.toNamed(AppRouts.carsScreen, arguments: {'mode': 'view'});
   }
 
   void showDeleteAccountDialog() {

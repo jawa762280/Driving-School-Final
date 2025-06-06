@@ -1,5 +1,6 @@
 import 'package:driving_school/core/constant/approuts.dart';
 import 'package:driving_school/core/middleware/mymiddleware.dart';
+import 'package:driving_school/view/screen/bookings_sessions_screen.dart';
 import 'package:driving_school/view/screen/cars_screen.dart';
 import 'package:driving_school/view/screen/login_screen.dart';
 import 'package:driving_school/view/screen/onboarding_screen.dart';
@@ -24,7 +25,7 @@ import 'package:get/get.dart';
 
 List<GetPage<dynamic>> routes = [
   GetPage(
-      name: "/", page: () => LoginScreen(), middlewares: [AuthMiddleware()]),
+      name: "/", page: () => BookingsSessionsScreen(), middlewares: [AuthMiddleware()]),
   GetPage(
     name: AppRouts.loginScreen,
     page: () => LoginScreen(),
@@ -95,5 +96,9 @@ List<GetPage<dynamic>> routes = [
   GetPage(
     name: AppRouts.showVacationsScreen,
     page: () => ShowVacationsScreen(),
+  ),
+  GetPage(
+    name: AppRouts.showVacationsScreen,
+    page: () => BookingsSessionsScreen(),
   ),
 ];

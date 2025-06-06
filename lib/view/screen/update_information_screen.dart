@@ -19,9 +19,10 @@ class UpdateInformationScreen extends StatelessWidget {
         body: SafeArea(
           child: Obx(
             () => Stack(children: [
+              
               SingleChildScrollView(
                 padding: EdgeInsets.all(24.w),
-                child: Column(  
+                child: Column(
                   children: [
                     AppLogo(),
                     UpdateInformationContainer(),

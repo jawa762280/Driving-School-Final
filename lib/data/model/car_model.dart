@@ -1,4 +1,5 @@
 class CarModel {
+  final int id;
   final String licensePlate;
   final String model;
   final String year;
@@ -11,6 +12,7 @@ class CarModel {
   final String status;
 
   CarModel({
+    required this.id,
     required this.licensePlate,
     required this.model,
     required this.year,
@@ -25,6 +27,7 @@ class CarModel {
 
   factory CarModel.fromJson(Map<String, dynamic> json) {
     return CarModel(
+      id: json['car_id'],
       licensePlate: json['license_plate'],
       model: json['model'],
       year: json['year'],

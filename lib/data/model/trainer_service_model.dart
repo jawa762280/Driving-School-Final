@@ -17,4 +17,5 @@ final List<TrainerServiceModel> trainerServices = [
       icon: Icons.schedule_outlined, title: "عرض جداولي التدريب "),
   TrainerServiceModel(icon: Icons.schedule_outlined, title: "طلب اجازة "),
   TrainerServiceModel(icon: Icons.schedule_outlined, title: "عرض الاجازات"),
+  TrainerServiceModel(icon: Icons.schedule_outlined, title: "عرض الجلسات"),
 ];

@@ -1,7 +1,9 @@
+import 'package:driving_school/controller/booking_controller.dart';
 import 'package:driving_school/core/constant/appcolors.dart';
 import 'package:driving_school/data/model/car_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
 
 class CarCard extends StatelessWidget {
   final CarModel car;
@@ -10,6 +12,7 @@ class CarCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Get.put(BookingController());
     return Container(
       padding: EdgeInsets.all(12.w),
       decoration: BoxDecoration(
@@ -23,9 +26,7 @@ class CarCard extends StatelessWidget {
           ),
         ],
         border: Border.all(
-          color: car.isForSpecialNeeds
-              ? Colors.deepPurple.shade200
-              : Colors.grey.shade300,
+          color: Colors.grey.shade300,
           width: 1.5,
         ),
       ),
@@ -97,21 +98,57 @@ class CarCard extends StatelessWidget {
           SizedBox(height: 16.h),
 
           // 🔹 زر "اختيار"
+          // 🔹 إظهار الحالة (محجوزة / متاحة)
           Center(
-            child: ElevatedButton(
-              onPressed: () {},
-              style: ElevatedButton.styleFrom(
-                backgroundColor: AppColors.lightGreen,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(20.r),
-                ),
-                padding: EdgeInsets.symmetric(horizontal: 32.w, vertical: 10.h),
-              ),
-              child: Text(
-                "اختيار",
-                style: TextStyle(fontSize: 15.sp, fontWeight: FontWeight.w600),
-              ),
-            ),
+            child: car.status == 'available'
+                ? ElevatedButton(
+                    onPressed: () {
+                      Get.defaultDialog(
+                        title: "تأكيد",
+                        middleText: "هل تريد حجز هذه السيارة للجلسة المختارة؟",
+                        textConfirm: "نعم",
+                        textCancel: "إلغاء",
+                        buttonColor: AppColors.primaryColor,
+                        onConfirm: () {
+                          Get.back(); // إغلاق الحوار
+                          final bookingController =
+                              Get.find<BookingController>();
+                          bookingController.bookTrainingSession(car.id);
+                        },
+                      );
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: AppColors.lightGreen,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(20.r),
+                      ),
+                      padding: EdgeInsets.symmetric(
+                          horizontal: 32.w, vertical: 10.h),
+                    ),
+                    child: Text(
+                      "اختيار",
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 15.sp,
+                          fontWeight: FontWeight.w600),
+                    ),
+                  )
+                : Container(
+                    padding:
+                        EdgeInsets.symmetric(horizontal: 32.w, vertical: 10.h),
+                    decoration: BoxDecoration(
+                      color: Colors.grey.shade400,
+                      borderRadius: BorderRadius.circular(20.r),
+                    ),
+                    child: Text(
+                      "محجوزة",
+                      style: TextStyle(
+                        fontSize: 15.sp,
+                        fontWeight: FontWeight.w600,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
           ),
         ],
       ),
