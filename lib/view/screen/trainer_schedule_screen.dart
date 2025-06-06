@@ -15,6 +15,15 @@ class TrainerScheduleScreen extends StatelessWidget {
     return Directionality(
       textDirection: TextDirection.rtl,
       child: Scaffold(
+        appBar: AppBar(
+          title: const Text(
+            "انشاء جدول تدريب",
+            style: TextStyle(color: Colors.white),
+          ),
+          backgroundColor: AppColors.primaryColor,
+          centerTitle: true,
+          iconTheme: IconThemeData(color: Colors.white), // <-- هنا لون السهم
+        ),
         backgroundColor: Color(0xFFF1F8F4),
         body: SafeArea(
           child: Obx(
@@ -37,13 +46,6 @@ class TrainerScheduleScreen extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Center(
-                        child: Text(
-                          "انشاء جدول تدريب",
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold, fontSize: 22),
-                        ),
-                      ),
                       SizedBox(
                         height: 20.h,
                       ),
@@ -131,7 +133,6 @@ class TrainerScheduleScreen extends StatelessWidget {
                             Row(
                               children: [
                                 Container(
-                                  height: 40,
                                   width: 100,
                                   decoration: BoxDecoration(
                                       color: Colors.white,
@@ -145,7 +146,6 @@ class TrainerScheduleScreen extends StatelessWidget {
                                 ),
                                 SizedBox(width: 10.w),
                                 Container(
-                                  height: 40,
                                   width: 100,
                                   decoration: BoxDecoration(
                                       color: Colors.white,

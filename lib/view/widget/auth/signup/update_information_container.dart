@@ -86,18 +86,17 @@ class UpdateInformationContainer extends StatelessWidget {
                 readOnly: true,
               ),
               SizedBox(height: 16.h),
-
-              // كلمة المرور
               Text("كلمة المرور",
                   style: TextStyle(color: Colors.grey[800], fontSize: 12.sp)),
               SizedBox(height: 15.h),
               MyTextformfield(
+                valid: (val) => validInput(val, 2, 30, "password"),
+                mycontroller: controller.password,
                 obscureText: controller.isShowPass,
                 prefixIcon: Icons.visibility,
+                keyboardType: TextInputType.text,
                 iconColor: AppColors.primaryColor,
-                onTapIcon: () => controller.showPass(),
                 filled: true,
-                readOnly: true,
               ),
               SizedBox(height: 16.h),
               // حقل تاريخ الميلاد
@@ -132,8 +131,7 @@ class UpdateInformationContainer extends StatelessWidget {
                   style: TextStyle(color: Colors.grey[800], fontSize: 11.sp)),
               SizedBox(height: 15.h),
               MyTextformfield(
-                valid: (val) => validInput(
-                    val, 10, 10, "phone_number"), // تعديل لاستخدام validInput
+                valid: (val) => validInput(val, 10, 10, "phone_number"),
                 mycontroller: controller.phoneController,
                 keyboardType: TextInputType.phone,
                 prefixIcon: Icons.phone_android,
@@ -278,40 +276,40 @@ class UpdateInformationContainer extends StatelessWidget {
                             }
                           },
                         ),
-                        SizedBox(height: 16.h),
-                        Text("نوع التدريب",
-                            style: TextStyle(
-                                color: Colors.grey[800], fontSize: 11.sp)),
-                        SizedBox(height: 15.h),
-                        DropdownButtonFormField<String>(
-                          decoration: InputDecoration(
-                            filled: true,
-                            fillColor: Colors.grey[100],
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(12.r),
-                              borderSide: BorderSide.none,
-                            ),
-                            contentPadding: EdgeInsets.symmetric(
-                                horizontal: 12.w, vertical: 14.h),
-                          ),
-                          value: controller.trainingType.text.isNotEmpty
-                              ? controller.trainingType.text
-                              : null,
-                          items: const [
-                            DropdownMenuItem(
-                                value: 'normal', child: Text('عادي')),
-                            DropdownMenuItem(
-                                value: 'special_needs',
-                                child: Text('ذوي الاحتياجات الخاصة')),
-                          ],
-                          onChanged: (val) {
-                            controller.trainingType.text = val!;
-                            controller.update();
-                          },
-                          validator: (value) => value == null || value.isEmpty
-                              ? 'يرجى اختيار نوع التدريب'
-                              : null,
-                        ),
+                        // SizedBox(height: 16.h),
+                        // Text("نوع التدريب",
+                        //     style: TextStyle(
+                        //         color: Colors.grey[800], fontSize: 11.sp)),
+                        // SizedBox(height: 15.h),
+                        // DropdownButtonFormField<String>(
+                        //   decoration: InputDecoration(
+                        //     filled: true,
+                        //     fillColor: Colors.grey[100],
+                        //     border: OutlineInputBorder(
+                        //       borderRadius: BorderRadius.circular(12.r),
+                        //       borderSide: BorderSide.none,
+                        //     ),
+                        //     contentPadding: EdgeInsets.symmetric(
+                        //         horizontal: 12.w, vertical: 14.h),
+                        //   ),
+                        //   value: controller.trainingType.text.isNotEmpty
+                        //       ? controller.trainingType.text
+                        //       : null,
+                        //   items: const [
+                        //     DropdownMenuItem(
+                        //         value: 'normal', child: Text('عادي')),
+                        //     DropdownMenuItem(
+                        //         value: 'special_needs',
+                        //         child: Text('ذوي الاحتياجات الخاصة')),
+                        //   ],
+                        //   onChanged: (val) {
+                        //     controller.trainingType.text = val!;
+                        //     controller.update();
+                        //   },
+                        //   validator: (value) => value == null || value.isEmpty
+                        //       ? 'يرجى اختيار نوع التدريب'
+                        //       : null,
+                        // ),
                         SizedBox(height: 16.h),
                         Text("الخبرات ",
                             style: TextStyle(
@@ -332,10 +330,6 @@ class UpdateInformationContainer extends StatelessWidget {
                       ],
                     )
                   : SizedBox(),
-              SizedBox(height: 20.h),
-
-              Text("الصورة الشخصية",
-                  style: TextStyle(color: Colors.grey[800], fontSize: 11.sp)),
               SizedBox(height: 15.h),
 
               InkWell(

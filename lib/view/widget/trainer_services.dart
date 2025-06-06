@@ -36,7 +36,7 @@ class TrainerServices extends StatelessWidget {
                   physics: const NeverScrollableScrollPhysics(),
                   itemCount: trainerServices.length,
                   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 1,
+                    crossAxisCount: 2,
                     crossAxisSpacing: 10.w,
                     mainAxisSpacing: 10.h,
                     childAspectRatio: 0.8,
