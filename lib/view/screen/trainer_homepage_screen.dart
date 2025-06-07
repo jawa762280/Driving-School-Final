@@ -17,8 +17,9 @@ class TrainerHomePageScreen extends StatelessWidget {
           body: SafeArea(
               child: SingleChildScrollView(
             child: Padding(
-              padding: EdgeInsets.all(16.w),
+              padding: EdgeInsets.all(10.w),
               child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   MyAppBar(
                     image: Image.asset(AppImages.appPhoto),
@@ -30,12 +31,12 @@ class TrainerHomePageScreen extends StatelessWidget {
                           image: DecorationImage(
                               fit: BoxFit.fill,
                               image: NetworkImage(
-                                  'http${data.read('user')['image'].toString().split('http').last}'))),
+                                  'http${data.read('user')['trainer']['image'].toString().split('http').last}'))),
                     ),
                   ),
                   SizedBox(height: 40.h),
                   Text(
-                    'مرحباً بك يا ${data.read('user')['first_name']}',
+                    'مرحباً بك يا ${data.read('user')['trainer']['first_name']}',
                     style: TextStyle(
                       fontSize: 22.sp,
                       fontWeight: FontWeight.bold,

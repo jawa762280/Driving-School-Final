@@ -1,3 +1,5 @@
+import 'package:driving_school/data/model/trainer_model.dart';
+
 class UserModel {
   final String userId;
   final String email;
@@ -8,6 +10,7 @@ class UserModel {
   final String? gender;
   final String? role;
   final String? imageUrl;
+  final TrainerModel? trainer; // ✅ إضافة
 
   UserModel({
     required this.userId,
@@ -19,6 +22,7 @@ class UserModel {
     this.gender,
     this.role,
     this.imageUrl,
+    this.trainer,
   });
 
   factory UserModel.fromJson(Map<String, dynamic> json) {
@@ -32,6 +36,9 @@ class UserModel {
       gender: json['gender'],
       role: json['role'],
       imageUrl: json['image'],
+      trainer: json['trainer'] != null
+          ? TrainerModel.fromJson(json['trainer'])
+          : null,
     );
   }
 
@@ -46,6 +53,7 @@ class UserModel {
       "gender": gender,
       "role": role,
       "image": imageUrl,
+      "trainer": trainer?.toJson(),
     };
   }
 }

@@ -88,9 +88,8 @@ class TrainerScheduleController extends GetxController {
     if (!formKey.currentState!.validate()) return;
     isLoading.value = true;
 
-    final trainer = data.read('user');
-    final trainerId =
-        trainer != null ? trainer['trainer_id']?.toString() : null;
+    final trainer = data.read('user')['trainer'];
+    final trainerId = trainer != null ? trainer['id']?.toString() : null;
 
     if (trainerId == null) {
       Get.snackbar("خطأ", "معرف المدرب غير موجود. الرجاء تسجيل الدخول مجدداً");
@@ -138,14 +137,14 @@ class TrainerScheduleController extends GetxController {
       print("❌ استثناء أثناء الطلب: ${e.toString()}");
     }
   }
-  void resetForm() {
-  selectedDay.value = '';
-  startTime.value = null;
-  endTime.value = null;
-  validFrom.value = null;
-  validTo.value = null;
-  isRecurring.value = true;
-  formKey.currentState?.reset();
-}
 
+  void resetForm() {
+    selectedDay.value = '';
+    startTime.value = null;
+    endTime.value = null;
+    validFrom.value = null;
+    validTo.value = null;
+    isRecurring.value = true;
+    formKey.currentState?.reset();
+  }
 }

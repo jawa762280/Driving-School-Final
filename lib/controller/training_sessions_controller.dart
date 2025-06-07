@@ -40,7 +40,7 @@ class TrainingSessionsController extends GetxController {
     trainerId = Get.arguments?['trainer_id']?.toString();
 
     // ثانياً: إذا لم يتم تمريره، نحاول من التخزين المحلي
-    trainerId ??= user?['trainer_id']?.toString();
+    trainerId ??= user?['trainer']['id']?.toString();
 
     if (trainerId == null) {
       errorMessage.value = 'لم يتم تحديد المدرب';

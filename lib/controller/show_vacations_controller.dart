@@ -19,8 +19,8 @@ class ShowVacationsController extends GetxController {
   Future<void> fetchVacations() async {
     try {
       isLoading.value = true;
-      final trainer = data.read('user');
-      final trainerId = trainer != null ? trainer['trainer_id'] : null;
+      final trainer = data.read('user')['trainer'];
+      final trainerId = trainer != null ? trainer['id'] : null;
 
       final response = await crud
           .getRequest('${AppLinks.showVacations}?trainer_id=$trainerId');

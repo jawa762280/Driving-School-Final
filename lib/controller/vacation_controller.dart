@@ -42,8 +42,8 @@ void setAvailableDatesFromSessions(List<dynamic> sessions) {
     try {
       isSubmitting.value = true;
 
-      final trainer = data.read('user');
-      final trainerId = trainer != null ? trainer['trainer_id'] : null;
+      final trainer = data.read('user')['trainer'];
+      final trainerId = trainer != null ? trainer['id'] : null;
 
       final response = await crud.postRequest(AppLinks.trainerVacation, {
         "trainer_id": trainerId,

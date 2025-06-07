@@ -43,7 +43,7 @@ class ShowTrainingSchedulesController extends GetxController {
 
     // نحدد المعرف حسب الدور
     final trainerId = role == 'trainer'
-        ? user['trainer_id']?.toString()
+        ? user['trainer']['id']?.toString()
         : externalTrainerId?.toString();
 
     final url = "${AppLinks.showTRainingSchedules}/$trainerId/schedules";

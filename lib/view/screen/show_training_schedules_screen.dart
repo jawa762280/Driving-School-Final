@@ -9,7 +9,6 @@ class ShowTRainingSchedulesScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // ضع الـ controller هنا
     Get.put(ShowTrainingSchedulesController());
 
     return GetBuilder<ShowTrainingSchedulesController>(

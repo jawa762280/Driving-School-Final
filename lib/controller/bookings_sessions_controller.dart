@@ -8,6 +8,7 @@ class BookingsSessionsController extends GetxController {
   var sessions = [].obs;
   var isLoading = false.obs;
   var error = ''.obs;
+  var errorMessage = ''.obs;
 
   @override
   void onInit() {
@@ -19,7 +20,8 @@ class BookingsSessionsController extends GetxController {
     isLoading.value = true;
     error.value = '';
 
-    final response = await crud.getRequest(AppLinks.bookingSessions); // تأكد إن الرابط صحيح
+    final response =
+        await crud.getRequest(AppLinks.bookingSessions); // تأكد إن الرابط صحيح
 
     isLoading.value = false;
 

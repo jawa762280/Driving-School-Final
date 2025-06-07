@@ -21,7 +21,7 @@ class StudentHomePageScreen extends StatelessWidget {
         body: SafeArea(
           child: SingleChildScrollView(
             child: Padding(
-              padding: EdgeInsets.all(16.w),
+              padding: EdgeInsets.all(10.w),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -35,12 +35,12 @@ class StudentHomePageScreen extends StatelessWidget {
                           image: DecorationImage(
                               fit: BoxFit.cover,
                               image: NetworkImage(
-                                  'http${data.read('user')['image'].toString().split('http').last}'))),
+                                  'http${data.read('user')['student']['image'].toString().split('http').last}'))),
                     ),
                   ),
                   SizedBox(height: 40.h),
                   Text(
-                    'مرحباً بك يا ${data.read('user')['first_name']}',
+                    'مرحباً بك يا ${data.read('user')['student']['first_name']}',
                     style: TextStyle(
                       fontSize: 22.sp,
                       fontWeight: FontWeight.bold,
