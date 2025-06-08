@@ -35,12 +35,12 @@ class StudentHomePageScreen extends StatelessWidget {
                           image: DecorationImage(
                               fit: BoxFit.cover,
                               image: NetworkImage(
-                                  'http${data.read('user')['student']['image'].toString().split('http').last}'))),
+                                  'http${data.read('user')[data.read('role').toString()]['image'].toString().split('http').last}'))),
                     ),
                   ),
                   SizedBox(height: 40.h),
                   Text(
-                    'مرحباً بك يا ${data.read('user')['student']['first_name']}',
+                    'مرحباً بك يا ${data.read('user')[data.read('role').toString()]['first_name']}',
                     style: TextStyle(
                       fontSize: 22.sp,
                       fontWeight: FontWeight.bold,

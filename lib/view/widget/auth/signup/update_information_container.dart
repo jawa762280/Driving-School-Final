@@ -10,7 +10,6 @@ import 'package:driving_school/core/functions/validinput.dart'; // استيرا�
 import 'package:driving_school/view/widget/my_button.dart';
 import 'package:driving_school/view/widget/my_textformfield.dart';
 import 'package:get/get.dart';
-import 'package:get_storage/get_storage.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 
@@ -19,7 +18,6 @@ class UpdateInformationContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final email = GetStorage().read('email');
     return GetBuilder<UpdateInformationController>(
       builder: (controller) => Container(
         padding: EdgeInsets.all(20.w),
@@ -79,7 +77,7 @@ class UpdateInformationContainer extends StatelessWidget {
                   style: TextStyle(color: Colors.grey[800], fontSize: 11.sp)),
               SizedBox(height: 15.h),
               MyTextformfield(
-                value: email,
+                mycontroller: controller.email,
                 prefixIcon: Icons.email,
                 iconColor: AppColors.primaryColor,
                 filled: true,

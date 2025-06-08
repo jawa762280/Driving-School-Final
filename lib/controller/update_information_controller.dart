@@ -20,16 +20,17 @@ class UpdateInformationController extends GetxController {
   TextEditingController addressController = TextEditingController();
   TextEditingController roleController = TextEditingController();
   TextEditingController passController = TextEditingController();
-  late TextEditingController firstNameController = TextEditingController();
-  late TextEditingController lastNameController = TextEditingController();
-  late TextEditingController birthDateController = TextEditingController();
-  late TextEditingController genderController = TextEditingController();
-  late TextEditingController imageController = TextEditingController();
+  TextEditingController firstNameController = TextEditingController();
+  TextEditingController lastNameController = TextEditingController();
+  TextEditingController birthDateController = TextEditingController();
+  TextEditingController genderController = TextEditingController();
+  TextEditingController imageController = TextEditingController();
   TextEditingController licenseNumber = TextEditingController();
   TextEditingController licenseExpiryDate = TextEditingController();
   TextEditingController trainingType = TextEditingController();
   TextEditingController experience = TextEditingController();
   TextEditingController password = TextEditingController();
+  TextEditingController email = TextEditingController();
 
   void showPass() {
     isShowPass = !isShowPass;
@@ -70,8 +71,8 @@ class UpdateInformationController extends GetxController {
           })
         : null;
     String apiLink = data.read('role').toString() == 'trainer'
-        ? '${AppLinks.trainers}/${data.read('user')['trainer_id']}'
-        : '${AppLinks.updateInformation}/${data.read('user')['student_id']}';
+        ? '${AppLinks.trainers}/${data.read('user')[data.read('role').toString()]['id']}'
+        : '${AppLinks.updateInformation}/${data.read('user')[data.read('role').toString()]['id']}';
     isLoading.value = true;
     update();
     var response = await crud.fileRequest(
@@ -100,34 +101,33 @@ class UpdateInformationController extends GetxController {
     print(data.read('user'));
     // ignore: avoid_print
     print('REFRESHTOKEN ${data.read('refreshToken')}');
-    firstNameController.text = data.read('user')['first_name'] ?? '';
-    lastNameController.text = data.read('user')['last_name'] ?? '';
-    birthDateController.text = data.read('user')['date_of_Birth'] ?? '';
-    genderController.text = data.read('user')['gender'].toString();
-    phoneController.text = data.read('user')['phone_number'] ?? '';
+    email.text = data.read('user')['email'] ?? '';
+    firstNameController.text =
+        data.read('user')[data.read('role').toString()]['first_name'] ?? '';
+    lastNameController.text =
+        data.read('user')[data.read('role').toString()]['last_name'] ?? '';
+    birthDateController.text =
+        data.read('user')[data.read('role').toString()]['date_of_Birth'] ?? '';
+    genderController.text =
+        data.read('user')[data.read('role').toString()]['gender'].toString();
+    phoneController.text =
+        data.read('user')[data.read('role').toString()]['phone_number'] ?? '';
     roleController.text = data.read('role') ?? '';
-    addressController.text = data.read('user')['address'] ?? '';
-    licenseNumber.text = data.read('user')['license_number'] ?? '';
-    licenseExpiryDate.text = data.read('user')['license_expiry_date'] ?? '';
-    trainingType.text = data.read('user')['training_type'] ?? '';
-    experience.text = data.read('user')['experience'] ?? '';
+    addressController.text =
+        data.read('user')[data.read('role').toString()]['address'] ?? '';
+    licenseNumber.text =
+        data.read('user')[data.read('role').toString()]['license_number'] ?? '';
+    licenseExpiryDate.text = data.read('user')[data.read('role').toString()]
+            ['license_expiry_date'] ??
+        '';
+    trainingType.text =
+        data.read('user')[data.read('role').toString()]['training_type'] ?? '';
+    experience.text =
+        data.read('user')[data.read('role').toString()]['experience'] ?? '';
     imageUrl =
-        'http${data.read('user')['image'].toString().split('http').last}';
+        'http${data.read('user')[data.read('role').toString()]['image'].toString().split('http').last}';
 
     update();
     super.onInit();
-  }
-
-  @override
-  void onClose() {
-    passController.dispose();
-    firstNameController.dispose();
-    lastNameController.dispose();
-    birthDateController.dispose();
-    genderController.dispose();
-    imageController.dispose();
-    phoneController.dispose();
-    roleController.dispose();
-    super.onClose();
   }
 }

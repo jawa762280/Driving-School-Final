@@ -41,23 +41,19 @@ class ProfileScreen extends StatelessWidget {
                     image: DecorationImage(
                         fit: BoxFit.fill,
                         image: NetworkImage(
-                            'http${data.read('user')['trainer']['image'].toString().split('http').last}'))),
+                            'http${data.read('user')[data.read('role').toString()]['image'].toString().split('http').last}'))),
               ),
 
               const SizedBox(height: 10),
-
               // الاسم الكامل
               Text(
-                data.read('user')['trainer']['first_name'],
+                data.read('user')[data.read('role').toString()]['first_name'],
                 style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
               ),
-
               SizedBox(height: 5.h),
-
               // رقم الهاتف
-
               Text(
-                data.read('user')['trainer']['phone_number'],
+                data.read('user')[data.read('role').toString()]['phone_number'],
                 style: TextStyle(color: Colors.grey[700]),
               ),
 

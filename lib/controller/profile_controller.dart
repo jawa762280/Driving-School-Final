@@ -53,7 +53,8 @@ class ProfileController extends GetxController {
               ),
               ElevatedButton(
                 onPressed: () async {
-                  final studentId = data.read('user')['student_id'];
+                  final studentId =
+                      data.read('user')[data.read('role').toString()]['id'];
 
                   final response = await crud.deleteRequest(
                     '${AppLinks.deleteAccount}/$studentId',

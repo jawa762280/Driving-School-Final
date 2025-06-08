@@ -75,7 +75,6 @@ class LoginController extends GetxController {
           'password': password,
         });
         isLoading.value = false;
-
         if (response != null && response['status'] == 'success') {
           final userData = response['data']['user'];
           // ignore: avoid_print
