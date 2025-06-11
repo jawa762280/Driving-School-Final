@@ -84,7 +84,7 @@ class UpdateInformationController extends GetxController {
     update();
     if (response['status'] == 'success') {
       data.remove('user');
-      data.write('user', response['data']);
+      data.write('user', response['data']['user']);
       MessageService.showSnackbar(
         title: "نجاح",
         message: response['message'],
