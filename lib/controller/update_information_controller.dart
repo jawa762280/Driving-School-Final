@@ -52,11 +52,34 @@ class UpdateInformationController extends GetxController {
       'first_name': firstNameController.text,
       'last_name': lastNameController.text,
       'date_of_Birth': birthDateController.text,
-      'phone_number': phoneController.text,
       'address': addressController.text,
       'role': data.read('role').toString(),
       'gender': genderController.text,
     };
+    experience.text !=
+            data
+                .read('user')[data.read('role').toString()]['experience']
+                .toString()
+        ? datas.addAll({
+            'experience': experience.text,
+          })
+        : null;
+    licenseNumber.text !=
+            data
+                .read('user')[data.read('role').toString()]['license_number']
+                .toString()
+        ? datas.addAll({
+            'license_number': licenseNumber.text,
+          })
+        : null;
+    phoneController.text ==
+            data
+                .read('user')[data.read('role').toString()]['phone_number']
+                .toString()
+        ? null
+        : datas.addAll({
+            'phone_number': phoneController.text,
+          });
     password.text.isNotEmpty
         ? datas.addAll({
             'password': password.text,
@@ -64,10 +87,8 @@ class UpdateInformationController extends GetxController {
         : null;
     data.read('role').toString() == 'trainer'
         ? datas.addAll({
-            'license_number': licenseNumber.text,
             'license_expiry_date': licenseExpiryDate.text,
             'training_type': trainingType.text,
-            'experience': experience.text,
           })
         : null;
     String apiLink = data.read('role').toString() == 'trainer'
