@@ -22,6 +22,7 @@ class StudentHomepageController extends GetxController {
 
   @override
   void onInit() {
+    // ignore: avoid_print
     print(data.read('user'));
     super.onInit();
   }

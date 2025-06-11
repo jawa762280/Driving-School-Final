@@ -1,5 +1,6 @@
 import 'package:driving_school/core/constant/app_api.dart';
 import 'package:driving_school/core/services/crud.dart';
+import 'package:driving_school/main.dart';
 import 'package:get/get.dart';
 
 class MySearchController extends GetxController {
@@ -7,14 +8,16 @@ class MySearchController extends GetxController {
 
   RxList<dynamic> allInstructors = [].obs;
   RxList<dynamic> filteredInstructors = [].obs;
+  RxString currentUserRole = ''.obs;
 
   @override
   void onInit() {
     super.onInit();
+    currentUserRole.value = data.read('role') ?? 'student';
     fetchInstructors();
   }
 
-  void fetchInstructors({String query = ''}) async {
+  Future<void> fetchInstructors({String query = ''}) async {
     try {
       final response = await crud.getRequest(
         '${AppLinks.searchTrainers}?first_name=$query',

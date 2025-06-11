@@ -383,23 +383,25 @@ class Crud extends GetxController {
   }
 
   Future<Map<String, dynamic>?> logout(String token, String url) async {
-    try {
-      var response = await http.post(
-        Uri.parse(url),
-        headers: {
-          'Authorization': 'Bearer $token',
-          'Accept': 'application/json',
-        },
-      );
+    return await retryOnUnauthorized(() async {
+      try {
+        var response = await http.post(
+          Uri.parse(url),
+          headers: {
+            'Authorization': 'Bearer $token',
+            'Accept': 'application/json',
+          },
+        );
 
-      if (response.statusCode == 200 || response.statusCode == 401) {
-        return jsonDecode(response.body);
-      } else {
+        if (response.statusCode == 200 || response.statusCode == 401) {
+          return jsonDecode(response.body);
+        } else {
+          return null;
+        }
+      } catch (e) {
+        print('Error in logout: $e');
         return null;
       }
-    } catch (e) {
-      print('Error in logout: $e');
-      return null;
-    }
+    });
   }
 }

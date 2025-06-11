@@ -93,7 +93,7 @@ class BookingsSessionsScreen extends StatelessWidget {
                 borderRadius: BorderRadius.circular(25),
                 gradient: LinearGradient(
                   colors: [
-                    statusData.color.withOpacity(0.15),
+                    statusData.color.withOpacity(0.1),
                     Colors.white,
                   ],
                   begin: Alignment.topLeft,
@@ -110,94 +110,47 @@ class BookingsSessionsScreen extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // التاريخ والحالة
+                  // التاريخ
                   Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Expanded(
-                        child: Row(
-                          children: [
-                            Icon(Icons.calendar_today_rounded,
-                                size: 20, color: statusData.color),
-                            const SizedBox(width: 10),
-                            Expanded(
-                              child: Text(
-                                formattedDate,
-                                style: TextStyle(
-                                  fontSize: 17,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.grey.shade800,
-                                ),
-                                overflow: TextOverflow.ellipsis,
-                                maxLines: 1,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
+                      Icon(Icons.calendar_today_rounded,
+                          size: 20, color: Colors.teal.shade400),
                       const SizedBox(width: 10),
-                      Container(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 14, vertical: 6),
-                        decoration: BoxDecoration(
-                          color: statusData.color.withOpacity(0.25),
-                          borderRadius: BorderRadius.circular(15),
-                        ),
-                        child: Text(
-                          statusData.label,
-                          style: TextStyle(
-                            color: statusData.color,
-                            fontWeight: FontWeight.w700,
-                            fontSize: 13,
-                          ),
-                        ),
+                      Text(
+                        formattedDate,
+                        style: TextStyle(
+                            fontSize: 17,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.grey.shade800),
                       ),
                     ],
                   ),
-
-                  const SizedBox(height: 18),
+                  const SizedBox(height: 12),
 
                   // الوقت
                   Row(
                     children: [
                       Icon(Icons.access_time_filled_rounded,
-                          size: 20, color: Colors.blueGrey.shade400),
+                          size: 20, color: Colors.teal.shade400),
                       const SizedBox(width: 12),
-                      Flexible(
-                        fit: FlexFit.loose,
-                        child: Text(
-                          "الوقت: $time",
+                      Text("الوقت: $time",
                           style: TextStyle(
-                              fontSize: 15, color: Colors.grey.shade700),
-                          overflow: TextOverflow.ellipsis,
-                          maxLines: 1,
-                        ),
-                      ),
+                              fontSize: 15, color: Colors.grey.shade700)),
                     ],
                   ),
-
-                  const SizedBox(height: 15),
+                  const SizedBox(height: 12),
 
                   // المدرب
                   Row(
                     children: [
                       Icon(Icons.person_outline,
-                          size: 20, color: Colors.deepPurple.shade400),
+                          size: 20, color: Colors.teal.shade400),
                       const SizedBox(width: 10),
-                      Flexible(
-                        fit: FlexFit.loose,
-                        child: Text(
-                          "المدرب: $trainerName",
+                      Text("المدرب: $trainerName",
                           style: const TextStyle(
-                              fontSize: 15, fontWeight: FontWeight.w600),
-                          overflow: TextOverflow.ellipsis,
-                          maxLines: 1,
-                        ),
-                      ),
+                              fontSize: 15, fontWeight: FontWeight.w600)),
                     ],
                   ),
-
                   const SizedBox(height: 8),
 
                   // الطالب
@@ -206,37 +159,109 @@ class BookingsSessionsScreen extends StatelessWidget {
                       Icon(Icons.school_outlined,
                           size: 20, color: Colors.teal.shade400),
                       const SizedBox(width: 10),
-                      Flexible(
-                        fit: FlexFit.loose,
-                        child: Text(
-                          "الطالب: $studentName",
+                      Text("الطالب: $studentName",
                           style: const TextStyle(
-                              fontSize: 15, fontWeight: FontWeight.w600),
-                          overflow: TextOverflow.ellipsis,
-                          maxLines: 1,
-                        ),
-                      ),
+                              fontSize: 15, fontWeight: FontWeight.w600)),
                     ],
                   ),
-
-                  const SizedBox(height: 15),
+                  const SizedBox(height: 12),
 
                   // السيارة
                   Row(
                     children: [
                       Icon(Icons.directions_car_outlined,
-                          size: 20, color: Colors.orange.shade400),
+                          size: 20, color: Colors.teal.shade400),
                       const SizedBox(width: 10),
-                      Flexible(
-                        fit: FlexFit.loose,
-                        child: Text(
+                      Text(
                           "السيارة: $carModel (${transmission.isNotEmpty ? transmission : 'غير محدد'})",
                           style: const TextStyle(
-                              fontSize: 15, fontWeight: FontWeight.w600),
-                          overflow: TextOverflow.ellipsis,
-                          maxLines: 1,
+                              fontSize: 15, fontWeight: FontWeight.w600)),
+                    ],
+                  ),
+                  SizedBox(
+                    height: 15,
+                  ),
+                  Row(
+                    children: [
+                      Icon(Icons.info_outline,
+                          size: 20, color: statusData.color),
+                      const SizedBox(width: 10),
+                      Text("الحالة: ${statusData.label}",
+                          style: TextStyle(
+                            fontSize: 15,
+                            fontWeight: FontWeight.w600,
+                            color: statusData.color,
+                          )),
+                    ],
+                  ),
+                  const SizedBox(height: 15),
+
+                  // أزرار البدء والإنهاء في يسار منتصف البطاقة
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      ElevatedButton.icon(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: AppColors.primaryColor,
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 12, vertical: 6),
+                          minimumSize: const Size(10, 36),
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10)),
                         ),
+                        onPressed: () {
+                          controller.startedSessions[index] = true;
+                        },
+                        icon: Icon(Icons.play_arrow,
+                            size: 18, color: Colors.teal.shade400),
+                        label: const Text("بدء",
+                            style:
+                                TextStyle(fontSize: 14, color: Colors.white)),
                       ),
+                      const SizedBox(width: 10),
+                      Obx(() => ElevatedButton.icon(
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.red.shade600,
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 12, vertical: 6),
+                              minimumSize: const Size(10, 36),
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10)),
+                            ),
+                            onPressed: controller.startedSessions[index]
+                                ? () {
+                                    // تنفيذ إنهاء الجلسة
+                                  }
+                                : null,
+                            icon: Icon(Icons.stop,
+                                size: 18, color: Colors.teal.shade400),
+                            label: const Text("إنهاء",
+                                style: TextStyle(
+                                    fontSize: 14, color: Colors.white)),
+                          )),
+                      const SizedBox(width: 20),
+
+                      // زر الإلغاء في أسفل البطاقة بمنتصفها
+                      if (status != 'completed' && status != 'cancelled')
+                        Center(
+                          child: TextButton.icon(
+                            style: TextButton.styleFrom(
+                              backgroundColor: Colors.grey.shade500,
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 20, vertical: 12),
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(12)),
+                            ),
+                            onPressed: () {
+                              _showCancelConfirmationDialog(context,
+                                  session['session']['id'], controller);
+                            },
+                            icon: const Icon(Icons.cancel, color: Colors.red),
+                            label: const Text("إلغاء",
+                                style: TextStyle(
+                                    color: Colors.white, fontSize: 14)),
+                          ),
+                        ),
                     ],
                   ),
                 ],
@@ -245,6 +270,33 @@ class BookingsSessionsScreen extends StatelessWidget {
           },
         );
       }),
+    );
+  }
+
+  void _showCancelConfirmationDialog(BuildContext context, int sessionId,
+      BookingsSessionsController controller) {
+    showDialog(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: const Text("تأكيد الإلغاء"),
+        content: const Text("هل أنت متأكد من رغبتك في إلغاء هذه الجلسة؟"),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.of(ctx).pop();
+            },
+            child: const Text("تراجع"),
+          ),
+          ElevatedButton(
+            style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
+            onPressed: () async {
+              Navigator.of(ctx).pop();
+              await controller.cancelSession(sessionId);
+            },
+            child: const Text("تأكيد"),
+          ),
+        ],
+      ),
     );
   }
 

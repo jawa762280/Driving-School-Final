@@ -41,25 +41,35 @@ class SearchScreen extends StatelessWidget {
                 ),
                 SizedBox(height: 30.h),
                 Expanded(
-                  child: Obx(() => ListView.builder(
-                        itemCount: controller.filteredInstructors.length,
-                        itemBuilder: (context, index) {
-                          final instructor =
-                              controller.filteredInstructors[index];
-
-                          return Column(
-                            children: [
-                              ContainerSearch(
-                                image: instructor['image'] ?? '',
-                                name:
-                                    '${instructor['first_name']} ${instructor['last_name']}',
-                                email: instructor['email'] ?? '',
-                                trainerId: instructor['trainer_id'],
-                              ),
-                              SizedBox(height: 15),
-                            ],
-                          );
+                  child: Obx(() => RefreshIndicator(
+                        onRefresh: () async {
+                          await controller.fetchInstructors();
                         },
+                        child: ListView.builder(
+                          itemCount: controller.filteredInstructors.length,
+                          itemBuilder: (context, index) {
+                            final instructor =
+                                controller.filteredInstructors[index];
+                            // ignore: avoid_print
+                            print(
+                                "Instructor #$index: ${instructor['trainer_id']} - data: $instructor"); // طباعة للتأكد من المفتاح
+
+                            return Column(
+                              children: [
+                                ContainerSearch(
+                                  image: instructor['image'] ?? '',
+                                  name:
+                                      '${instructor['first_name']} ${instructor['last_name']}',
+                                  email: instructor['email'] ?? '',
+                                  trainerId: instructor['trainer_id'],
+                                  userRole: controller.currentUserRole
+                                      .value, // تمرير دور المستخدم
+                                ),
+                                SizedBox(height: 15),
+                              ],
+                            );
+                          },
+                        ),
                       )),
                 )
               ],

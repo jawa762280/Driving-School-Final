@@ -12,13 +12,15 @@ class ContainerSearch extends StatelessWidget {
     required this.image,
     required this.name,
     required this.email,
-    required this.trainerId, // 👈 أضف هذا
+    required this.trainerId,
+    required this.userRole, // 'student' أو 'trainer'
   });
 
   final String image;
   final String name;
   final String email;
-  final int trainerId; // 👈 أضف هذا
+  final int trainerId;
+  final String userRole;
 
   @override
   Widget build(BuildContext context) {
@@ -86,11 +88,18 @@ class ContainerSearch extends StatelessWidget {
           Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
+              // زر "عرض جداول التدريب" (يظهر للجميع)
               ElevatedButton.icon(
                 onPressed: () {
-                  final controller = Get.put(ShowTrainingSchedulesController());
-                  controller.setTrainerId(trainerId); // ✅ نستخدم القيمة الممررة
+                  // ignore: avoid_print
+                  print(
+                      "trainerId to fetch schedule: $trainerId"); // طباعة للتأكد من الـ ID
 
+                  final controller =
+                      Get.isRegistered<ShowTrainingSchedulesController>()
+                          ? Get.find<ShowTrainingSchedulesController>()
+                          : Get.put(ShowTrainingSchedulesController());
+                  controller.setTrainerId(trainerId);
                   Get.toNamed(AppRouts.showTRainingSchedulesScreen);
                 },
                 icon: Icon(Icons.table_chart_outlined, size: 18.sp),
@@ -106,26 +115,33 @@ class ContainerSearch extends StatelessWidget {
                   ),
                 ),
               ),
-              SizedBox(height: 10.h),
-              ElevatedButton.icon(
-                onPressed: () {
-                  Get.toNamed(AppRouts.trainingSessionsScreen, arguments: {
-                    'trainer_id': trainerId,
-                  });
-                },
-                icon: Icon(Icons.event_available_outlined, size: 18.sp),
-                label:
-                    Text("حجز جلسة تدريب", style: TextStyle(fontSize: 13.sp)),
-                style: ElevatedButton.styleFrom(
-                  foregroundColor: Colors.white,
-                  backgroundColor: AppColors.primaryColor,
-                  padding:
-                      EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.h),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12.r),
-                  ),
+              if (userRole ==
+                  'student') // زر "حجز جلسة تدريب" (يظهر فقط للطلاب)
+                Column(
+                  children: [
+                    SizedBox(height: 10.h),
+                    ElevatedButton.icon(
+                      onPressed: () {
+                        Get.toNamed(AppRouts.trainingSessionsScreen,
+                            arguments: {
+                              'trainer_id': trainerId,
+                            });
+                      },
+                      icon: Icon(Icons.event_available_outlined, size: 18.sp),
+                      label: Text("حجز جلسة تدريب",
+                          style: TextStyle(fontSize: 13.sp)),
+                      style: ElevatedButton.styleFrom(
+                        foregroundColor: Colors.white,
+                        backgroundColor: AppColors.primaryColor,
+                        padding: EdgeInsets.symmetric(
+                            horizontal: 12.w, vertical: 6.h),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12.r),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
-              ),
             ],
           ),
         ],

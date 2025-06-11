@@ -8,11 +8,14 @@ class ShowTrainingSchedulesController extends GetxController {
   final GetStorage data = GetStorage();
 
   List<Map<String, dynamic>> scheduleList = [];
-  bool isLoading = true;
+  var isLoading = true.obs; // observable boolean
 
   int? externalTrainerId;
 
   void setTrainerId(int id) {
+    // ignore: avoid_print
+    print("Set externalTrainerId: $id"); // طباعة
+
     externalTrainerId = id;
     fetchTrainerSchedule();
   }
@@ -20,15 +23,15 @@ class ShowTrainingSchedulesController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-
-    // في حالة تم استدعاؤه بدون تمرير ID خارجي (يعني من مدرب نفسه)
-    if (externalTrainerId == null) {
-      fetchTrainerSchedule();
-    }
+    Future.delayed(Duration.zero, () {
+      if (externalTrainerId == null) {
+        fetchTrainerSchedule();
+      }
+    });
   }
 
   void fetchTrainerSchedule() async {
-    isLoading = true;
+    isLoading.value = true;
     update();
 
     final user = data.read('user');
@@ -36,15 +39,25 @@ class ShowTrainingSchedulesController extends GetxController {
 
     if (user == null) {
       Get.snackbar("خطأ", "لم يتم العثور على بيانات المستخدم");
-      isLoading = false;
+      isLoading.value = false;
       update();
       return;
     }
 
-    // نحدد المعرف حسب الدور
-    final trainerId = role == 'trainer'
-        ? user['trainer']['id']?.toString()
-        : externalTrainerId?.toString();
+    final trainerId = externalTrainerId?.toString() ??
+        (role == 'trainer' ? user['trainer']['id']?.toString() : null);
+
+    // ignore: avoid_print
+    print("Fetching schedules for trainerId: $trainerId"); // طباعة
+
+    // ✅ أوقف التنفيذ إذا trainerId غير متوفّر
+    if (trainerId == null) {
+      // ignore: avoid_print
+      print("⚠️ لم يتم تحديد trainerId بعد، سيتم تجاهل الطلب.");
+      isLoading.value = false;
+      update();
+      return;
+    }
 
     final url = "${AppLinks.showTRainingSchedules}/$trainerId/schedules";
 
@@ -58,7 +71,7 @@ class ShowTrainingSchedulesController extends GetxController {
       Get.snackbar("خطأ", "فشل في تحميل الجداول");
     }
 
-    isLoading = false;
+      isLoading.value = false;
     update();
   }
 }

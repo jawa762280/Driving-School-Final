@@ -9,44 +9,47 @@ class ShowTRainingSchedulesScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Get.put(ShowTrainingSchedulesController());
+    final controller = Get.put(ShowTrainingSchedulesController());
 
-    return GetBuilder<ShowTrainingSchedulesController>(
-      builder: (controller) {
+    return Scaffold(
+      backgroundColor: Colors.grey[100],
+      appBar: AppBar(
+        title: const Text(
+          "جداول التدريب",
+          style: TextStyle(color: Colors.white),
+        ),
+        backgroundColor: AppColors.primaryColor,
+        centerTitle: true,
+        iconTheme: const IconThemeData(color: Colors.white),
+      ),
+      body: Obx(() {
         final role = controller.data.read('role') ?? '';
-
         final isTrainer = role == 'trainer';
 
-        return Scaffold(
-          backgroundColor: Colors.grey[100],
-          appBar: AppBar(
-            title: const Text(
-              "جداول التدريب",
-              style: TextStyle(color: Colors.white),
+        if (controller.isLoading.value) {
+          return const Center(child: CircularProgressIndicator());
+        }
+
+        if (controller.scheduleList.isEmpty) {
+          return const Center(
+            child: Text(
+              "لا توجد جداول حالياً",
+              style: TextStyle(fontSize: 18),
             ),
-            backgroundColor: AppColors.primaryColor,
-            centerTitle: true,
-            iconTheme: IconThemeData(color: Colors.white), // <-- هنا لون السهم
-          ),
-          body: controller.isLoading
-              ? const Center(child: CircularProgressIndicator())
-              : controller.scheduleList.isEmpty
-                  ? const Center(
-                      child: Text("لا توجد جداول حالياً",
-                          style: TextStyle(fontSize: 18)),
-                    )
-                  : ListView.builder(
-                      padding: const EdgeInsets.all(16),
-                      itemCount: controller.scheduleList.length,
-                      itemBuilder: (context, index) {
-                        final item = controller.scheduleList[index];
-                        return isTrainer
-                            ? _buildTrainerCard(item)
-                            : _buildStudentCard(item);
-                      },
-                    ),
+          );
+        }
+
+        return ListView.builder(
+          padding: const EdgeInsets.all(16),
+          itemCount: controller.scheduleList.length,
+          itemBuilder: (context, index) {
+            final item = controller.scheduleList[index];
+            return isTrainer
+                ? _buildTrainerCard(item)
+                : _buildStudentCard(item);
+          },
         );
-      },
+      }),
     );
   }
 
@@ -122,7 +125,7 @@ class ShowTRainingSchedulesScreen extends StatelessWidget {
               const Icon(Icons.repeat_rounded, size: 18, color: Colors.grey),
               const SizedBox(width: 8),
               Text(
-                "التكرار: ${item['is_recurring'] ? "متكرر" : "مرة واحدة"}",
+                "التكرار: ${(item['is_recurring'] ?? false) ? "متكرر" : "مرة واحدة"}",
                 style: const TextStyle(fontSize: 14),
               ),
             ],

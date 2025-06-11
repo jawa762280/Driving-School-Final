@@ -178,6 +178,6 @@ class LoginController extends GetxController {
       } else {
         lockoutTime.value--;
       }
-    });
+    }); 
   }
 }

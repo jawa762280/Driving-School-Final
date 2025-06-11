@@ -129,21 +129,19 @@ class TrainingSessionsScreen extends StatelessWidget {
       separatorBuilder: (_, __) => const SizedBox(height: 14),
       itemBuilder: (context, index) {
         final session = sessions[index];
+        final status = session['status'];
 
-        final available = session['status'] == 'available';
-        final booked = session['status'] == 'booked';
-
+        final isAvailable = status == 'available';
         final start = session['start_time'].substring(0, 5);
         final end = session['end_time'].substring(0, 5);
 
         return GestureDetector(
-          onTap: (!controller.isTrainer && available)
+          onTap: (!controller.isTrainer && isAvailable)
               ? () {
                   Get.toNamed(AppRouts.carsScreen, arguments: {
                     'mode': 'booking',
                     'session_id': session['id'],
                   });
-                  // فقط الطالب يمكنه الضغط على جلسة متاحة
                   Get.snackbar(
                     "تم اختيار الجلسة",
                     "من $start إلى $end",
@@ -159,15 +157,15 @@ class TrainingSessionsScreen extends StatelessWidget {
             duration: const Duration(milliseconds: 250),
             padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
-              color: available ? Colors.white : Colors.grey.shade200,
+              color: isAvailable ? Colors.white : Colors.grey.shade200,
               borderRadius: BorderRadius.circular(16),
               border: Border.all(
                 color:
-                    available ? AppColors.primaryColor : Colors.grey.shade400,
+                    isAvailable ? AppColors.primaryColor : Colors.grey.shade400,
                 width: 1.4,
               ),
               boxShadow: [
-                if (available && !controller.isTrainer)
+                if (isAvailable && !controller.isTrainer)
                   BoxShadow(
                     color:
                         AppColors.primaryColor.withAlpha((0.1 * 255).toInt()),
@@ -186,7 +184,9 @@ class TrainingSessionsScreen extends StatelessWidget {
                     style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w600,
-                      color: available ? AppColors.primaryColor : Colors.grey,
+                      color: isAvailable
+                          ? AppColors.primaryColor
+                          : Colors.grey.shade700,
                     ),
                   ),
                 ),
@@ -194,27 +194,15 @@ class TrainingSessionsScreen extends StatelessWidget {
                   padding:
                       const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                   decoration: BoxDecoration(
-                    color: available
-                        ? AppColors.primaryColor.withAlpha((0.15 * 255).toInt())
-                        : booked
-                            ? Colors.grey.shade400
-                            : Colors.grey.shade200,
+                    color: _getStatusBackgroundColor(status),
                     borderRadius: BorderRadius.circular(12),
                   ),
                   child: Text(
-                    available
-                        ? "متاح"
-                        : booked
-                            ? "محجوز"
-                            : "عطلة",
+                    _getStatusText(status),
                     style: TextStyle(
                       fontSize: 12,
                       fontWeight: FontWeight.bold,
-                      color: available
-                          ? AppColors.primaryColor
-                          : booked
-                              ? Colors.white
-                              : Colors.yellow.shade600,
+                      color: _getStatusTextColor(status),
                     ),
                   ),
                 )
@@ -224,5 +212,56 @@ class TrainingSessionsScreen extends StatelessWidget {
         );
       },
     );
+  }
+
+  String _getStatusText(String status) {
+    switch (status) {
+      case 'available':
+        return 'متاح';
+      case 'booked':
+        return 'محجوز';
+      case 'vacation':
+        return 'عطلة';
+      case 'completed':
+        return 'مكتملة';
+      case 'cancelled':
+        return 'ملغاة';
+      default:
+        return 'غير معروف';
+    }
+  }
+
+  Color _getStatusTextColor(String status) {
+    switch (status) {
+      case 'available':
+        return AppColors.primaryColor;
+      case 'booked':
+        return Colors.white;
+      case 'vacation':
+        return Colors.orange.shade700;
+      case 'completed':
+        return Colors.green.shade700;
+      case 'cancelled':
+        return Colors.red.shade700;
+      default:
+        return Colors.grey;
+    }
+  }
+
+  Color _getStatusBackgroundColor(String status) {
+    switch (status) {
+      case 'available':
+        return AppColors.primaryColor.withAlpha(40);
+      case 'booked':
+        return Colors.grey.shade500;
+      case 'vacation':
+        return Colors.orange.shade100;
+      case 'completed':
+        return Colors.green.shade100;
+      case 'cancelled':
+        return Colors.red.shade100;
+      default:
+        return Colors.grey.shade300;
+    }
   }
 }
