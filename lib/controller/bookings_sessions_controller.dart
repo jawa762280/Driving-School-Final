@@ -58,4 +58,44 @@ class BookingsSessionsController extends GetxController {
           duration: Duration(seconds: 2));
     }
   }
+
+  Future<void> startSession(int bookingId) async {
+    final response =
+        await crud.postRequest("${AppLinks.startSession}/$bookingId/start", {});
+
+    if (response != null && response['message'] != null) {
+      Get.snackbar("نجاح", response['message'],
+          backgroundColor: Colors.green.shade100,
+          colorText: Colors.black,
+          duration: Duration(seconds: 2));
+
+      await fetchTrainerSessions(); // إعادة تحميل الجلسات
+    } else {
+      final errorMsg = response?['message'] ?? 'فشل بدء الجلسة';
+      Get.snackbar("خطأ", errorMsg,
+          backgroundColor: Colors.red.shade100,
+          colorText: Colors.black,
+          duration: Duration(seconds: 2));
+    }
+  }
+
+  Future<void> completeSession(int bookingId) async {
+    final response = await crud
+        .postRequest("${AppLinks.completeSession}/$bookingId/complete", {});
+
+    if (response != null && response['message'] != null) {
+      Get.snackbar("نجاح", response['message'],
+          backgroundColor: Colors.green.shade100,
+          colorText: Colors.black,
+          duration: Duration(seconds: 2));
+
+      await fetchTrainerSessions(); // إعادة تحميل الجلسات
+    } else {
+      final errorMsg = response?['message'] ?? 'فشل إنهاء الجلسة';
+      Get.snackbar("خطأ", errorMsg,
+          backgroundColor: Colors.red.shade100,
+          colorText: Colors.black,
+          duration: Duration(seconds: 2));
+    }
+  }
 }
