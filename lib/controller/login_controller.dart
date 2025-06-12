@@ -82,7 +82,7 @@ class LoginController extends GetxController {
           final token = response['data']['token'];
           myServices.saveToken(token);
           data.write('user', userData);
-          data.write('role', response['data']['role'].toString());
+          data.write('role', response['data']['user']['role'].toString());
           data.write('token', response['data']['token']);
           data.write('refreshToken', response['data']['refresh_token']);
           data.write('tokenType', response['data']['token_type']);
@@ -178,6 +178,6 @@ class LoginController extends GetxController {
       } else {
         lockoutTime.value--;
       }
-    }); 
+    });
   }
 }

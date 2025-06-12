@@ -2,19 +2,24 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:driving_school/core/services/crud.dart';
 import 'package:driving_school/core/constant/app_api.dart';
+import 'package:get_storage/get_storage.dart';
 
 class BookingsSessionsController extends GetxController {
   final Crud crud = Crud();
+  var userRole = ''.obs;
 
   var sessions = [].obs;
   var isLoading = false.obs;
   var error = ''.obs;
   var errorMessage = ''.obs;
   var startedSessions = <bool>[].obs;
+  final GetStorage data = GetStorage();
 
   @override
   void onInit() {
     super.onInit();
+    userRole.value = data.read('role') ?? 'student'; // أو 'trainer'
+
     fetchTrainerSessions();
   }
 
@@ -36,7 +41,8 @@ class BookingsSessionsController extends GetxController {
   }
 
   Future<void> cancelSession(int sessionId) async {
-    final response = await crud.postRequest("${AppLinks.cancelSession}/$sessionId/cancel", {});
+    final response = await crud
+        .postRequest("${AppLinks.cancelSession}/$sessionId/cancel", {});
 
     if (response != null && response['status'] == true) {
       Get.snackbar("نجاح", response['message'],

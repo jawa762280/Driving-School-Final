@@ -27,6 +27,5 @@ class AppLinks {
   static const String trainers = '$init/trainers';
   static const String booking = '$init/bookings';
   static const String bookingSessions = '$init/trainer/bookings';
-    static const String cancelSession = '$init/bookings';
-
+  static const String cancelSession = '$init/bookings';
 }

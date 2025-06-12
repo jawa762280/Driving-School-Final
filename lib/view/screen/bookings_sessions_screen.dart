@@ -25,6 +25,8 @@ class BookingsSessionsScreen extends StatelessWidget {
         ),
         backgroundColor: AppColors.primaryColor,
         centerTitle: true,
+        iconTheme: IconThemeData(color: Colors.white), // <-- هنا لون السهم
+
         elevation: 5,
         shadowColor: Colors.black54,
       ),
@@ -60,6 +62,8 @@ class BookingsSessionsScreen extends StatelessWidget {
           );
         }
 
+        final userRole = controller.userRole.value;
+
         return ListView.builder(
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
           itemCount: controller.sessions.length,
@@ -93,7 +97,7 @@ class BookingsSessionsScreen extends StatelessWidget {
                 borderRadius: BorderRadius.circular(25),
                 gradient: LinearGradient(
                   colors: [
-                    statusData.color.withOpacity(0.1),
+                    statusData.color.withAlpha((0.1 * 255).toInt()),
                     Colors.white,
                   ],
                   begin: Alignment.topLeft,
@@ -101,7 +105,7 @@ class BookingsSessionsScreen extends StatelessWidget {
                 ),
                 boxShadow: [
                   BoxShadow(
-                    color: statusData.color.withOpacity(0.3),
+                    color: statusData.color.withAlpha((0.3 * 255).toInt()),
                     blurRadius: 12,
                     offset: const Offset(0, 6),
                   ),
@@ -196,74 +200,76 @@ class BookingsSessionsScreen extends StatelessWidget {
                   ),
                   const SizedBox(height: 15),
 
-                  // أزرار البدء والإنهاء في يسار منتصف البطاقة
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      ElevatedButton.icon(
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: AppColors.primaryColor,
+                  // أزرار البدء والإنهاء فقط للمدرب
+                  if (userRole == 'trainer')
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        ElevatedButton.icon(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: AppColors.primaryColor,
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 12, vertical: 6),
+                            minimumSize: const Size(10, 36),
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10)),
+                          ),
+                          onPressed: () {
+                            controller.startedSessions[index] = true;
+                          },
+                          icon: Icon(Icons.play_arrow,
+                              size: 18, color: Colors.teal.shade400),
+                          label: const Text("بدء",
+                              style:
+                                  TextStyle(fontSize: 14, color: Colors.white)),
+                        ),
+                        const SizedBox(width: 10),
+                        Obx(() => ElevatedButton.icon(
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: Colors.red.shade600,
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 12, vertical: 6),
+                                minimumSize: const Size(10, 36),
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(10)),
+                              ),
+                              onPressed:
+                                  controller.startedSessions[index] == true
+                                      ? () {
+                                          // تنفيذ إنهاء الجلسة
+                                        }
+                                      : null,
+                              icon: Icon(Icons.stop,
+                                  size: 18, color: Colors.teal.shade400),
+                              label: const Text("إنهاء",
+                                  style: TextStyle(
+                                      fontSize: 14, color: Colors.white)),
+                            )),
+                        const SizedBox(width: 20),
+                      ],
+                    ),
+
+                  // زر الإلغاء متوفر للجميع طالما الحالة ليست مكتملة أو ملغاة
+                  if (status != 'completed' && status != 'cancelled')
+                    Center(
+                      child: TextButton.icon(
+                        style: TextButton.styleFrom(
+                          backgroundColor: Colors.grey.shade500,
                           padding: const EdgeInsets.symmetric(
-                              horizontal: 12, vertical: 6),
-                          minimumSize: const Size(10, 36),
+                              horizontal: 20, vertical: 12),
                           shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10)),
+                              borderRadius: BorderRadius.circular(12)),
                         ),
                         onPressed: () {
-                          controller.startedSessions[index] = true;
+                          _showCancelConfirmationDialog(
+                              context, sessionData['id'], controller);
                         },
-                        icon: Icon(Icons.play_arrow,
-                            size: 18, color: Colors.teal.shade400),
-                        label: const Text("بدء",
+                        icon: const Icon(Icons.cancel, color: Colors.red),
+                        label: const Text("إلغاء",
                             style:
-                                TextStyle(fontSize: 14, color: Colors.white)),
+                                TextStyle(color: Colors.white, fontSize: 14)),
                       ),
-                      const SizedBox(width: 10),
-                      Obx(() => ElevatedButton.icon(
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.red.shade600,
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 12, vertical: 6),
-                              minimumSize: const Size(10, 36),
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(10)),
-                            ),
-                            onPressed: controller.startedSessions[index]
-                                ? () {
-                                    // تنفيذ إنهاء الجلسة
-                                  }
-                                : null,
-                            icon: Icon(Icons.stop,
-                                size: 18, color: Colors.teal.shade400),
-                            label: const Text("إنهاء",
-                                style: TextStyle(
-                                    fontSize: 14, color: Colors.white)),
-                          )),
-                      const SizedBox(width: 20),
-
-                      // زر الإلغاء في أسفل البطاقة بمنتصفها
-                      if (status != 'completed' && status != 'cancelled')
-                        Center(
-                          child: TextButton.icon(
-                            style: TextButton.styleFrom(
-                              backgroundColor: Colors.grey.shade500,
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 20, vertical: 12),
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(12)),
-                            ),
-                            onPressed: () {
-                              _showCancelConfirmationDialog(context,
-                                  session['session']['id'], controller);
-                            },
-                            icon: const Icon(Icons.cancel, color: Colors.red),
-                            label: const Text("إلغاء",
-                                style: TextStyle(
-                                    color: Colors.white, fontSize: 14)),
-                          ),
-                        ),
-                    ],
-                  ),
+                    ),
                 ],
               ),
             );
@@ -312,7 +318,7 @@ class BookingsSessionsScreen extends StatelessWidget {
       case 'pending':
       default:
         return _SessionStatus(
-            label: "قيد الانتظار", color: Colors.grey.shade600);
+            label: "قيد الانتظار", color: Colors.grey.shade700);
     }
   }
 }

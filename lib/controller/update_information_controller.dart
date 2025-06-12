@@ -16,7 +16,6 @@ class UpdateInformationController extends GetxController {
   bool isShowPass = true;
   File? imageFile;
   String? phoneError;
-
   TextEditingController phoneController = TextEditingController();
   TextEditingController addressController = TextEditingController();
   TextEditingController roleController = TextEditingController();
@@ -33,11 +32,18 @@ class UpdateInformationController extends GetxController {
   TextEditingController password = TextEditingController();
   TextEditingController email = TextEditingController();
 
-  late Map<String, dynamic> originalUserData;
-
   void showPass() {
     isShowPass = !isShowPass;
     update();
+  }
+
+  String sanitizeImageUrl(String rawUrl) {
+    final regex = RegExp(r'(http:\/\/[^\s]+\/images\/[^\s]+)');
+    final match = regex.firstMatch(rawUrl);
+    if (match != null) {
+      return match.group(0)!;
+    }
+    return rawUrl; // fallback
   }
 
   updateInformation() async {
@@ -46,120 +52,103 @@ class UpdateInformationController extends GetxController {
       'first_name': firstNameController.text,
       'last_name': lastNameController.text,
       'date_of_Birth': birthDateController.text,
-      'phone_number': phoneController.text,
       'address': addressController.text,
-      'role': roleController.text,
+      'role': data.read('role').toString(),
       'gender': genderController.text,
     };
-
-    if (password.text.isNotEmpty) {
-      datas['password'] = password.text;
-    }
-
-    if (roleController.text == 'trainer') {
-      datas.addAll({
-        'license_number': licenseNumber.text,
-        'license_expiry_date': licenseExpiryDate.text,
-        'training_type': trainingType.text,
-        'experience': experience.text,
-      });
-    }
-
-    // إذا حابب تعمل مقارنة للقيم القديمة والجديدة قبل الإرسال لتفادي إرسال بيانات غير متغيرة
-    datas.removeWhere((key, value) {
-      if (key == '_method') return false; // أبقي هذا المفتاح ضروري
-      // قارن مع البيانات الأصلية المخزنة
-      if (originalUserData.containsKey(key)) {
-        var originalValue = originalUserData[key];
-        // بعض الحقول مثل role، ممكن تكون ليست في originalUserData مباشرة
-        if (originalValue == null && value.isEmpty) return true;
-        return originalValue.toString() == value;
-      }
-      return false;
-    });
-
-    if (datas.length <= 1) {
-      // يعني ما في تغييرات سوى _method فقط
-      MessageService.showSnackbar(
-        title: "تنبيه",
-        message: "لم تقم بتعديل أي بيانات",
-      );
-      return;
-    }
-
-    String apiLink = roleController.text == 'trainer'
-        ? '${AppLinks.trainers}/${originalUserData['id']}'
-        : '${AppLinks.updateInformation}/${originalUserData['id']}';
-
+    experience.text !=
+            data
+                .read('user')[data.read('role').toString()]['experience']
+                .toString()
+        ? datas.addAll({
+            'experience': experience.text,
+          })
+        : null;
+    licenseNumber.text !=
+            data
+                .read('user')[data.read('role').toString()]['license_number']
+                .toString()
+        ? datas.addAll({
+            'license_number': licenseNumber.text,
+          })
+        : null;
+    phoneController.text ==
+            data
+                .read('user')[data.read('role').toString()]['phone_number']
+                .toString()
+        ? null
+        : datas.addAll({
+            'phone_number': phoneController.text,
+          });
+    password.text.isNotEmpty
+        ? datas.addAll({
+            'password': password.text,
+          })
+        : null;
+    data.read('role').toString() == 'trainer'
+        ? datas.addAll({
+            'license_expiry_date': licenseExpiryDate.text,
+            'training_type': trainingType.text,
+          })
+        : null;
+    String apiLink = data.read('role').toString() == 'trainer'
+        ? '${AppLinks.trainers}/${data.read('user')[data.read('role').toString()]['id']}'
+        : '${AppLinks.updateInformation}/${data.read('user')[data.read('role').toString()]['id']}';
     isLoading.value = true;
     update();
-
     var response = await crud.fileRequest(
       apiLink,
       datas,
       imageFile,
     );
-
     isLoading.value = false;
     update();
-
-    if (response != null && response['status'] == 'success') {
-      data.write('user', response['data']);
-      data.write('role', roleController.text);
+    if (response['status'] == 'success') {
+      data.remove('user');
+      data.write('user', response['data']['user']);
       MessageService.showSnackbar(
         title: "نجاح",
         message: response['message'],
       );
-      if (roleController.text == 'student') {
-        Get.offAllNamed(AppRouts.studentHomePageScreen);
-      } else if (roleController.text == 'trainer') {
-        Get.offAllNamed(AppRouts.trainerHomePageScreen);
-      }
-    } else {
-      // معالجة الأخطاء (مثلاً عرض رسالة)
-      MessageService.showSnackbar(
-        title: "خطأ",
-        message: response?['message'] ?? 'حدث خطأ غير معروف',
-      );
+      data.read('role').toString() == 'student'
+          ? Get.offAllNamed(AppRouts.studentHomePageScreen)
+          : Get.offAllNamed(AppRouts.trainerHomePageScreen);
     }
   }
 
   @override
   void onInit() {
-    super.onInit();
-
-    final role = data.read('role');
-    final user = data.read('user');
-
-    if (user == null || role == null) {
-      print("User data or role is null!");
-      return;
-    }
-
-    originalUserData = Map<String, dynamic>.from(user);
-
-    email.text = user['email'] ?? '';
-    firstNameController.text = user['first_name'] ?? '';
-    lastNameController.text = user['last_name'] ?? '';
-    birthDateController.text = user['date_of_Birth'] ?? '';
-    genderController.text = user['gender']?.toString() ?? '';
-    phoneController.text = user['phone_number'] ?? '';
-    roleController.text = role;
-    addressController.text = user['address'] ?? '';
-    licenseNumber.text = user['license_number'] ?? '';
-    licenseExpiryDate.text = user['license_expiry_date'] ?? '';
-    trainingType.text = user['training_type'] ?? '';
-    experience.text = user['experience'] ?? '';
-
-    final rawImage = user['image']?.toString() ?? '';
-    if (rawImage.startsWith('http')) {
-      imageUrl = rawImage;
-    } else if (rawImage.isNotEmpty) {
-      imageUrl = 'http${rawImage.split('http').last}';
-    } else {
-      imageUrl = ''; // صورة فارغة أو صورة افتراضية
-    }
+    // ignore: avoid_print
+    print(data.read('user'));
+    // ignore: avoid_print
+    print('REFRESHTOKEN ${data.read('refreshToken')}');
+    email.text = data.read('user')['email'] ?? '';
+    firstNameController.text =
+        data.read('user')[data.read('role').toString()]['first_name'] ?? '';
+    lastNameController.text =
+        data.read('user')[data.read('role').toString()]['last_name'] ?? '';
+    birthDateController.text =
+        data.read('user')[data.read('role').toString()]['date_of_Birth'] ?? '';
+    genderController.text =
+        data.read('user')[data.read('role').toString()]['gender'].toString();
+    phoneController.text =
+        data.read('user')[data.read('role').toString()]['phone_number'] ?? '';
+    roleController.text = data.read('role') ?? '';
+    addressController.text =
+        data.read('user')[data.read('role').toString()]['address'] ?? '';
+    licenseNumber.text =
+        data.read('user')[data.read('role').toString()]['license_number'] ?? '';
+    licenseExpiryDate.text = data.read('user')[data.read('role').toString()]
+            ['license_expiry_date'] ??
+        '';
+    trainingType.text =
+        data.read('user')[data.read('role').toString()]['training_type'] ?? '';
+    experience.text =
+        data.read('user')[data.read('role').toString()]['experience'] ?? '';
+    imageUrl =
+        'http${data.read('user')[data.read('role').toString()]['image'].toString().split('http').last}';
 
     update();
+    super.onInit();
   }
 }
