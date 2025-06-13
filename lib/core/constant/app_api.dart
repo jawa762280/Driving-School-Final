@@ -26,7 +26,8 @@ class AppLinks {
   static const String showVacations = '$init/trainer-exceptions';
   static const String trainers = '$init/trainers';
   static const String booking = '$init/bookings';
-  static const String bookingSessions = '$init/trainer/bookings';
+  static const String bookingSessionsTrainer = '$init/trainer/bookings';
+  static const String bookingSessionsStudent = '$init/student/bookings';
   static const String cancelSession = '$init/bookings';
   static const String startSession = '$init/booking';
   static const String completeSession = '$init/bookings';

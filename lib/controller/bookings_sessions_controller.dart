@@ -19,16 +19,21 @@ class BookingsSessionsController extends GetxController {
   void onInit() {
     super.onInit();
     userRole.value = data.read('role') ?? 'student'; // أو 'trainer'
-
-    fetchTrainerSessions();
+    fetchSessions();
   }
 
-  Future<void> fetchTrainerSessions() async {
+  Future<void> fetchSessions() async {
     isLoading.value = true;
     error.value = '';
 
-    final response =
-        await crud.getRequest(AppLinks.bookingSessions); // تأكد إن الرابط صحيح
+    String url;
+    if (userRole.value == 'trainer') {
+      url = AppLinks.bookingSessionsTrainer; 
+    } else {
+      url = AppLinks.bookingSessionsStudent;
+    }
+
+    final response = await crud.getRequest(url); 
 
     isLoading.value = false;
 
@@ -49,7 +54,7 @@ class BookingsSessionsController extends GetxController {
           backgroundColor: Colors.green.shade100,
           colorText: Colors.black,
           duration: Duration(seconds: 2));
-      await fetchTrainerSessions(); // إعادة تحميل الجلسات
+      await fetchSessions(); // إعادة تحميل الجلسات
     } else {
       final errorMsg = response?['message'] ?? 'فشل في إلغاء الجلسة';
       Get.snackbar("خطأ", errorMsg,
@@ -69,7 +74,7 @@ class BookingsSessionsController extends GetxController {
           colorText: Colors.black,
           duration: Duration(seconds: 2));
 
-      await fetchTrainerSessions(); // إعادة تحميل الجلسات
+      await fetchSessions(); // إعادة تحميل الجلسات
     } else {
       final errorMsg = response?['message'] ?? 'فشل بدء الجلسة';
       Get.snackbar("خطأ", errorMsg,
@@ -89,7 +94,7 @@ class BookingsSessionsController extends GetxController {
           colorText: Colors.black,
           duration: Duration(seconds: 2));
 
-      await fetchTrainerSessions(); // إعادة تحميل الجلسات
+      await fetchSessions(); // إعادة تحميل الجلسات
     } else {
       final errorMsg = response?['message'] ?? 'فشل إنهاء الجلسة';
       Get.snackbar("خطأ", errorMsg,
