@@ -87,7 +87,6 @@ class BookingsSessionsScreen extends StatelessWidget {
             // ignore: avoid_print
             print("Session status: $status");
 
-
             final trainerName = session['trainer']?['name'] ?? 'مدرب غير معروف';
             final studentName = session['student']?['name'] ?? 'طالب غير معروف';
             final carModel = session['car']?['model'] ?? 'موديل غير معروف';
@@ -264,27 +263,26 @@ class BookingsSessionsScreen extends StatelessWidget {
                             ],
                           ),
                         const SizedBox(height: 10),
-                        if (status == 'pending' || status == 'booked')
-
-                        Center(
-                          child: TextButton.icon(
-                            style: TextButton.styleFrom(
-                              backgroundColor: Colors.grey.shade500,
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 20, vertical: 12),
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(12)),
+                        if (status == 'booked')
+                          Center(
+                            child: TextButton.icon(
+                              style: TextButton.styleFrom(
+                                backgroundColor: Colors.grey.shade500,
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 20, vertical: 12),
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(12)),
+                              ),
+                              onPressed: () {
+                                showCancelConfirmationDialog(
+                                    context, sessionData['id'], controller);
+                              },
+                              icon: const Icon(Icons.cancel, color: Colors.red),
+                              label: const Text("إلغاء",
+                                  style: TextStyle(
+                                      color: Colors.white, fontSize: 14)),
                             ),
-                            onPressed: () {
-                              showCancelConfirmationDialog(
-                                  context, sessionData['id'], controller);
-                            },
-                            icon: const Icon(Icons.cancel, color: Colors.red),
-                            label: const Text("إلغاء",
-                                style: TextStyle(
-                                    color: Colors.white, fontSize: 14)),
                           ),
-                        ),
                       ],
                     ),
                 ],
