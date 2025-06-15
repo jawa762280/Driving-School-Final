@@ -1,3 +1,4 @@
+import 'package:driving_school/main.dart';
 import 'package:driving_school/view/screen/bookings_sessions_screen.dart';
 import 'package:driving_school/view/screen/profile_screen.dart';
 import 'package:driving_school/view/screen/search_screen.dart';
@@ -16,5 +17,11 @@ class TrainerHomepageController extends GetxController {
   changPage(int i) {
     currentpage = i;
     update();
+  }
+
+  @override
+  void onInit() {
+    print(data.read('token'));
+    super.onInit();
   }
 }

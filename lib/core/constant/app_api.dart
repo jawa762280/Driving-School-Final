@@ -31,4 +31,7 @@ class AppLinks {
   static const String cancelSession = '$init/bookings';
   static const String startSession = '$init/booking';
   static const String completeSession = '$init/bookings';
+  static const String feedbackStudent = '$init/feedback/student';
+  static const String trainerReviews = '$init/trainer-reviews';
+  static const String createExam = '$init/exams';
 }

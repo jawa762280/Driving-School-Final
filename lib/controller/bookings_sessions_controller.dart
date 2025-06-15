@@ -14,12 +14,55 @@ class BookingsSessionsController extends GetxController {
   var errorMessage = ''.obs;
   var startedSessions = <bool>[].obs;
   final GetStorage data = GetStorage();
+  String level = '';
+  int levelCount = 0;
+  TextEditingController comment = TextEditingController();
+  double rating = 3;
 
   @override
   void onInit() {
     super.onInit();
-    userRole.value = data.read('role') ?? 'student'; // أو 'trainer'
+    userRole.value = data.read('role') ?? 'student';
+    if (data.read('student-review') == null) {
+      data.write('student-review', []);
+    }
     fetchSessions();
+  }
+
+  sendFeedback(id) async {
+    var response = await crud.postRequest(AppLinks.feedbackStudent, {
+      'booking_id': id,
+      'level': level,
+      'notes': comment.text,
+    });
+    if (response['status'] == 'success') {
+      Get.snackbar("نجاح", 'تم ارسال التقييم',
+          backgroundColor: Colors.green.shade100,
+          colorText: Colors.black,
+          duration: Duration(seconds: 2));
+    }
+    update();
+  }
+
+  sendFeedbackStudent(id) async {
+    var response = await crud.postRequest(AppLinks.trainerReviews, {
+      'trainer_id': id,
+      'comment': comment.text,
+      'rating': rating,
+    });
+    print('MyResponse $response');
+    if (response['status'] == true) {
+      Get.back();
+      List<dynamic> reviews = data.read('student-review') ?? [];
+      reviews.add({
+        'trainer_id': id,
+        'rating': rating.toString(),
+        'comment': comment.text,
+      });
+      data.write('student-review', reviews);
+      update();
+    }
+    update();
   }
 
   Future<void> fetchSessions() async {
@@ -28,12 +71,12 @@ class BookingsSessionsController extends GetxController {
 
     String url;
     if (userRole.value == 'trainer') {
-      url = AppLinks.bookingSessionsTrainer; 
+      url = AppLinks.bookingSessionsTrainer;
     } else {
       url = AppLinks.bookingSessionsStudent;
     }
 
-    final response = await crud.getRequest(url); 
+    final response = await crud.getRequest(url);
 
     isLoading.value = false;
 
