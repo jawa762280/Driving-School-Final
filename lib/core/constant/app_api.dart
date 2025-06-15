@@ -1,6 +1,6 @@
 class AppLinks {
-  static const String init = 'http://192.168.1.107:8000/api';
-  // static const String init = 'http://127.0.0.1:8000/api';
+  // static const String init = 'http://192.168.1.107:8000/api';
+  static const String init = 'http://127.0.0.1:8000/api';
   // static const String init = 'http://192.168.80.83:8000/api';
 
   static const String login = '$init/login';
@@ -31,4 +31,6 @@ class AppLinks {
   static const String cancelSession = '$init/bookings';
   static const String startSession = '$init/booking';
   static const String completeSession = '$init/bookings';
+  static const String feedbackStudent = '$init/feedback/student';
+  static const String trainerReviews = '$init/trainer-reviews';
 }
