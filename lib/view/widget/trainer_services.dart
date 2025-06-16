@@ -59,6 +59,12 @@ class TrainerServices extends StatelessWidget {
                             } else if (index == 3) {
                               Get.toNamed(AppRouts.showVacationsScreen);
                             }
+                             else if (index == 4) {
+                              Get.toNamed(AppRouts.creatExam);
+                            }
+                             else if (index == 5) {
+                              Get.toNamed(AppRouts.showExamByType);
+                            }
                           },
                           child: Container(
                             decoration: BoxDecoration(

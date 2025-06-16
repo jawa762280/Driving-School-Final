@@ -285,6 +285,7 @@ class BookingsSessionsScreen extends StatelessWidget {
                                                         const Duration(
                                                             seconds: 1), () {
                                                       showMyDialog(
+                                                        // ignore: use_build_context_synchronously
                                                         context,
                                                         session['id'],
                                                       );

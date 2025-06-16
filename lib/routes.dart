@@ -2,12 +2,14 @@ import 'package:driving_school/core/constant/approuts.dart';
 import 'package:driving_school/core/middleware/mymiddleware.dart';
 import 'package:driving_school/view/screen/bookings_sessions_screen.dart';
 import 'package:driving_school/view/screen/cars_screen.dart';
+import 'package:driving_school/view/screen/exam_creation_screen.dart';
 import 'package:driving_school/view/screen/login_screen.dart';
 import 'package:driving_school/view/screen/onboarding_screen.dart';
 import 'package:driving_school/view/screen/forget_password_screen.dart';
 import 'package:driving_school/view/screen/profile_screen.dart';
 import 'package:driving_school/view/screen/reset_password_screen.dart';
 import 'package:driving_school/view/screen/search_screen.dart';
+import 'package:driving_school/view/screen/show_exam_by_type_screen.dart';
 import 'package:driving_school/view/screen/show_training_schedules_screen.dart';
 import 'package:driving_school/view/screen/show_vacations_screen.dart';
 import 'package:driving_school/view/screen/sign_up_screen.dart';
@@ -100,5 +102,13 @@ List<GetPage<dynamic>> routes = [
   GetPage(
     name: AppRouts.showVacationsScreen,
     page: () => BookingsSessionsScreen(),
+  ),
+  GetPage(
+    name: AppRouts.creatExam,
+    page: () => ExamCreationScreen(),
+  ),
+  GetPage(
+    name: AppRouts.showExamByType,
+    page: () => ShowExamByTypeScreen(),
   ),
 ];

@@ -21,6 +21,7 @@ class TrainerHomepageController extends GetxController {
 
   @override
   void onInit() {
+    // ignore: avoid_print
     print(data.read('token'));
     super.onInit();
   }

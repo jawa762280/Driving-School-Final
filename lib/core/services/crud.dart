@@ -209,38 +209,72 @@ class Crud extends GetxController {
   // دوال ملفات متعددة ...
   multiFileRequestMoreImagePath(String url, Map<String, String> datas,
       List<XFile> files, List<String> imagePaths) async {
-    var request = http.MultipartRequest('POST', Uri.parse(url));
-    request.headers.addAll({
-      'apiPassword': '',
-      'Accept': 'application/json',
-      'userLang': 'ar',
+    return await retryOnUnauthorized(() async {
+      try {
+        var request = http.MultipartRequest('POST', Uri.parse(url));
+        String token = data.read('token') ?? '';
+
+        // إضافة الهيدرز مع التوكن
+        request.headers.addAll({
+          'Authorization': 'Bearer $token',
+          'Accept': 'application/json',
+          'userLang': 'ar',
+        });
+
+        for (int i = 0; i < files.length; i++) {
+          var file = files[i];
+          var length = await file.length();
+          var stream = http.ByteStream(file.openRead());
+          var multipartFile = http.MultipartFile(
+            imagePaths[i],
+            stream,
+            length,
+            filename: basename(file.path),
+          );
+          request.files.add(multipartFile);
+        }
+
+        datas.forEach((key, value) {
+          request.fields[key] = value;
+        });
+
+        var myRequest = await request.send();
+        var response = await http.Response.fromStream(myRequest);
+
+        print('Status Code: ${response.statusCode}');
+        print('Response Body: ${response.body}');
+
+        if (response.statusCode == 200 || response.statusCode == 201) {
+          var responseBody = jsonDecode(response.body);
+          return responseBody;
+        } else if (response.statusCode == 401) {
+          // حالة غير موثق
+          return {'statusCode': 401};
+        } else if (response.statusCode == 422) {
+          var errorResponse = jsonDecode(response.body);
+          return {
+            'status': false,
+            'message': errorResponse['message'] ?? 'بيانات غير صالحة',
+            'errors': errorResponse['errors'] ?? {}
+          };
+        } else {
+          var responseBody = jsonDecode(response.body);
+          return {
+            'status': false,
+            'message': responseBody['message'] ?? 'خطأ غير متوقع',
+            'statusCode': response.statusCode,
+            'body': response.body,
+          };
+        }
+      } catch (e) {
+        print('Exception in multiFileRequestMoreImagePath: $e');
+        return {
+          'status': false,
+          'message': 'فشل الاتصال بالخادم',
+          'error': e.toString(),
+        };
+      }
     });
-    for (int i = 0; i < files.length; i++) {
-      var file = files[i];
-      var length = await file.length();
-      var stream = http.ByteStream(file.openRead());
-      var multipartFile = http.MultipartFile(imagePaths[i], stream, length,
-          filename: basename(file.path));
-      request.files.add(multipartFile);
-    }
-
-    datas.forEach((key, value) {
-      request.fields[key] = value;
-    });
-
-    var myRequest = await request.send();
-    var response = await http.Response.fromStream(myRequest);
-
-    if (response.statusCode == 200) {
-      var responseBody = jsonDecode(response.body);
-      return responseBody;
-    } else {
-      print(response.body);
-      var responseBody = jsonDecode(response.body);
-      print(responseBody['status'] + responseBody['message']);
-    }
-
-    update();
   }
 
   multiFileRequestOneImagePath(String url, Map<String, String> datas,

@@ -50,6 +50,7 @@ class BookingsSessionsController extends GetxController {
       'comment': comment.text,
       'rating': rating,
     });
+    // ignore: avoid_print
     print('MyResponse $response');
     if (response['status'] == true) {
       Get.back();

@@ -73,6 +73,10 @@ class ExamCreationController extends GetxController {
 
     if (response != null && response['message'] != null) {
       Get.snackbar('تم بنجاح', response['message']);
+      titleController.clear();
+      durationController.clear();
+      examType.value = '';
+      questions.clear();
     } else {
       Get.snackbar('خطأ', 'فشل إرسال الامتحان');
     }

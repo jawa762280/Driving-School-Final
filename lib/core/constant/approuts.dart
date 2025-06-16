@@ -22,4 +22,6 @@ class AppRouts {
   static const String vacationScreen = "/vacation_screen";
   static const String showVacationsScreen = "/show_vacations_screen";
   static const String bookingsSessions = "/bookings_sessions_screen";
+  static const String creatExam = "/exam_creation_screen";
+  static const String showExamByType = "/show_exam_by_type_screen";
 }
