@@ -24,4 +24,5 @@ class AppRouts {
   static const String bookingsSessions = "/bookings_sessions_screen";
   static const String creatExam = "/exam_creation_screen";
   static const String showExamByType = "/show_exam_by_type_screen";
+  static const String trainerReviews = "/trainer_reviews";
 }

@@ -64,6 +64,7 @@ class SearchScreen extends StatelessWidget {
                                   trainerId: instructor['trainer_id'],
                                   userRole: controller.currentUserRole
                                       .value, // تمرير دور المستخدم
+                                  reviews: controller.reviews,
                                 ),
                                 SizedBox(height: 15),
                               ],

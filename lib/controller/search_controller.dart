@@ -9,6 +9,7 @@ class MySearchController extends GetxController {
   RxList<dynamic> allInstructors = [].obs;
   RxList<dynamic> filteredInstructors = [].obs;
   RxString currentUserRole = ''.obs;
+  List reviews = [];
 
   @override
   void onInit() {
@@ -47,4 +48,12 @@ class MySearchController extends GetxController {
   void search(String query) {
     fetchInstructors(query: query);
   }
+
+  // getReviews() async {
+  //   var response =
+  //       await crud.getRequest('${AppLinks.init}/trainer/$id/reviews');
+  //   reviews.addAll(response);
+  //   print(response);
+  //   update();
+  // }
 }

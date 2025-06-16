@@ -13,7 +13,8 @@ class ContainerSearch extends StatelessWidget {
     required this.name,
     required this.email,
     required this.trainerId,
-    required this.userRole, // 'student' أو 'trainer'
+    required this.userRole,
+    this.reviews, // 'student' أو 'trainer'
   });
 
   final String image;
@@ -21,6 +22,7 @@ class ContainerSearch extends StatelessWidget {
   final String email;
   final int trainerId;
   final String userRole;
+  final List? reviews;
 
   @override
   Widget build(BuildContext context) {
@@ -76,6 +78,11 @@ class ContainerSearch extends StatelessWidget {
                       ),
                       overflow: TextOverflow.ellipsis,
                     ),
+                    for (var i = 0; i < reviews!.length; i++)
+                      Icon(
+                        Icons.star,
+                        color: Colors.amber,
+                      )
                   ],
                 ),
               ),
@@ -142,6 +149,25 @@ class ContainerSearch extends StatelessWidget {
                     ),
                   ],
                 ),
+              ElevatedButton.icon(
+                onPressed: () {
+                  Get.toNamed(AppRouts.trainerReviews, arguments: {
+                    'trainer_id': trainerId,
+                  });
+                },
+                icon: Icon(Icons.star_border_sharp, size: 18.sp),
+                label: Text("عرض تقييمات المدرب",
+                    style: TextStyle(fontSize: 13.sp)),
+                style: ElevatedButton.styleFrom(
+                  foregroundColor: Colors.white,
+                  backgroundColor: AppColors.primaryColor,
+                  padding:
+                      EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.h),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12.r),
+                  ),
+                ),
+              ),
             ],
           ),
         ],
