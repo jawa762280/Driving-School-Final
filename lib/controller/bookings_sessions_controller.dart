@@ -18,6 +18,7 @@ class BookingsSessionsController extends GetxController {
   int levelCount = 0;
   TextEditingController comment = TextEditingController();
   double rating = 3;
+  List reviews = [];
 
   @override
   void onInit() {
@@ -26,7 +27,21 @@ class BookingsSessionsController extends GetxController {
     if (data.read('student-review') == null) {
       data.write('student-review', []);
     }
+    getReviews();
+    getReviewsStudent();
     fetchSessions();
+  }
+
+  getReviews() async {
+    var response = await crud.getRequest(AppLinks.trainerFeedbacks);
+    reviews.addAll(response['data']);
+    update();
+  }
+
+  getReviewsStudent() async {
+    var response = await crud.getRequest(AppLinks.studentFeedbacks);
+    reviews.addAll(response['data']);
+    update();
   }
 
   sendFeedback(id) async {

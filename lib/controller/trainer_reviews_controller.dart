@@ -10,8 +10,9 @@ class TrainerReviewsController extends GetxController {
   getReviews() async {
     var response =
         await crud.getRequest('${AppLinks.init}/trainer/$id/reviews');
-    reviews.addAll(response);
-    print(response);
+    if (response[0].isNotEmpty) {
+      reviews.addAll(response);
+    }
     update();
   }
 

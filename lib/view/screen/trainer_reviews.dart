@@ -45,31 +45,6 @@ class TrainerReviews extends StatelessWidget {
                           )
                         ],
                       ),
-                      // child: Column(
-                      //   children: [
-                      //     Text(
-                      //       controller.reviews[i]['student_name'].toString(),
-                      //       style: TextStyle(
-                      //         fontSize: 18,
-                      //         fontWeight: FontWeight.bold,
-                      //       ),
-                      //     ),
-                      //     SizedBox(height: 5),
-                      //     Row(
-                      //       mainAxisAlignment: MainAxisAlignment.center,
-                      //       children: [
-                      //         for (var index = 0;
-                      //             index <
-                      //                 int.parse(
-                      //                     controller.reviews[i]['rating'].toString());
-                      //             index++)
-                      //           Icon(Icons.star, color: Colors.amber),
-                      //       ],
-                      //     ),
-                      //     SizedBox(height: 30),
-                      //     Text(controller.reviews[i]['comment'].toString()),
-                      //   ],
-                      // ),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [

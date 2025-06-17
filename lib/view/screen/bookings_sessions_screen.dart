@@ -358,6 +358,40 @@ class BookingsSessionsScreen extends StatelessWidget {
                                     ),
                                   )
                             : SizedBox(),
+                          Column(
+                            children: [
+                              Divider(thickness: 3, color: AppColors.green900),
+                              Row(
+                                children: [
+                                  Icon(Icons.auto_awesome,
+                                      color: AppColors.primaryColor),
+                                  SizedBox(width: 10),
+                                  Text(
+                                    controller.reviews[index]['level'],
+                                    style: TextStyle(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              SizedBox(height: 10),
+                              Row(
+                                children: [
+                                  Icon(Icons.comment,
+                                      color: AppColors.primaryColor),
+                                  SizedBox(width: 10),
+                                  Text(
+                                    controller.reviews[index]['notes'],
+                                    style: TextStyle(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          )
                       ],
                     ),
                   );

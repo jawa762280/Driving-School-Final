@@ -35,4 +35,6 @@ class AppLinks {
   static const String trainerReviews = '$init/trainer-reviews';
   static const String createExam = '$init/exams';
   static const String showExamByType = "$init/exam/type";
+  static const String trainerFeedbacks = "$init/trainer/feedbacks";
+  static const String studentFeedbacks = "$init/feedback-students";
 }
