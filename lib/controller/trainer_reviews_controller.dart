@@ -13,6 +13,7 @@ class TrainerReviewsController extends GetxController {
     if (response[0].isNotEmpty) {
       reviews.addAll(response);
     }
+
     update();
   }
 

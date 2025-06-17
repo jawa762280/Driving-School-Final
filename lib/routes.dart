@@ -3,6 +3,7 @@ import 'package:driving_school/core/middleware/mymiddleware.dart';
 import 'package:driving_school/view/screen/bookings_sessions_screen.dart';
 import 'package:driving_school/view/screen/cars_screen.dart';
 import 'package:driving_school/view/screen/exam_creation_screen.dart';
+import 'package:driving_school/view/screen/exams_home_screen.dart';
 import 'package:driving_school/view/screen/login_screen.dart';
 import 'package:driving_school/view/screen/onboarding_screen.dart';
 import 'package:driving_school/view/screen/forget_password_screen.dart';
@@ -15,6 +16,7 @@ import 'package:driving_school/view/screen/show_vacations_screen.dart';
 import 'package:driving_school/view/screen/sign_up_screen.dart';
 import 'package:driving_school/view/screen/success_reset_password_screen.dart';
 import 'package:driving_school/view/screen/success_verifycode_signup_screen.dart';
+import 'package:driving_school/view/screen/trainer_exam_screen.dart';
 import 'package:driving_school/view/screen/trainer_reviews.dart';
 import 'package:driving_school/view/screen/trainer_schedule_screen.dart';
 import 'package:driving_school/view/screen/training_sessions_screen.dart';
@@ -105,15 +107,23 @@ List<GetPage<dynamic>> routes = [
     page: () => BookingsSessionsScreen(),
   ),
   GetPage(
-    name: AppRouts.creatExam,
+    name: AppRouts.creatExamScreen,
     page: () => ExamCreationScreen(),
   ),
   GetPage(
-    name: AppRouts.showExamByType,
+    name: AppRouts.showExamByTypeScreen,
     page: () => ShowExamByTypeScreen(),
   ),
   GetPage(
-    name: AppRouts.trainerReviews,
+    name: AppRouts.trainerReviewsScreen,
     page: () => TrainerReviews(),
+  ),
+  GetPage(
+    name: AppRouts.trainerExamScreen,
+    page: () => TrainerExamsScreen(),
+  ),
+   GetPage(
+    name: AppRouts.examHomeScreen,
+    page: () => ExamsHomeScreen(),
   ),
 ];

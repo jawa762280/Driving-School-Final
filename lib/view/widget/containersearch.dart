@@ -151,7 +151,7 @@ class ContainerSearch extends StatelessWidget {
                 ),
               ElevatedButton.icon(
                 onPressed: () {
-                  Get.toNamed(AppRouts.trainerReviews, arguments: {
+                  Get.toNamed(AppRouts.trainerReviewsScreen, arguments: {
                     'trainer_id': trainerId,
                   });
                 },

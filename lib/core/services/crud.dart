@@ -3,6 +3,7 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:driving_school/core/constant/app_api.dart';
+import 'package:driving_school/core/constant/approuts.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:image_picker/image_picker.dart';
@@ -40,10 +41,18 @@ class Crud extends GetxController {
       print("✅ Token refreshed successfully");
       return true;
     } else {
-      print("❌ Failed to refresh token: ${response.body}");
-      return false;
-    }
+    // إذا كان الـ refresh token غير صالح أو منتهي
+    print("❌ Failed to refresh token: ${response.body}");
+
+    // امسح التوكنات القديمة وارجع false
+    data.remove('token');
+    data.remove('refreshToken');
+
+    Get.offAllNamed(AppRouts.loginScreen);
+
+    return false;
   }
+}
 
   /// ⏱️ إعادة المحاولة بعد التجديد إن لزم
   Future<T?> retryOnUnauthorized<T>(Future<T?> Function() requestFn) async {

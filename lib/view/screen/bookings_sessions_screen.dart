@@ -271,27 +271,18 @@ class BookingsSessionsScreen extends StatelessWidget {
                                                       BorderRadius.circular(
                                                           10)),
                                             ),
-                                            onPressed: session['status'] ==
-                                                    'started'
-                                                ? () async {
-                                                    final bookingId =
-                                                        session['id'];
-                                                    await controller
-                                                        .completeSession(
-                                                            bookingId);
-                                                    await controller
-                                                        .fetchSessions();
-                                                    Future.delayed(
-                                                        const Duration(
-                                                            seconds: 1), () {
-                                                      showMyDialog(
-                                                        // ignore: use_build_context_synchronously
-                                                        context,
-                                                        session['id'],
-                                                      );
-                                                    });
-                                                  }
-                                                : null,
+                                            onPressed:
+                                                session['status'] == 'started'
+                                                    ? () async {
+                                                        final bookingId =
+                                                            session['id'];
+                                                        await controller
+                                                            .completeSession(
+                                                                bookingId);
+                                                        await controller
+                                                            .fetchSessions();
+                                                      }
+                                                    : null,
                                             icon: Icon(Icons.stop,
                                                 size: 18,
                                                 color: Colors.teal.shade400),
@@ -358,40 +349,40 @@ class BookingsSessionsScreen extends StatelessWidget {
                                     ),
                                   )
                             : SizedBox(),
-                          Column(
-                            children: [
-                              Divider(thickness: 3, color: AppColors.green900),
-                              Row(
-                                children: [
-                                  Icon(Icons.auto_awesome,
-                                      color: AppColors.primaryColor),
-                                  SizedBox(width: 10),
-                                  Text(
-                                    controller.reviews[index]['level'],
-                                    style: TextStyle(
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.w500,
-                                    ),
+                        Column(
+                          children: [
+                            Divider(thickness: 3, color: AppColors.green900),
+                            Row(
+                              children: [
+                                Icon(Icons.auto_awesome,
+                                    color: AppColors.primaryColor),
+                                SizedBox(width: 10),
+                                Text(
+                                  controller.reviews[index]['level'],
+                                  style: TextStyle(
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.w500,
                                   ),
-                                ],
-                              ),
-                              SizedBox(height: 10),
-                              Row(
-                                children: [
-                                  Icon(Icons.comment,
-                                      color: AppColors.primaryColor),
-                                  SizedBox(width: 10),
-                                  Text(
-                                    controller.reviews[index]['notes'],
-                                    style: TextStyle(
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.w500,
-                                    ),
+                                ),
+                              ],
+                            ),
+                            SizedBox(height: 10),
+                            Row(
+                              children: [
+                                Icon(Icons.comment,
+                                    color: AppColors.primaryColor),
+                                SizedBox(width: 10),
+                                Text(
+                                  controller.reviews[index]['notes'],
+                                  style: TextStyle(
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.w500,
                                   ),
-                                ],
-                              ),
-                            ],
-                          )
+                                ),
+                              ],
+                            ),
+                          ],
+                        )
                       ],
                     ),
                   );
@@ -468,36 +459,38 @@ void showMyDialog(BuildContext context, id) {
                 children: [
                   Text('قيم الطالب'),
                   SizedBox(height: 20),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      InkWell(
-                        onTap: () {
-                          controller.level = 'beginner';
-                          controller.levelCount = 0;
-                          controller.update();
-                        },
-                        child: buildBox("Beginner", 0),
-                      ),
-                      SizedBox(width: 10),
-                      InkWell(
-                        onTap: () {
-                          controller.level = 'intermediate';
-                          controller.levelCount = 1;
-                          controller.update();
-                        },
-                        child: buildBox("Intermediate", 1),
-                      ),
-                      SizedBox(width: 10),
-                      InkWell(
-                        onTap: () {
-                          controller.level = 'excellent';
-                          controller.levelCount = 2;
-                          controller.update();
-                        },
-                        child: buildBox("Excellent", 2),
-                      ),
-                    ],
+                  SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: Row(
+                      children: [
+                        InkWell(
+                          onTap: () {
+                            controller.level = 'beginner';
+                            controller.levelCount = 0;
+                            controller.update();
+                          },
+                          child: buildBox("Beginner", 0),
+                        ),
+                        SizedBox(width: 10),
+                        InkWell(
+                          onTap: () {
+                            controller.level = 'intermediate';
+                            controller.levelCount = 1;
+                            controller.update();
+                          },
+                          child: buildBox("Intermediate", 1),
+                        ),
+                        SizedBox(width: 10),
+                        InkWell(
+                          onTap: () {
+                            controller.level = 'excellent';
+                            controller.levelCount = 2;
+                            controller.update();
+                          },
+                          child: buildBox("Excellent", 2),
+                        ),
+                      ],
+                    ),
                   ),
                   SizedBox(height: 20),
                   MyTextformfield(

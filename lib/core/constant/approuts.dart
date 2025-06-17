@@ -21,8 +21,10 @@ class AppRouts {
   static const String trainingSessionsScreen = "/training_sessions_screen";
   static const String vacationScreen = "/vacation_screen";
   static const String showVacationsScreen = "/show_vacations_screen";
-  static const String bookingsSessions = "/bookings_sessions_screen";
-  static const String creatExam = "/exam_creation_screen";
-  static const String showExamByType = "/show_exam_by_type_screen";
-  static const String trainerReviews = "/trainer_reviews";
+  static const String bookingsSessionsScreen = "/bookings_sessions_screen";
+  static const String creatExamScreen = "/exam_creation_screen";
+  static const String showExamByTypeScreen = "/show_exam_by_type_screen";
+  static const String trainerReviewsScreen = "/trainer_reviews";
+  static const String trainerExamScreen = "/trainer_exam_screen";
+  static const String examHomeScreen = "/exams_home_screen";
 }
