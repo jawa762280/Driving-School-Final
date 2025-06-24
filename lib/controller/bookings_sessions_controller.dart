@@ -27,8 +27,16 @@ class BookingsSessionsController extends GetxController {
     if (data.read('student-review') == null) {
       data.write('student-review', []);
     }
-    getReviews();
-    getReviewsStudent();
+    if (data.read('trainer-review') == null) {
+      data.write('trainer-review', []);
+    }
+    if (data.read('role').toString() == 'trainer') {
+      getReviews();
+    }
+    if (data.read('role').toString() == 'student') {
+      getReviewsStudent();
+    }
+
     fetchSessions();
   }
 
@@ -50,11 +58,19 @@ class BookingsSessionsController extends GetxController {
       'level': level,
       'notes': comment.text,
     });
-    if (response['status'] == 'success') {
+    if (response['level'].toString() != 'null') {
       Get.snackbar("نجاح", 'تم ارسال التقييم',
           backgroundColor: Colors.green.shade100,
           colorText: Colors.black,
           duration: Duration(seconds: 2));
+      Get.back();
+      List<dynamic> reviews = data.read('trainer-review') ?? [];
+      reviews.add({
+        'booking_id': id,
+        'trainer_id': data.read('user')['trainer']['id'].toString(),
+      });
+      data.write('trainer-review', reviews);
+      update();
     }
     update();
   }

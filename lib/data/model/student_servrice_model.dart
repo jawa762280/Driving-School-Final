@@ -11,7 +11,7 @@ class StudentServiceModel {
 }
 
 final List<StudentServiceModel> studentServices = [
-  StudentServiceModel(icon: Icons.edit_document, title: "حجز رخصة عملية"),
+  StudentServiceModel(icon: Icons.edit_document, title: "توليد امتحان"),
   StudentServiceModel(icon: Icons.account_box, title: "حجز رخصة نظرية"),
   StudentServiceModel(
       icon: Icons.directions_car, title: "اختبار تجريبي مع تصحيح فوري"),

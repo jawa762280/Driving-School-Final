@@ -10,6 +10,7 @@ class SignUpController extends GetxController {
   GlobalKey<FormState> formState = GlobalKey<FormState>();
   Crud crud = Crud();
   var isLoading = false.obs;
+  bool isLeftHandDisabled = false;
   bool isShowPass = true;
   File? imageFile;
   String? emailError;
@@ -36,12 +37,9 @@ class SignUpController extends GetxController {
   }
 
   signUp() async {
-    // التحقق من صحة الفورم
     if (!formState.currentState!.validate()) return;
 
-    // التحقق من وجود صورة
 
-    // التحقق من اكتمال البيانات
     if (roleController.text.isEmpty ||
         phoneController.text.isEmpty ||
         addressController.text.isEmpty) {
@@ -53,7 +51,6 @@ class SignUpController extends GetxController {
     update();
 
     try {
-      // تجهيز البيانات
       Map<String, String> data = {
         'first_name': firstNameController.text,
         'last_name': lastNameController.text,
@@ -69,6 +66,9 @@ class SignUpController extends GetxController {
         'training_type': trainingType.text,
         'experience': experience.text,
       };
+      if (roleController.text.toLowerCase() == "student") {
+        data['left_hand_disabled'] = isLeftHandDisabled ? '1' : '0';
+      }
       String selectedRole = roleController.text.toLowerCase();
       String apiUrl = selectedRole == "trainer"
           ? AppLinks.signUpTrainer

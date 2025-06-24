@@ -349,40 +349,84 @@ class BookingsSessionsScreen extends StatelessWidget {
                                     ),
                                   )
                             : SizedBox(),
-                        Column(
-                          children: [
-                            Divider(thickness: 3, color: AppColors.green900),
-                            Row(
+                        if (userRole == 'student')
+                          if (controller.reviews.length > index &&
+                              controller.reviews[index] != null)
+                            Column(
                               children: [
-                                Icon(Icons.auto_awesome,
-                                    color: AppColors.primaryColor),
-                                SizedBox(width: 10),
-                                Text(
-                                  controller.reviews[index]['level'],
-                                  style: TextStyle(
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.w500,
-                                  ),
+                                Row(
+                                  children: [
+                                    Icon(Icons.auto_awesome,
+                                        color: AppColors.primaryColor),
+                                    SizedBox(width: 10),
+                                    Text(
+                                      controller.reviews[index]['level'] ??
+                                          'بدون مستوى',
+                                      style: TextStyle(
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                SizedBox(height: 10),
+                                Row(
+                                  children: [
+                                    Icon(Icons.comment,
+                                        color: AppColors.primaryColor),
+                                    SizedBox(width: 10),
+                                    Text(
+                                      controller.reviews[index]['notes'] ??
+                                          'لا توجد ملاحظات',
+                                      style: TextStyle(
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                    ),
+                                  ],
                                 ),
                               ],
+                            )
+                          else
+                            Text(
+                              'لا يوجد تقييم بعد',
+                              style: TextStyle(
+                                fontSize: 16,
+                                color: Colors.grey.shade600,
+                              ),
                             ),
-                            SizedBox(height: 10),
-                            Row(
-                              children: [
-                                Icon(Icons.comment,
-                                    color: AppColors.primaryColor),
-                                SizedBox(width: 10),
-                                Text(
-                                  controller.reviews[index]['notes'],
-                                  style: TextStyle(
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.w500,
+
+                        if (userRole == 'trainer' && status == 'completed')
+                          (data.read('trainer-review') as List).any((review) =>
+                                  review['booking_id'].toString() ==
+                                  session['id'].toString())
+                              ? SizedBox()
+                              : InkWell(
+                                  onTap: () {
+                                    showMyDialog(context,
+                                        controller.sendFeedback(session['id']));
+                                  },
+                                  child: Container(
+                                    padding: EdgeInsets.all(15),
+                                    margin: EdgeInsets.only(top: 20),
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(12),
+                                      color: AppColors.primaryColor,
+                                    ),
+                                    child: Text(
+                                      'تقييم الطالب',
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                        fontSize: 15,
+                                        color: Colors.white,
+                                      ),
+                                    ),
                                   ),
                                 ),
-                              ],
-                            ),
-                          ],
-                        )
+                        if (userRole == 'trainer' && status == 'completed')
+                          if (controller.reviews.length > index &&
+                              controller.reviews[index] != null)
+                            Text(controller.reviews[index]['level'])
                       ],
                     ),
                   );
@@ -445,7 +489,6 @@ class SessionStatus {
 
 void showMyDialog(BuildContext context, id) {
   showDialog(
-    barrierDismissible: false,
     context: context,
     builder: (context) => Dialog(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
@@ -459,11 +502,10 @@ void showMyDialog(BuildContext context, id) {
                 children: [
                   Text('قيم الطالب'),
                   SizedBox(height: 20),
-                  SingleChildScrollView(
-                    scrollDirection: Axis.horizontal,
-                    child: Row(
-                      children: [
-                        InkWell(
+                  Row(
+                    children: [
+                      Expanded(
+                        child: InkWell(
                           onTap: () {
                             controller.level = 'beginner';
                             controller.levelCount = 0;
@@ -471,8 +513,10 @@ void showMyDialog(BuildContext context, id) {
                           },
                           child: buildBox("Beginner", 0),
                         ),
-                        SizedBox(width: 10),
-                        InkWell(
+                      ),
+                      SizedBox(width: 10),
+                      Expanded(
+                        child: InkWell(
                           onTap: () {
                             controller.level = 'intermediate';
                             controller.levelCount = 1;
@@ -480,8 +524,10 @@ void showMyDialog(BuildContext context, id) {
                           },
                           child: buildBox("Intermediate", 1),
                         ),
-                        SizedBox(width: 10),
-                        InkWell(
+                      ),
+                      SizedBox(width: 10),
+                      Expanded(
+                        child: InkWell(
                           onTap: () {
                             controller.level = 'excellent';
                             controller.levelCount = 2;
@@ -489,8 +535,8 @@ void showMyDialog(BuildContext context, id) {
                           },
                           child: buildBox("Excellent", 2),
                         ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
                   SizedBox(height: 20),
                   MyTextformfield(
@@ -520,7 +566,7 @@ Widget buildBox(String text, int i) {
   final controller = Get.put(BookingsSessionsController());
   return AnimatedContainer(
     duration: const Duration(milliseconds: 300),
-    padding: EdgeInsets.all(12),
+    padding: EdgeInsets.symmetric(vertical: 15),
     decoration: BoxDecoration(
       color: controller.levelCount == i
           ? AppColors.primaryColor
@@ -533,6 +579,7 @@ Widget buildBox(String text, int i) {
     ),
     child: Text(
       text,
+      textAlign: TextAlign.center,
       style: TextStyle(
         color: controller.levelCount == i ? Colors.white : Colors.black,
       ),
@@ -601,4 +648,3 @@ void studentReviewDialog(BuildContext context, id) {
     ),
   );
 }
-// asdasd

@@ -41,7 +41,7 @@ class SearchScreen extends StatelessWidget {
                 ),
                 SizedBox(height: 30.h),
                 Expanded(
-                  child: Obx(() => RefreshIndicator(
+                    child: Obx(() => RefreshIndicator(
                         onRefresh: () async {
                           await controller.fetchInstructors();
                         },
@@ -50,9 +50,8 @@ class SearchScreen extends StatelessWidget {
                           itemBuilder: (context, index) {
                             final instructor =
                                 controller.filteredInstructors[index];
-                            // ignore: avoid_print
-                            print(
-                                "Instructor #$index: ${instructor['trainer_id']} - data: $instructor"); // طباعة للتأكد من المفتاح
+                            final double avgRating =
+                                instructor['avg_rating'] ?? 0;
 
                             return Column(
                               children: [
@@ -62,17 +61,28 @@ class SearchScreen extends StatelessWidget {
                                       '${instructor['first_name']} ${instructor['last_name']}',
                                   email: instructor['email'] ?? '',
                                   trainerId: instructor['trainer_id'],
-                                  userRole: controller.currentUserRole
-                                      .value, // تمرير دور المستخدم
-                                  reviews: controller.reviews,
+                                  userRole: controller.currentUserRole.value,
+                                  reviews: Row(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    children: [
+                                      ...List.generate(5, (starIndex) {
+                                        return Icon(
+                                          starIndex < avgRating.round()
+                                              ? Icons.star
+                                              : Icons.star_border,
+                                          color: Colors.amber,
+                                          size: 20,
+                                        );
+                                      }),
+                                      SizedBox(width: 6),
+                                    ],
+                                  ),
                                 ),
-                                SizedBox(height: 15),
+                                SizedBox(height: 5),
                               ],
                             );
                           },
-                        ),
-                      )),
-                )
+                        ))))
               ],
             ),
           ),

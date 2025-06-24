@@ -180,7 +180,6 @@ class SignUpContainer extends StatelessWidget {
                 items: const [
                   DropdownMenuItem(value: 'student', child: Text('طالب')),
                   DropdownMenuItem(value: 'trainer', child: Text('مدرب')),
-                  DropdownMenuItem(value: 'employee', child: Text('موظف')),
                 ],
                 onChanged: (val) {
                   controller.roleController.text = val!;
@@ -223,6 +222,7 @@ class SignUpContainer extends StatelessWidget {
                   ),
                 ),
               ),
+
               SizedBox(height: 20.h),
               controller.roleController.text == 'trainer'
                   ? Column(
@@ -234,7 +234,7 @@ class SignUpContainer extends StatelessWidget {
                         SizedBox(height: 15.h),
                         MyTextformfield(
                           valid: (val) =>
-                              validInput(val, 7, 255, "License Number"),
+                              validInput(val, 1, 6, "License Number"),
                           mycontroller: controller.licenseNumber,
                           keyboardType: TextInputType.number,
                           prefixIcon: Icons.credit_card_outlined,
@@ -376,6 +376,46 @@ class SignUpContainer extends StatelessWidget {
                   ),
                 ),
               ),
+              SizedBox(height: 15),
+              if (controller.roleController.text == 'student') ...[
+                SizedBox(height: 16.h),
+                Text("ذوي الاحتياجات الخاصة",
+                    style: TextStyle(color: Colors.grey[800], fontSize: 11.sp)),
+                SizedBox(height: 8.h),
+                Container(
+                  padding:
+                      EdgeInsets.symmetric(horizontal: 12.w, vertical: 10.h),
+                  decoration: BoxDecoration(
+                    color: Colors.grey[100],
+                    borderRadius: BorderRadius.circular(12.r),
+                  ),
+                  child: Row(
+                    children: [
+                      Checkbox(
+                        activeColor: AppColors.primaryColor,
+                        value: controller.isLeftHandDisabled,
+                        onChanged: (val) {
+                          controller.isLeftHandDisabled = val!;
+                          controller.update();
+                        },
+                      ),
+                      Expanded(
+                        child: Text(
+                          "هل أنت من ذوي الإعاقة باليد اليسرى؟",
+                          style: TextStyle(fontSize: 13.sp),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsets.only(top: 6.h, right: 8.w),
+                  child: Text(
+                    "نقبل فقط حالات الإعاقة باليد اليسرى حصرا",
+                    style: TextStyle(fontSize: 11.sp, color: Colors.grey[600]),
+                  ),
+                ),
+              ],
 
               SizedBox(height: 30.h),
               MyButton(

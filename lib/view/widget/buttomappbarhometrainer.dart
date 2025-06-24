@@ -17,6 +17,7 @@ class Buttomappbarhometrainer extends StatelessWidget {
               child: controller.pages.elementAt(controller.currentpage),
             ),
             bottomNavigationBar: BottomNavigationBar(
+              currentIndex: controller.currentpage,
               unselectedItemColor: AppColors.grey,
               selectedItemColor: AppColors.primaryColor,
               type: BottomNavigationBarType.fixed,

@@ -38,7 +38,7 @@ class VerifycodeContainer extends StatelessWidget {
             ),
             SizedBox(height: 15.h),
             Text(
-              "لقد أرسلنا رمز تحقق مكون من 5 أرقام إلى بريدك الإلكتروني",
+              "لقد أرسلنا رمز تحقق مكون من 6 أرقام إلى بريدك الإلكتروني",
               style: TextStyle(
                 fontSize: 14.sp,
                 color: Colors.grey[700],

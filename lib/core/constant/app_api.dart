@@ -22,6 +22,9 @@ class AppLinks {
   static const String createSchedule = '$init/training-schedules';
   static const String showTRainingSchedules = '$init/trainer';
   static const String trainingSessions = '$init/trainer-sessions';
+  static const String trainerSessionsBySchedule =
+      "$init/trainer-sessions/schedule";
+
   static const String trainerVacation = '$init/schedule-exceptions';
   static const String showVacations = '$init/trainer-exceptions';
   static const String trainers = '$init/trainers';
@@ -38,4 +41,7 @@ class AppLinks {
   static const String trainerFeedbacks = "$init/trainer/feedbacks";
   static const String studentFeedbacks = "$init/feedback-students";
   static const String showTrainerExam = "$init/exam";
+  static const String generateExam = "$init/generate";
+  static const String startExam = "$init/exams/start";
+  static const String submitExam = "$init/exams/submit";
 }

@@ -12,7 +12,7 @@ class TrainingSessionsController extends GetxController {
   var errorMessage = ''.obs;
   var selectedDayIndex = 0.obs;
 
-  late final bool isTrainer;
+bool isTrainer = false;
   String? trainerId;
 
   void selectDay(int index) {
@@ -25,10 +25,19 @@ class TrainingSessionsController extends GetxController {
   }
 
   @override
-  void onInit() {
-    super.onInit();
-    initTrainerIdAndFetch();
+void onInit() {
+  super.onInit();
+  final args = Get.arguments;
+
+  if (args != null && args['schedule_id'] != null) {
+    fetchSessionsByScheduleId(args['schedule_id']);
+  } else if (args != null && args['trainer_id'] != null) {
+    setTrainerId(args['trainer_id']);
+  } else {
+    initTrainerIdAndFetch(); // fallback للمدرب الحالي
   }
+}
+
 
   void initTrainerIdAndFetch() {
     final user = data.read('user');
@@ -66,4 +75,20 @@ class TrainingSessionsController extends GetxController {
 
     isLoading.value = false;
   }
+  Future<void> fetchSessionsByScheduleId(int scheduleId) async {
+  isLoading.value = true;
+  errorMessage.value = '';
+
+  final url = "${AppLinks.trainerSessionsBySchedule}?schedule_id=$scheduleId";
+  final response = await crud.getRequest(url);
+
+  if (response != null && response['data'] != null) {
+    sessionsData.value = response['data'];
+  } else {
+    errorMessage.value = 'فشل في تحميل الجلسات حسب الجدول';
+  }
+
+  isLoading.value = false;
+}
+
 }

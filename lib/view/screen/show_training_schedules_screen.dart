@@ -1,4 +1,5 @@
 import 'package:driving_school/controller/show_training_schedules_controller.dart';
+import 'package:driving_school/core/constant/approuts.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
@@ -108,6 +109,27 @@ class ShowTRainingSchedulesScreen extends StatelessWidget {
             ],
           ),
           const SizedBox(height: 12),
+          /// 👇 الزر هنا
+SizedBox(
+  width: double.infinity,
+  child: ElevatedButton.icon(
+    icon: const Icon(Icons.list_alt, size: 18),
+    label: const Text("تفاصيل الجدول"),
+    style: ElevatedButton.styleFrom(
+      backgroundColor: AppColors.primaryColor,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12),
+      ),
+    ),
+    onPressed: () {
+      final scheduleId = item['id'];
+      Get.toNamed(
+        AppRouts.trainingSessionsScreen, 
+        arguments: {'schedule_id': scheduleId},
+      );
+    },
+  ),
+),
           Row(
             children: [
               const Icon(Icons.access_time_rounded,

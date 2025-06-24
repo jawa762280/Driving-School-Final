@@ -10,8 +10,12 @@ class TrainerReviewsController extends GetxController {
   getReviews() async {
     var response =
         await crud.getRequest('${AppLinks.init}/trainer/$id/reviews');
-    if (response[0].isNotEmpty) {
-      reviews.addAll(response);
+
+    List filteredReviews =
+        response.where((e) => e is Map && e.isNotEmpty).toList();
+
+    if (filteredReviews.isNotEmpty) {
+      reviews.addAll(filteredReviews);
     }
 
     update();

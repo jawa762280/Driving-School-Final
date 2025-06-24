@@ -83,6 +83,10 @@ class LoginController extends GetxController {
           myServices.saveToken(token);
           data.write('user', userData);
           data.write('role', response['data']['user']['role'].toString());
+          if (response['data']['user']['role'].toString() == 'student') {
+            final studentId = response['data']['user']['student']['id'];
+            data.write('id', studentId);
+          }
           data.write('token', response['data']['token']);
           data.write('refreshToken', response['data']['refresh_token']);
           data.write('tokenType', response['data']['token_type']);

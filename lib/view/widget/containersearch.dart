@@ -22,7 +22,7 @@ class ContainerSearch extends StatelessWidget {
   final String email;
   final int trainerId;
   final String userRole;
-  final List? reviews;
+  final Widget? reviews;
 
   @override
   Widget build(BuildContext context) {
@@ -78,11 +78,7 @@ class ContainerSearch extends StatelessWidget {
                       ),
                       overflow: TextOverflow.ellipsis,
                     ),
-                    for (var i = 0; i < reviews!.length; i++)
-                      Icon(
-                        Icons.star,
-                        color: Colors.amber,
-                      )
+                    reviews!,
                   ],
                 ),
               ),
