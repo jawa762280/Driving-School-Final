@@ -255,42 +255,32 @@ class BookingsSessionsScreen extends StatelessWidget {
                                               color: Colors.white)),
                                     ),
 
-                                    session['status'] != 'started'
-                                        ? Container()
-                                        : ElevatedButton.icon(
-                                            style: ElevatedButton.styleFrom(
-                                              backgroundColor:
-                                                  Colors.red.shade600,
-                                              padding:
-                                                  const EdgeInsets.symmetric(
-                                                      horizontal: 12,
-                                                      vertical: 6),
-                                              minimumSize: const Size(10, 36),
-                                              shape: RoundedRectangleBorder(
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                          10)),
-                                            ),
-                                            onPressed:
-                                                session['status'] == 'started'
-                                                    ? () async {
-                                                        final bookingId =
-                                                            session['id'];
-                                                        await controller
-                                                            .completeSession(
-                                                                bookingId);
-                                                        await controller
-                                                            .fetchSessions();
-                                                      }
-                                                    : null,
-                                            icon: Icon(Icons.stop,
-                                                size: 18,
-                                                color: Colors.teal.shade400),
-                                            label: const Text("إنهاء",
-                                                style: TextStyle(
-                                                    fontSize: 14,
-                                                    color: Colors.white)),
-                                          ),
+                                    ElevatedButton.icon(
+                                      style: ElevatedButton.styleFrom(
+                                        backgroundColor: Colors.red.shade600,
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 12, vertical: 6),
+                                        minimumSize: const Size(10, 36),
+                                        shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(10)),
+                                      ),
+                                      onPressed: session['status'] == 'started'
+                                          ? () async {
+                                              final bookingId = session['id'];
+                                              await controller
+                                                  .completeSession(bookingId);
+                                              await controller.fetchSessions();
+                                            }
+                                          : null,
+                                      icon: Icon(Icons.stop,
+                                          size: 18,
+                                          color: Colors.teal.shade400),
+                                      label: const Text("إنهاء",
+                                          style: TextStyle(
+                                              fontSize: 14,
+                                              color: Colors.white)),
+                                    ),
                                   ],
                                 ),
                               const SizedBox(height: 10),
@@ -318,6 +308,54 @@ class BookingsSessionsScreen extends StatelessWidget {
                                 ),
                             ],
                           ),
+                        if (userRole == 'student')
+                          if (controller.reviews.length > index &&
+                              controller.reviews[index] != null)
+                            Column(
+                              children: [
+                                Row(
+                                  children: [
+                                    Icon(Icons.auto_awesome,
+                                        color: AppColors.primaryColor),
+                                    SizedBox(width: 10),
+                                    Text(
+                                      translateLevel(
+                                          controller.reviews[index]['level']),
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                SizedBox(height: 10),
+                                Row(
+                                  children: [
+                                    Icon(Icons.comment,
+                                        color: AppColors.primaryColor),
+                                    SizedBox(width: 10),
+                                    Text(
+                                      controller.reviews[index]['notes'] ??
+                                          'لا توجد ملاحظات',
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            )
+                          else
+                            Text(
+                              'لا يوجد تقييم بعد',
+                              style: TextStyle(
+                                fontSize: 16,
+                                color: Colors.grey.shade600,
+                              ),
+                            ),
+                        SizedBox(height: 15),
+
                         userRole == 'student' && status == 'completed'
                             ? (data.read('student-review') as List).any(
                                     (review) =>
@@ -349,52 +387,6 @@ class BookingsSessionsScreen extends StatelessWidget {
                                     ),
                                   )
                             : SizedBox(),
-                        if (userRole == 'student')
-                          if (controller.reviews.length > index &&
-                              controller.reviews[index] != null)
-                            Column(
-                              children: [
-                                Row(
-                                  children: [
-                                    Icon(Icons.auto_awesome,
-                                        color: AppColors.primaryColor),
-                                    SizedBox(width: 10),
-                                    Text(
-                                      controller.reviews[index]['level'] ??
-                                          'بدون مستوى',
-                                      style: TextStyle(
-                                        fontSize: 18,
-                                        fontWeight: FontWeight.w500,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                SizedBox(height: 10),
-                                Row(
-                                  children: [
-                                    Icon(Icons.comment,
-                                        color: AppColors.primaryColor),
-                                    SizedBox(width: 10),
-                                    Text(
-                                      controller.reviews[index]['notes'] ??
-                                          'لا توجد ملاحظات',
-                                      style: TextStyle(
-                                        fontSize: 18,
-                                        fontWeight: FontWeight.w500,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ],
-                            )
-                          else
-                            Text(
-                              'لا يوجد تقييم بعد',
-                              style: TextStyle(
-                                fontSize: 16,
-                                color: Colors.grey.shade600,
-                              ),
-                            ),
 
                         if (userRole == 'trainer' && status == 'completed')
                           (data.read('trainer-review') as List).any((review) =>
@@ -403,8 +395,7 @@ class BookingsSessionsScreen extends StatelessWidget {
                               ? SizedBox()
                               : InkWell(
                                   onTap: () {
-                                    showMyDialog(context,
-                                        controller.sendFeedback(session['id']));
+                                    showMyDialog(context, (session['id']));
                                   },
                                   child: Container(
                                     padding: EdgeInsets.all(15),
@@ -478,6 +469,19 @@ class BookingsSessionsScreen extends StatelessWidget {
             label: "قيد الانتظار", color: Colors.grey.shade700);
     }
   }
+
+  String translateLevel(String? level) {
+    switch (level) {
+      case 'beginner':
+        return 'مبتدئ';
+      case 'intermediate':
+        return 'متوسط';
+      case 'excellent':
+        return 'ممتاز';
+      default:
+        return 'بدون مستوى';
+    }
+  }
 }
 
 class SessionStatus {
@@ -500,7 +504,7 @@ void showMyDialog(BuildContext context, id) {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Text('قيم الطالب'),
+                  Text('تقييم الطالب'),
                   SizedBox(height: 20),
                   Row(
                     children: [
@@ -511,7 +515,7 @@ void showMyDialog(BuildContext context, id) {
                             controller.levelCount = 0;
                             controller.update();
                           },
-                          child: buildBox("Beginner", 0),
+                          child: buildBox("مبتدئ", 0),
                         ),
                       ),
                       SizedBox(width: 10),
@@ -522,7 +526,7 @@ void showMyDialog(BuildContext context, id) {
                             controller.levelCount = 1;
                             controller.update();
                           },
-                          child: buildBox("Intermediate", 1),
+                          child: buildBox("متوسط", 1),
                         ),
                       ),
                       SizedBox(width: 10),
@@ -533,7 +537,7 @@ void showMyDialog(BuildContext context, id) {
                             controller.levelCount = 2;
                             controller.update();
                           },
-                          child: buildBox("Excellent", 2),
+                          child: buildBox("ممتاز", 2),
                         ),
                       ),
                     ],

@@ -5,12 +5,15 @@ import 'package:driving_school/core/services/crud.dart';
 import 'package:driving_school/data/model/exam_question_model.dart';
 import 'package:driving_school/data/model/exam_result_model.dart';
 import 'package:driving_school/view/exam_result_screen.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class GenerateExamController extends GetxController {
   final Crud crud = Crud();
   RxString startedAt = ''.obs;
   var examResult = Rx<ExamResultModel?>(null);
+  var isTimeUp = false.obs;
+
   var completedTypes = <String>{}.obs;
   var isLoading = false.obs;
   final Map<String, String> examTypesMap = {
@@ -68,13 +71,24 @@ class GenerateExamController extends GetxController {
       // ⏱️ ابدأ المؤقت بعد بدء الامتحان رسميًا
       timer?.cancel();
       timer = Timer.periodic(Duration(seconds: 1), (_) {
-        if (timeLeft.value > 0) {
-          timeLeft.value--;
-        } else {
-          timer?.cancel();
-          // يمكنك استدعاء submitAnswers() تلقائيًا هنا
-        }
-      });
+  if (timeLeft.value > 0) {
+    timeLeft.value--;
+  } else {
+    timer?.cancel();
+    isTimeUp.value = true;
+
+    Get.snackbar(
+      'انتباه',
+      'انتهى وقت الامتحان. سيتم تصحيح الإجابات المُدخلة فقط.',
+      snackPosition: SnackPosition.TOP,
+      colorText: Colors.black87,
+      duration: const Duration(seconds: 2),
+      margin: const EdgeInsets.all(16),
+      borderRadius: 12,
+    );
+  }
+});
+
     } else {
       Get.snackbar('خطأ', 'فشل بدء الامتحان');
     }
@@ -102,7 +116,7 @@ class GenerateExamController extends GetxController {
     );
 
     if (response['success'] == true) {
-      Get.snackbar('تم', response['message']);
+      Get.snackbar('تم', "تم تصحيح الاجابات المدخلة فقط ");
 
       examResult.value = ExamResultModel.fromJson(response['data']);
 

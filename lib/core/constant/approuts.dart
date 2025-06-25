@@ -27,6 +27,6 @@ class AppRouts {
   static const String trainerReviewsScreen = "/trainer_reviews";
   static const String trainerExamScreen = "/trainer_exam_screen";
   static const String examHomeScreen = "/exams_home_screen";
-    static const String generateExamScreen = "/generate_exam_screen";
-
+  static const String generateExamScreen = "/generate_exam_screen";
+  static const String chooseOtomatikScreen = "/choose_otomatik_screen";
 }

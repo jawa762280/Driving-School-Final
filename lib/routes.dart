@@ -2,6 +2,7 @@ import 'package:driving_school/core/constant/approuts.dart';
 import 'package:driving_school/core/middleware/mymiddleware.dart';
 import 'package:driving_school/view/screen/bookings_sessions_screen.dart';
 import 'package:driving_school/view/screen/cars_screen.dart';
+import 'package:driving_school/view/screen/choose_otomatik_screen.dart';
 import 'package:driving_school/view/screen/exam_creation_screen.dart';
 import 'package:driving_school/view/screen/exams_home_screen.dart';
 import 'package:driving_school/view/screen/generate_exam_screen.dart';
@@ -130,5 +131,9 @@ List<GetPage<dynamic>> routes = [
   GetPage(
     name: AppRouts.generateExamScreen,
     page: () => GenerateExamScreen(),
+  ),
+   GetPage(
+    name: AppRouts.chooseOtomatikScreen,
+    page: () => ChooseOtomatikScreen(),
   ),
 ];

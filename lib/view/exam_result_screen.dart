@@ -26,6 +26,8 @@ class ExamResultScreen extends StatelessWidget {
       );
     }
 
+    final correctedQuestions = result.details;
+
     return Scaffold(
       backgroundColor: Colors.grey.shade100,
       appBar: AppBar(
@@ -42,12 +44,11 @@ class ExamResultScreen extends StatelessWidget {
           children: [
             Expanded(
               child: SingleChildScrollView(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    // الدائرة الكبيرة للنتيجة
+                    // دائرة النسبة
                     Container(
                       width: 125,
                       height: 125,
@@ -90,16 +91,14 @@ class ExamResultScreen extends StatelessWidget {
                     ),
                     const SizedBox(height: 6),
                     Text(
-                      "${result.score} من ${result.total} اسئلة",
+                      "${result.score} من ${result.total} أسئلة",
                       style: const TextStyle(
                         fontSize: 22,
                         fontWeight: FontWeight.bold,
                         color: Colors.black87,
                       ),
                     ),
-
                     const SizedBox(height: 30),
-
                     const Align(
                       alignment: Alignment.centerRight,
                       child: Text(
@@ -110,23 +109,24 @@ class ExamResultScreen extends StatelessWidget {
                         ),
                       ),
                     ),
-
                     const SizedBox(height: 16),
 
+                    // عرض الأسئلة المصححة فقط
                     ListView.separated(
                       shrinkWrap: true,
                       physics: const NeverScrollableScrollPhysics(),
-                      itemCount: result.details.length,
+                      itemCount: correctedQuestions.length,
                       separatorBuilder: (_, __) => const SizedBox(height: 14),
                       itemBuilder: (context, index) {
-                        final q = result.details[index];
+                        final q = correctedQuestions[index];
                         final bool correct = q['is_correct'] ?? false;
+                        final questionText = q['question_text'] ?? '';
+                        final userAnswer = q['user_answer']?.toString() ?? '';
+                        final correctAnswer = q['correct_answer']?.toString() ?? '';
 
                         return Container(
                           decoration: BoxDecoration(
-                            color: correct
-                                ? Colors.green.shade50
-                                : Colors.red.shade50,
+                            color: correct ? Colors.green.shade50 : Colors.red.shade50,
                             borderRadius: BorderRadius.circular(15),
                             border: Border.all(
                               color: correct ? Colors.green : Colors.red,
@@ -155,7 +155,7 @@ class ExamResultScreen extends StatelessWidget {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
-                                      "السؤال ${index + 1}: ${q['question_text'] ?? ''}",
+                                      "السؤال ${index + 1}: $questionText",
                                       style: const TextStyle(
                                         fontWeight: FontWeight.w700,
                                         fontSize: 13.8,
@@ -165,7 +165,7 @@ class ExamResultScreen extends StatelessWidget {
                                     if (!correct) ...[
                                       const SizedBox(height: 8),
                                       Text(
-                                        "إجابتك: ${q['user_answer'] ?? ''}",
+                                        "إجابتك: $userAnswer",
                                         style: TextStyle(
                                           color: Colors.grey.shade800,
                                           fontWeight: FontWeight.w600,
@@ -173,7 +173,7 @@ class ExamResultScreen extends StatelessWidget {
                                       ),
                                       const SizedBox(height: 4),
                                       Text(
-                                        "الإجابة الصحيحة: ${q['correct_answer'] ?? ''}",
+                                        "الإجابة الصحيحة: $correctAnswer",
                                         style: TextStyle(
                                           color: Colors.grey.shade800,
                                           fontWeight: FontWeight.w600,
@@ -188,13 +188,14 @@ class ExamResultScreen extends StatelessWidget {
                         );
                       },
                     ),
-                    const SizedBox(height: 80), // مساحة أسفل للزر
+
+                    const SizedBox(height: 80), // فراغ أسفل الزر
                   ],
                 ),
               ),
             ),
 
-            // زر أسفل الصفحة ثابت مع تباعد جيد
+            // زر اختيار امتحان جديد
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
               child: SizedBox(
@@ -215,17 +216,11 @@ class ExamResultScreen extends StatelessWidget {
                     padding: const EdgeInsets.symmetric(vertical: 14),
                   ),
                   child: Row(
-                    textDirection:
-                        TextDirection.ltr, // أجبر اتجاه النص لليسار لليمين
-
+                    textDirection: TextDirection.ltr,
                     mainAxisAlignment: MainAxisAlignment.center,
                     mainAxisSize: MainAxisSize.min,
                     children: const [
-                      Icon(
-                        Icons.restart_alt,
-                        size: 24,
-                        color: Colors.white,
-                      ),
+                      Icon(Icons.restart_alt, size: 24, color: Colors.white),
                       SizedBox(width: 12),
                       Text(
                         "اختيار امتحان جديد",

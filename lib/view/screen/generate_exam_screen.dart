@@ -235,9 +235,11 @@ class GenerateExamScreen extends StatelessWidget {
                         () => RadioListTile<int>(
                           value: i,
                           groupValue: controller.answers[index].value,
-                          onChanged: (val) {
-                            controller.answers[index].value = val;
-                          },
+                          onChanged: controller.isTimeUp.value
+                              ? null
+                              : (val) {
+                                  controller.answers[index].value = val;
+                                },
                           title: Text(question.choices[i].text),
                           activeColor: AppColors.primaryColor,
                           shape: RoundedRectangleBorder(
