@@ -2,8 +2,10 @@ import 'package:driving_school/core/services/crud.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
-
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 import '../core/constant/app_api.dart';
+import '../main.dart';
 
 class ChooseOtomatikController extends GetxController {
   final selectedDay = ''.obs;
@@ -77,23 +79,62 @@ class ChooseOtomatikController extends GetxController {
   }
 
   selectSessions(id) async {
-    var response = await crud.postRequest(AppLinks.autobooksession, {
-      'session_id': id,
-      'transmission': vitesType,
-      'is_for_special_needs': trainingType == 'special_needs' ? '1' : '0',
-    });
-    if (response['data'] != null || response['data'].isNotEmpty) {
+    String token = data.read('token') ?? '';
+    try {
+      final response = await http.post(
+        Uri.parse(AppLinks.autobooksession),
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer $token',
+          'Accept': 'application/json',
+        },
+        body: jsonEncode({
+          'session_id': id,
+          'transmission': vitesType,
+          'is_for_special_needs': trainingType == 'special_needs' ? '1' : '0',
+        }),
+      );
+
+      final data = jsonDecode(response.body);
+
+      if (response.statusCode == 200 &&
+          data['data'] != null &&
+          data['data'].isNotEmpty) {
+        Get.snackbar(
+          'تمت العملية بنجاح',
+          'تم حجز الجلسة بنجاح',
+          snackPosition: SnackPosition.TOP,
+          backgroundColor: Colors.green.shade400,
+          colorText: Colors.white,
+          duration: const Duration(seconds: 3),
+          margin: const EdgeInsets.all(16),
+          borderRadius: 12,
+        );
+      } else {
+        Get.snackbar(
+          'حدث خطأ',
+          data['message'] ?? 'حدث خطأ غير متوقع',
+          snackPosition: SnackPosition.TOP,
+          backgroundColor: Colors.red.shade400,
+          colorText: Colors.white,
+          duration: const Duration(seconds: 3),
+          margin: const EdgeInsets.all(16),
+          borderRadius: 12,
+        );
+      }
+    } catch (e) {
       Get.snackbar(
-        'تمت العملية بنجاح',
-        'تم حجز الجلسة بنجاح',
+        'خطأ في الاتصال',
+        'حدث خطأ أثناء الاتصال بالخادم',
         snackPosition: SnackPosition.TOP,
-        backgroundColor: Colors.green.shade400,
+        backgroundColor: Colors.red.shade400,
         colorText: Colors.white,
         duration: const Duration(seconds: 3),
         margin: const EdgeInsets.all(16),
         borderRadius: 12,
       );
     }
+
     update();
   }
 }

@@ -21,4 +21,7 @@ final List<TrainerServiceModel> trainerServices = [
       icon: Icons.text_snippet_outlined, title: "انشاء امتحان "),
   TrainerServiceModel(
       icon: Icons.text_snippet_outlined, title: " عرض الامتحانات"),
+  TrainerServiceModel(icon: Icons.car_crash_outlined, title: "إبلاغ عطل سيارة"),
+  TrainerServiceModel(
+      icon: Icons.car_rental_outlined, title: "عرض أعطال سيارات"),
 ];

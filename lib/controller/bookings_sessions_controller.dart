@@ -62,6 +62,7 @@ class BookingsSessionsController extends GetxController {
         'level': level,
         'notes': comment.text,
       });
+      Navigator.pop(Get.context!);
       if (response['level'].toString() != 'null') {
         Get.snackbar(
           "نجاح",
@@ -70,17 +71,16 @@ class BookingsSessionsController extends GetxController {
           colorText: Colors.black,
           duration: Duration(seconds: 2),
         );
-        Get.back(); // ✅ بعد الإرسال
+        Get.back();
         List<dynamic> reviews = data.read('trainer-review') ?? [];
         reviews.add({
           'booking_id': id,
           'trainer_id': data.read('user')['trainer']['id'].toString(),
         });
         data.write('trainer-review', reviews);
-        getReviews(); // تحديث قائمة التقييمات
+        getReviews();
       }
     } catch (e) {
-      // يمكنك عرض رسالة خطأ هنا إذا أردت
       Get.snackbar("خطأ", "حدث خطأ أثناء إرسال التقييم");
     } finally {
       isLoading.value = false;
@@ -89,35 +89,34 @@ class BookingsSessionsController extends GetxController {
   }
 
   sendFeedbackStudent(id) async {
-  isLoading.value = true;
-  try {
-    var response = await crud.postRequest(AppLinks.trainerReviews, {
-      'trainer_id': id,
-      'comment': comment.text,
-      'rating': rating,
-    });
-
-    print('MyResponse $response');
-
-    if (response['status'] == true) {
-      Get.back();
-      List<dynamic> reviews = data.read('student-review') ?? [];
-      reviews.add({
+    isLoading.value = true;
+    try {
+      var response = await crud.postRequest(AppLinks.trainerReviews, {
         'trainer_id': id,
-        'rating': rating.toString(),
         'comment': comment.text,
+        'rating': rating,
       });
-      data.write('student-review', reviews);
-      getReviewsStudent();
-    }
-  } catch (e) {
-    Get.snackbar("خطأ", "حدث خطأ أثناء إرسال التقييم");
-  } finally {
-    isLoading.value = false;
-    update();
-  }
-}
 
+      print('MyResponse $response');
+
+      if (response['status'] == true) {
+        Get.back();
+        List<dynamic> reviews = data.read('student-review') ?? [];
+        reviews.add({
+          'trainer_id': id,
+          'rating': rating.toString(),
+          'comment': comment.text,
+        });
+        data.write('student-review', reviews);
+        getReviewsStudent();
+      }
+    } catch (e) {
+      Get.snackbar("خطأ", "حدث خطأ أثناء إرسال التقييم");
+    } finally {
+      isLoading.value = false;
+      update();
+    }
+  }
 
   Future<void> fetchSessions() async {
     isLoading.value = true;
@@ -151,7 +150,7 @@ class BookingsSessionsController extends GetxController {
           backgroundColor: Colors.green.shade100,
           colorText: Colors.black,
           duration: Duration(seconds: 2));
-      await fetchSessions(); // إعادة تحميل الجلسات
+      await fetchSessions(); 
     } else {
       final errorMsg = response?['message'] ?? 'فشل في إلغاء الجلسة';
       Get.snackbar("خطأ", errorMsg,
@@ -171,7 +170,7 @@ class BookingsSessionsController extends GetxController {
           colorText: Colors.black,
           duration: Duration(seconds: 2));
 
-      await fetchSessions(); // إعادة تحميل الجلسات
+      await fetchSessions();
     } else {
       final errorMsg = response?['message'] ?? 'فشل بدء الجلسة';
       Get.snackbar("خطأ", errorMsg,
@@ -191,7 +190,7 @@ class BookingsSessionsController extends GetxController {
           colorText: Colors.black,
           duration: Duration(seconds: 2));
 
-      await fetchSessions(); // إعادة تحميل الجلسات
+      await fetchSessions();
     } else {
       final errorMsg = response?['message'] ?? 'فشل إنهاء الجلسة';
       Get.snackbar("خطأ", errorMsg,

@@ -65,6 +65,12 @@ class TrainerServices extends StatelessWidget {
                              else if (index == 5) {
                               Get.toNamed(AppRouts.examHomeScreen);
                             }
+                             else if (index == 6) {
+                              Get.toNamed(AppRouts.createFalutCar);
+                            }
+                             else if (index == 7) {
+                              Get.toNamed(AppRouts.showCarFaults);
+                            }
                             
                           },
                           child: Container(

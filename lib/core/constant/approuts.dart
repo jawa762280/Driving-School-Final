@@ -29,4 +29,6 @@ class AppRouts {
   static const String examHomeScreen = "/exams_home_screen";
   static const String generateExamScreen = "/generate_exam_screen";
   static const String chooseOtomatikScreen = "/choose_otomatik_screen";
+  static const String createFalutCar = "/create-fault-car";
+  static const String showCarFaults = "/show-fault-car";
 }
