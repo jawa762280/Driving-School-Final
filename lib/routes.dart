@@ -18,6 +18,7 @@ import 'package:driving_school/view/screen/show_exam_by_type_screen.dart';
 import 'package:driving_school/view/screen/show_training_schedules_screen.dart';
 import 'package:driving_school/view/screen/show_vacations_screen.dart';
 import 'package:driving_school/view/screen/sign_up_screen.dart';
+import 'package:driving_school/view/screen/student_evaluation_screen.dart';
 import 'package:driving_school/view/screen/success_reset_password_screen.dart';
 import 'package:driving_school/view/screen/success_verifycode_signup_screen.dart';
 import 'package:driving_school/view/screen/trainer_exam_screen.dart';
@@ -145,5 +146,9 @@ List<GetPage<dynamic>> routes = [
    GetPage(
     name: AppRouts.showCarFaults,
     page: () => ShowCarFaults(),
+  ),
+  GetPage(
+    name: AppRouts.evaluationStudentScreen,
+    page: () => StudentEvaluationScreen(),
   ),
 ];

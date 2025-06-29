@@ -31,4 +31,6 @@ class AppRouts {
   static const String chooseOtomatikScreen = "/choose_otomatik_screen";
   static const String createFalutCar = "/create-fault-car";
   static const String showCarFaults = "/show-fault-car";
+    static const String evaluationStudentScreen = "/student_evaluation_screen";
+
 }

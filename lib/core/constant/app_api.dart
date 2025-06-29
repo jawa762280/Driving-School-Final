@@ -48,4 +48,6 @@ class AppLinks {
   static const String autobooksession = "$init/auto-book-session";
   static const String addFault = "$init/add";
   static const String carFaults = "$init/car-faults";
+    static const String evaluationStuent = "$init/student/evaluation";
+
 }
