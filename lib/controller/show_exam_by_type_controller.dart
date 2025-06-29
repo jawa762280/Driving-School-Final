@@ -1,4 +1,5 @@
 import 'package:driving_school/data/model/display_exam_model.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:driving_school/core/services/crud.dart';
 import '../../../core/constant/app_api.dart';
@@ -11,6 +12,7 @@ class ShowExamByTypeController extends GetxController {
 
   Future<void> fetchExamByType() async {
     final type = selectedType.value;
+
     if (type.isEmpty) {
       Get.snackbar('تحذير', 'يرجى اختيار نوع الامتحان أولاً');
       return;
@@ -21,14 +23,28 @@ class ShowExamByTypeController extends GetxController {
 
     final response = await crud.getRequest('${AppLinks.showExamByType}/$type');
 
+    isLoading.value = false;
+
     if (response != null &&
         response['exam'] != null &&
         response['exam']['questions'] != null) {
       exam.value = DisplayExam.fromJson(response['exam']);
     } else {
-      Get.snackbar('خطأ', 'فشل تحميل الأسئلة من السيرفر');
-    }
+      // نحاول جلب رسالة الخطأ من السيرفر، وإذا لم تكن موجودة نعرض رسالة افتراضية
+      final String message =
+          response?['message']?.toString().trim().isNotEmpty == true
+              ? response!['message']
+              : 'فشل تحميل الأسئلة من السيرفر';
 
-    isLoading.value = false;
+      Get.snackbar(
+        'خطأ',
+        message,
+        snackPosition: SnackPosition.TOP,
+        colorText: Colors.black,
+        duration: const Duration(seconds: 3),
+        margin: const EdgeInsets.all(16),
+        borderRadius: 12,
+      );
+    }
   }
 }

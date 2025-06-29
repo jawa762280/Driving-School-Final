@@ -66,10 +66,10 @@ class GenerateExamScreen extends StatelessWidget {
             final label = entry.key;
             final value = entry.value;
             final isSelected = controller.selectedType.value == value;
-            final isCompleted = controller.completedTypes.contains(value);
+            controller.isCompleted = controller.completedTypes.contains(value);
 
             return GestureDetector(
-              onTap: isCompleted
+              onTap: controller.isCompleted
                   ? null
                   : () => controller.selectedType.value = value,
               child: Container(
@@ -77,7 +77,7 @@ class GenerateExamScreen extends StatelessWidget {
                 padding:
                     const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
                 decoration: BoxDecoration(
-                  color: isCompleted
+                  color: controller.isCompleted
                       ? Colors.green.shade50
                       : isSelected
                           ? AppColors.primaryColor
@@ -98,7 +98,7 @@ class GenerateExamScreen extends StatelessWidget {
                         label,
                         style: TextStyle(
                           fontWeight: FontWeight.w600,
-                          color: isCompleted
+                          color: controller.isCompleted
                               ? Colors.green
                               : isSelected
                                   ? AppColors.primaryColor
@@ -106,9 +106,9 @@ class GenerateExamScreen extends StatelessWidget {
                         ),
                       ),
                     ),
-                    if (isCompleted)
+                    if (controller.isCompleted)
                       const Icon(Icons.check_circle, color: Colors.green),
-                    if (isSelected && !isCompleted)
+                    if (isSelected && !controller.isCompleted)
                       Icon(Icons.radio_button_checked,
                           color: AppColors.primaryColor),
                   ],

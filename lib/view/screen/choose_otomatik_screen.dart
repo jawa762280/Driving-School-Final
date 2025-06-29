@@ -73,6 +73,35 @@ class ChooseOtomatikScreen extends StatelessWidget {
                   ),
                 ],
               ),
+              SizedBox(height: 25.h),
+              buildSectionTitle("🚦 اختر نوع الفيتيس"),
+              Row(
+                children: [
+                  Expanded(
+                    child: buildTrainingOption(
+                      selected: controller.vitesType == 'automatic',
+                      label: 'أوتوماتيك',
+                      icon: Icons.transform_outlined,
+                      onTap: () {
+                        controller.vitesType = 'automatic';
+                        controller.update();
+                      },
+                    ),
+                  ),
+                  SizedBox(width: 15.w),
+                  Expanded(
+                    child: buildTrainingOption(
+                      selected: controller.vitesType == 'manual',
+                      label: 'عادي',
+                      icon: Icons.width_normal_outlined,
+                      onTap: () {
+                        controller.vitesType = 'manual';
+                        controller.update();
+                      },
+                    ),
+                  ),
+                ],
+              ),
               SizedBox(height: 30.h),
               MyButton(
                 text: '🔍 عرض الجلسات المقترحة',
@@ -99,27 +128,33 @@ class ChooseOtomatikScreen extends StatelessWidget {
                         )
                       ],
                     ),
-                    child: ListTile(
-                      leading: Icon(Icons.event, color: AppColors.primaryColor),
-                      title: Text(
-                        "${session['start_time']} - ${session['end_time']}",
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold, fontSize: 15),
-                      ),
-                      subtitle: Text("🗓 ${session['session_date']}"),
-                      trailing: Container(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 12, vertical: 6),
-                        decoration: BoxDecoration(
-                          color: getStatusBackgroundColor(status),
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        child: Text(
-                          getStatusText(status),
+                    child: InkWell(
+                      onTap: () {
+                        controller.selectSessions(session['id']);
+                      },
+                      child: ListTile(
+                        leading:
+                            Icon(Icons.event, color: AppColors.primaryColor),
+                        title: Text(
+                          "${session['start_time']} - ${session['end_time']}",
                           style: TextStyle(
-                            fontSize: 12,
-                            fontWeight: FontWeight.bold,
-                            color: getStatusTextColor(status),
+                              fontWeight: FontWeight.bold, fontSize: 15),
+                        ),
+                        subtitle: Text("🗓 ${session['session_date']}"),
+                        trailing: Container(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 12, vertical: 6),
+                          decoration: BoxDecoration(
+                            color: getStatusBackgroundColor(status),
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          child: Text(
+                            getStatusText(status),
+                            style: TextStyle(
+                              fontSize: 12,
+                              fontWeight: FontWeight.bold,
+                              color: getStatusTextColor(status),
+                            ),
                           ),
                         ),
                       ),

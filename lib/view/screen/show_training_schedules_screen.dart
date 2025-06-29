@@ -91,45 +91,64 @@ class ShowTRainingSchedulesScreen extends StatelessWidget {
                 ),
               ),
               const Spacer(),
-              Container(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                decoration: BoxDecoration(
-                  color: isActive ? AppColors.primaryColor : Colors.redAccent,
-                  borderRadius: BorderRadius.circular(20),
-                ),
-                child: Text(
-                  isActive ? "نشط" : "غير نشط",
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontSize: 12,
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  SizedBox(
+                    width: 90,
+                    height: 30,
+                    child: Container(
+                      alignment: Alignment.center,
+                      decoration: BoxDecoration(
+                        color: isActive
+                            ? AppColors.primaryColor
+                            : Colors.redAccent,
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: Text(
+                        isActive ? "نشط" : "غير نشط",
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 12,
+                        ),
+                      ),
+                    ),
                   ),
-                ),
+                  const SizedBox(height: 8),
+                  SizedBox(
+                    width: 90,
+                    height: 30,
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: AppColors.primaryColor,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                      ),
+                      onPressed: () {
+                        final scheduleId = item['id'];
+                        Get.toNamed(
+                          AppRouts.trainingSessionsScreen,
+                          arguments: {'schedule_id': scheduleId},
+                        );
+                      },
+                      child: const Text(
+                        "تفاصيل",
+                        style: TextStyle(
+                          fontSize: 12,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ],
           ),
           const SizedBox(height: 12),
+
           /// 👇 الزر هنا
-SizedBox(
-  width: double.infinity,
-  child: ElevatedButton.icon(
-    icon: const Icon(Icons.list_alt, size: 18),
-    label: const Text("تفاصيل الجدول"),
-    style: ElevatedButton.styleFrom(
-      backgroundColor: AppColors.primaryColor,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(12),
-      ),
-    ),
-    onPressed: () {
-      final scheduleId = item['id'];
-      Get.toNamed(
-        AppRouts.trainingSessionsScreen, 
-        arguments: {'schedule_id': scheduleId},
-      );
-    },
-  ),
-),
+
           Row(
             children: [
               const Icon(Icons.access_time_rounded,

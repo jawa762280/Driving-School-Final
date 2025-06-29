@@ -14,7 +14,7 @@ class BookingsSessionsController extends GetxController {
   var errorMessage = ''.obs;
   var startedSessions = <bool>[].obs;
   final GetStorage data = GetStorage();
-  String level = '';
+  String level = 'beginner';
   int levelCount = 0;
   TextEditingController comment = TextEditingController();
   double rating = 3;
@@ -42,47 +42,63 @@ class BookingsSessionsController extends GetxController {
 
   getReviews() async {
     var response = await crud.getRequest(AppLinks.trainerFeedbacks);
+    reviews.clear();
     reviews.addAll(response['data']);
     update();
   }
 
   getReviewsStudent() async {
     var response = await crud.getRequest(AppLinks.studentFeedbacks);
+    reviews.clear();
     reviews.addAll(response['data']);
     update();
   }
 
   sendFeedback(id) async {
-    var response = await crud.postRequest(AppLinks.feedbackStudent, {
-      'booking_id': id,
-      'level': level,
-      'notes': comment.text,
-    });
-    if (response['level'].toString() != 'null') {
-      Get.snackbar("نجاح", 'تم ارسال التقييم',
+    isLoading.value = true;
+    try {
+      var response = await crud.postRequest(AppLinks.feedbackStudent, {
+        'booking_id': id,
+        'level': level,
+        'notes': comment.text,
+      });
+      if (response['level'].toString() != 'null') {
+        Get.snackbar(
+          "نجاح",
+          'تم ارسال التقييم',
           backgroundColor: Colors.green.shade100,
           colorText: Colors.black,
-          duration: Duration(seconds: 2));
-      Get.back();
-      List<dynamic> reviews = data.read('trainer-review') ?? [];
-      reviews.add({
-        'booking_id': id,
-        'trainer_id': data.read('user')['trainer']['id'].toString(),
-      });
-      data.write('trainer-review', reviews);
+          duration: Duration(seconds: 2),
+        );
+        Get.back(); // ✅ بعد الإرسال
+        List<dynamic> reviews = data.read('trainer-review') ?? [];
+        reviews.add({
+          'booking_id': id,
+          'trainer_id': data.read('user')['trainer']['id'].toString(),
+        });
+        data.write('trainer-review', reviews);
+        getReviews(); // تحديث قائمة التقييمات
+      }
+    } catch (e) {
+      // يمكنك عرض رسالة خطأ هنا إذا أردت
+      Get.snackbar("خطأ", "حدث خطأ أثناء إرسال التقييم");
+    } finally {
+      isLoading.value = false;
       update();
     }
-    update();
   }
 
   sendFeedbackStudent(id) async {
+  isLoading.value = true;
+  try {
     var response = await crud.postRequest(AppLinks.trainerReviews, {
       'trainer_id': id,
       'comment': comment.text,
       'rating': rating,
     });
-    // ignore: avoid_print
+
     print('MyResponse $response');
+
     if (response['status'] == true) {
       Get.back();
       List<dynamic> reviews = data.read('student-review') ?? [];
@@ -92,10 +108,16 @@ class BookingsSessionsController extends GetxController {
         'comment': comment.text,
       });
       data.write('student-review', reviews);
-      update();
+      getReviewsStudent();
     }
+  } catch (e) {
+    Get.snackbar("خطأ", "حدث خطأ أثناء إرسال التقييم");
+  } finally {
+    isLoading.value = false;
     update();
   }
+}
+
 
   Future<void> fetchSessions() async {
     isLoading.value = true;

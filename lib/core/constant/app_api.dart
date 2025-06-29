@@ -45,4 +45,6 @@ class AppLinks {
   static const String startExam = "$init/exams/start";
   static const String submitExam = "$init/exams/submit";
   static const String recommendedSessions = "$init/recommended-sessions";
+    static const String autobooksession = "$init/auto-book-session";
+
 }

@@ -1,11 +1,12 @@
 import 'dart:io';
 
+import 'package:driving_school/data/nationalities.dart';
 import 'package:driving_school/view/widget/genderchip.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:driving_school/controller/sign_up_controller.dart';
 import 'package:driving_school/core/constant/appcolors.dart';
-import 'package:driving_school/core/functions/validinput.dart'; // استيراد الدالة
+import 'package:driving_school/core/functions/validinput.dart'; 
 import 'package:driving_school/view/widget/my_button.dart';
 import 'package:driving_school/view/widget/my_textformfield.dart';
 import 'package:get/get.dart';
@@ -378,6 +379,68 @@ class SignUpContainer extends StatelessWidget {
               ),
               SizedBox(height: 15),
               if (controller.roleController.text == 'student') ...[
+                SizedBox(height: 16.h),
+                Text("الجنسية",
+                    style: TextStyle(color: Colors.grey[800], fontSize: 11.sp)),
+                SizedBox(height: 15.h),
+                DropdownButtonFormField<String>(
+                  decoration: InputDecoration(
+                    filled: true,
+                    fillColor: Colors.grey[100],
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12.r),
+                      borderSide: BorderSide.none,
+                    ),
+                    contentPadding:
+                        EdgeInsets.symmetric(horizontal: 12.w, vertical: 14.h),
+                  ),
+                  value: controller.nationalityController.text.isNotEmpty
+                      ? controller.nationalityController.text
+                      : null,
+                  items: nationalities
+                      .map((nation) => DropdownMenuItem(
+                            value: nation,
+                            child: Text(nation),
+                          ))
+                      .toList(),
+                  onChanged: (val) {
+                    controller.nationalityController.text = val!;
+                    controller.update();
+                  },
+                  validator: (value) => value == null || value.isEmpty
+                      ? 'يرجى اختيار الجنسية'
+                      : null,
+                ),
+                SizedBox(height: 16.h),
+                Text("هل تتبع إلى وزارة الدفاع؟",
+                    style: TextStyle(color: Colors.grey[800], fontSize: 11.sp)),
+                SizedBox(height: 8.h),
+                Container(
+                  padding:
+                      EdgeInsets.symmetric(horizontal: 12.w, vertical: 10.h),
+                  decoration: BoxDecoration(
+                    color: Colors.grey[100],
+                    borderRadius: BorderRadius.circular(12.r),
+                  ),
+                  child: Row(
+                    children: [
+                      Checkbox(
+                        activeColor: AppColors.primaryColor,
+                        value: controller.isMilitary,
+                        onChanged: (val) {
+                          controller.isMilitary = val ?? false;
+                          controller.update();
+                        },
+                      ),
+                      Expanded(
+                        child: Text(
+                          "     هل أنت عسكري وتتبع لوزارة الدفاع",
+                          style: TextStyle(fontSize: 13.sp),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
                 SizedBox(height: 16.h),
                 Text("ذوي الاحتياجات الخاصة",
                     style: TextStyle(color: Colors.grey[800], fontSize: 11.sp)),

@@ -93,6 +93,13 @@ class BookingsSessionsScreen extends StatelessWidget {
                       ? "$startTime - $endTime"
                       : 'غير محدد';
 
+                  final matchingReview = controller.reviews.firstWhere(
+                    (element) =>
+                        element['session_id'].toString() ==
+                        session['session']['id'].toString(),
+                    orElse: () => null,
+                  );
+
                   final status = session['status'] ?? 'pending';
                   final statusData = getStatusData(status);
                   // ignore: avoid_print
@@ -136,14 +143,14 @@ class BookingsSessionsScreen extends StatelessWidget {
                         Row(
                           children: [
                             Icon(Icons.calendar_today_rounded,
-                                size: 20, color: Colors.teal.shade400),
+                                size: 20, color: statusData.color),
                             const SizedBox(width: 10),
                             Text(
                               formattedDate,
                               style: TextStyle(
-                                  fontSize: 17,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.grey.shade800),
+                                  fontSize: 15,
+                                  // fontWeight: FontWeight.bold,
+                                  color: Colors.black),
                             ),
                           ],
                         ),
@@ -152,12 +159,12 @@ class BookingsSessionsScreen extends StatelessWidget {
                         // الوقت
                         Row(
                           children: [
-                            Icon(Icons.access_time_filled_rounded,
-                                size: 20, color: Colors.teal.shade400),
+                            Icon(Icons.access_time,
+                                size: 20, color: statusData.color),
                             const SizedBox(width: 12),
                             Text("الوقت: $time",
                                 style: TextStyle(
-                                    fontSize: 15, color: Colors.grey.shade700)),
+                                    fontSize: 15, color: Colors.black)),
                           ],
                         ),
                         const SizedBox(height: 12),
@@ -166,22 +173,22 @@ class BookingsSessionsScreen extends StatelessWidget {
                         Row(
                           children: [
                             Icon(Icons.person_outline,
-                                size: 20, color: Colors.teal.shade400),
+                                size: 20, color: statusData.color),
                             const SizedBox(width: 10),
                             Text("المدرب: $trainerName",
                                 style: const TextStyle(
-                                    fontSize: 15, fontWeight: FontWeight.w600)),
+                                    fontSize: 15, color: Colors.black)),
                           ],
                         ),
                         const SizedBox(height: 8),
                         Row(
                           children: [
                             Icon(Icons.school_outlined,
-                                size: 20, color: Colors.teal.shade400),
+                                size: 20, color: statusData.color),
                             const SizedBox(width: 10),
                             Text("الطالب: $studentName",
                                 style: const TextStyle(
-                                    fontSize: 15, fontWeight: FontWeight.w600)),
+                                    fontSize: 15, color: Colors.black)),
                           ],
                         ),
                         const SizedBox(height: 12),
@@ -190,12 +197,12 @@ class BookingsSessionsScreen extends StatelessWidget {
                         Row(
                           children: [
                             Icon(Icons.directions_car_outlined,
-                                size: 20, color: Colors.teal.shade400),
+                                size: 20, color: statusData.color),
                             const SizedBox(width: 10),
                             Text(
                                 "السيارة: $carModel (${transmission.isNotEmpty ? transmission : 'غير محدد'})",
                                 style: const TextStyle(
-                                    fontSize: 15, fontWeight: FontWeight.w600)),
+                                    fontSize: 15, color: Colors.black)),
                           ],
                         ),
                         SizedBox(
@@ -215,6 +222,43 @@ class BookingsSessionsScreen extends StatelessWidget {
                           ],
                         ),
                         const SizedBox(height: 15),
+                        if ((userRole == 'trainer' || userRole == 'student') &&
+                            status == 'completed' &&
+                            matchingReview != null) ...[
+                          Row(
+                            children: [
+                              Icon(Icons.star_border,
+                                  size: 20, color: statusData.color),
+                              const SizedBox(width: 10),
+                              Text(
+                                'المستوى:  ${translateLevel(matchingReview['level'])}',
+                                style: TextStyle(
+                                  fontSize: 15,
+                                  color: Colors.black,
+                                ),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 15),
+                          Row(
+                            children: [
+                              Icon(Icons.note_outlined,
+                                  size: 20, color: statusData.color),
+                              const SizedBox(width: 10),
+                              Expanded(
+                                child: Text(
+                                  'التعليق:  ${matchingReview['notes']}',
+                                  style: TextStyle(
+                                    fontSize: 15,
+                                    color: Colors.black,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+
+                        // const SizedBox(height: 15),
 
                         if ((userRole == 'trainer' &&
                                 status != 'completed' &&
@@ -308,52 +352,7 @@ class BookingsSessionsScreen extends StatelessWidget {
                                 ),
                             ],
                           ),
-                        if (userRole == 'student')
-                          if (controller.reviews.length > index &&
-                              controller.reviews[index] != null)
-                            Column(
-                              children: [
-                                Row(
-                                  children: [
-                                    Icon(Icons.auto_awesome,
-                                        color: AppColors.primaryColor),
-                                    SizedBox(width: 10),
-                                    Text(
-                                      translateLevel(
-                                          controller.reviews[index]['level']),
-                                      style: TextStyle(
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.w500,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                SizedBox(height: 10),
-                                Row(
-                                  children: [
-                                    Icon(Icons.comment,
-                                        color: AppColors.primaryColor),
-                                    SizedBox(width: 10),
-                                    Text(
-                                      controller.reviews[index]['notes'] ??
-                                          'لا توجد ملاحظات',
-                                      style: TextStyle(
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.w500,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ],
-                            )
-                          else
-                            Text(
-                              'لا يوجد تقييم بعد',
-                              style: TextStyle(
-                                fontSize: 16,
-                                color: Colors.grey.shade600,
-                              ),
-                            ),
+
                         SizedBox(height: 15),
 
                         userRole == 'student' && status == 'completed'
@@ -387,37 +386,30 @@ class BookingsSessionsScreen extends StatelessWidget {
                                     ),
                                   )
                             : SizedBox(),
-
-                        if (userRole == 'trainer' && status == 'completed')
-                          (data.read('trainer-review') as List).any((review) =>
-                                  review['booking_id'].toString() ==
-                                  session['id'].toString())
-                              ? SizedBox()
-                              : InkWell(
-                                  onTap: () {
-                                    showMyDialog(context, (session['id']));
-                                  },
-                                  child: Container(
-                                    padding: EdgeInsets.all(15),
-                                    margin: EdgeInsets.only(top: 20),
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(12),
-                                      color: AppColors.primaryColor,
-                                    ),
-                                    child: Text(
-                                      'تقييم الطالب',
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                        fontSize: 15,
-                                        color: Colors.white,
-                                      ),
-                                    ),
-                                  ),
+                        if (userRole == 'trainer' &&
+                            status == 'completed' &&
+                            matchingReview == null)
+                          InkWell(
+                            onTap: () {
+                              showMyDialog(context, (session['id']));
+                            },
+                            child: Container(
+                              padding: EdgeInsets.all(15),
+                              margin: EdgeInsets.only(top: 20),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(12),
+                                color: AppColors.primaryColor,
+                              ),
+                              child: Text(
+                                'تقييم الطالب',
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  fontSize: 15,
+                                  color: Colors.white,
                                 ),
-                        if (userRole == 'trainer' && status == 'completed')
-                          if (controller.reviews.length > index &&
-                              controller.reviews[index] != null)
-                            Text(controller.reviews[index]['level'])
+                              ),
+                            ),
+                          ),
                       ],
                     ),
                   );
@@ -496,69 +488,75 @@ void showMyDialog(BuildContext context, id) {
     context: context,
     builder: (context) => Dialog(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-      child: GetBuilder(
-          init: BookingsSessionsController(),
+      child: GetBuilder<BookingsSessionsController>(
+          init: Get.find<BookingsSessionsController>(),
           builder: (controller) {
-            return Padding(
-              padding: const EdgeInsets.all(20),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text('تقييم الطالب'),
-                  SizedBox(height: 20),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: InkWell(
-                          onTap: () {
-                            controller.level = 'beginner';
-                            controller.levelCount = 0;
-                            controller.update();
-                          },
-                          child: buildBox("مبتدئ", 0),
-                        ),
+            return Obx(
+              () => Padding(
+                padding: const EdgeInsets.all(20),
+                child: controller.isLoading.value
+                    ? const SizedBox(
+                        height: 100,
+                        child: Center(child: CircularProgressIndicator()),
+                      )
+                    : Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Text('تقييم الطالب'),
+                          SizedBox(height: 20),
+                          Row(
+                            children: [
+                              Expanded(
+                                child: InkWell(
+                                  onTap: () {
+                                    controller.level = 'beginner';
+                                    controller.levelCount = 0;
+                                    controller.update();
+                                  },
+                                  child: buildBox("مبتدئ", 0),
+                                ),
+                              ),
+                              SizedBox(width: 10),
+                              Expanded(
+                                child: InkWell(
+                                  onTap: () {
+                                    controller.level = 'intermediate';
+                                    controller.levelCount = 1;
+                                    controller.update();
+                                  },
+                                  child: buildBox("متوسط", 1),
+                                ),
+                              ),
+                              SizedBox(width: 10),
+                              Expanded(
+                                child: InkWell(
+                                  onTap: () {
+                                    controller.level = 'excellent';
+                                    controller.levelCount = 2;
+                                    controller.update();
+                                  },
+                                  child: buildBox("ممتاز", 2),
+                                ),
+                              ),
+                            ],
+                          ),
+                          SizedBox(height: 20),
+                          MyTextformfield(
+                            maxLines: 5,
+                            mycontroller: controller.comment,
+                            keyboardType: TextInputType.visiblePassword,
+                            hintText: 'ملاحظة للطالب',
+                            filled: true,
+                          ),
+                          SizedBox(height: 20),
+                          MyButton(
+                            onPressed: () {
+                              controller.sendFeedback(id);
+                            },
+                            text: "ارسال",
+                          ),
+                        ],
                       ),
-                      SizedBox(width: 10),
-                      Expanded(
-                        child: InkWell(
-                          onTap: () {
-                            controller.level = 'intermediate';
-                            controller.levelCount = 1;
-                            controller.update();
-                          },
-                          child: buildBox("متوسط", 1),
-                        ),
-                      ),
-                      SizedBox(width: 10),
-                      Expanded(
-                        child: InkWell(
-                          onTap: () {
-                            controller.level = 'excellent';
-                            controller.levelCount = 2;
-                            controller.update();
-                          },
-                          child: buildBox("ممتاز", 2),
-                        ),
-                      ),
-                    ],
-                  ),
-                  SizedBox(height: 20),
-                  MyTextformfield(
-                    maxLines: 5,
-                    mycontroller: controller.comment,
-                    keyboardType: TextInputType.visiblePassword,
-                    hintText: 'ملاحظة للطالب',
-                    filled: true,
-                  ),
-                  SizedBox(height: 20),
-                  MyButton(
-                    onPressed: () {
-                      Get.back();
-                      controller.sendFeedback(id);
-                    },
-                    text: "ارسال",
-                  ),
-                ],
               ),
             );
           }),
@@ -593,62 +591,70 @@ Widget buildBox(String text, int i) {
 
 void studentReviewDialog(BuildContext context, id) {
   showDialog(
-    barrierDismissible: false,
-    context: context,
-    builder: (context) => Dialog(
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-      child: GetBuilder(
-          init: BookingsSessionsController(),
-          builder: (controller) {
-            return Padding(
-              padding: const EdgeInsets.all(20),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text('قيم المدرب'),
-                  SizedBox(height: 20),
-                  AnimatedRatingStars(
-                    initialRating: 3.5,
-                    minRating: 0.0,
-                    maxRating: 5.0,
-                    filledColor: Colors.amber,
-                    emptyColor: Colors.grey,
-                    filledIcon: Icons.star,
-                    halfFilledIcon: Icons.star_half,
-                    emptyIcon: Icons.star_border,
-                    onChanged: (double rating) {
-                      controller.rating = rating;
-                      controller.update();
-                    },
-                    displayRatingValue: true,
-                    interactiveTooltips: false,
-                    customFilledIcon: Icons.star,
-                    customHalfFilledIcon: Icons.star_half,
-                    customEmptyIcon: Icons.star_border,
-                    starSize: 30.0,
-                    animationDuration: Duration(milliseconds: 300),
-                    animationCurve: Curves.easeInOut,
-                    readOnly: false,
-                  ),
-                  SizedBox(height: 20),
-                  MyTextformfield(
-                    maxLines: 5,
-                    mycontroller: controller.comment,
-                    keyboardType: TextInputType.visiblePassword,
-                    hintText: 'ملاحظة للمدرب',
-                    filled: true,
-                  ),
-                  SizedBox(height: 20),
-                  MyButton(
-                    onPressed: () {
-                      controller.sendFeedbackStudent(id);
-                    },
-                    text: "ارسال",
-                  ),
-                ],
-              ),
-            );
-          }),
-    ),
-  );
+      barrierDismissible: false,
+      context: context,
+      builder: (context) => Dialog(
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+            child: GetBuilder(
+                init: BookingsSessionsController(),
+                builder: (controller) {
+                  return Obx(() {
+                    return Padding(
+                      padding: const EdgeInsets.all(20),
+                      child: controller.isLoading.value
+                          ? const SizedBox(
+                              height: 100,
+                              child: Center(child: CircularProgressIndicator()),
+                            )
+                          : Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Text('قيم المدرب'),
+                                SizedBox(height: 20),
+                                AnimatedRatingStars(
+                                  initialRating: 3.5,
+                                  minRating: 0.0,
+                                  maxRating: 5.0,
+                                  filledColor: Colors.amber,
+                                  emptyColor: Colors.grey,
+                                  filledIcon: Icons.star,
+                                  halfFilledIcon: Icons.star_half,
+                                  emptyIcon: Icons.star_border,
+                                  onChanged: (double rating) {
+                                    controller.rating = rating;
+                                    controller.update();
+                                  },
+                                  displayRatingValue: true,
+                                  interactiveTooltips: false,
+                                  customFilledIcon: Icons.star,
+                                  customHalfFilledIcon: Icons.star_half,
+                                  customEmptyIcon: Icons.star_border,
+                                  starSize: 30.0,
+                                  animationDuration:
+                                      Duration(milliseconds: 300),
+                                  animationCurve: Curves.easeInOut,
+                                  readOnly: false,
+                                ),
+                                SizedBox(height: 20),
+                                MyTextformfield(
+                                  maxLines: 5,
+                                  mycontroller: controller.comment,
+                                  keyboardType: TextInputType.visiblePassword,
+                                  hintText: 'ملاحظة للمدرب',
+                                  filled: true,
+                                ),
+                                SizedBox(height: 20),
+                                MyButton(
+                                  onPressed: () {
+                                    controller.sendFeedbackStudent(id);
+                                  },
+                                  text: "ارسال",
+                                ),
+                              ],
+                            ),
+                    );
+                  });
+                }),
+          ));
 }

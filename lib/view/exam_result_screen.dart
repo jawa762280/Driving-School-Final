@@ -27,6 +27,8 @@ class ExamResultScreen extends StatelessWidget {
     }
 
     final correctedQuestions = result.details;
+    final bool passed = result.score >= 5;
+    final bool canRetake = !passed;
 
     return Scaffold(
       backgroundColor: Colors.grey.shade100,
@@ -44,7 +46,8 @@ class ExamResultScreen extends StatelessWidget {
           children: [
             Expanded(
               child: SingleChildScrollView(
-                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
@@ -57,14 +60,16 @@ class ExamResultScreen extends StatelessWidget {
                         gradient: LinearGradient(
                           colors: [
                             AppColors.primaryColor,
-                            AppColors.primaryColor.withOpacity(0.7),
+                            AppColors.primaryColor
+                                .withAlpha((0.7 * 255).toInt()),
                           ],
                           begin: Alignment.topLeft,
                           end: Alignment.bottomRight,
                         ),
                         boxShadow: [
                           BoxShadow(
-                            color: AppColors.primaryColor.withOpacity(0.4),
+                            color: AppColors.primaryColor
+                                .withAlpha((0.4 * 255).toInt()),
                             blurRadius: 12,
                             offset: const Offset(0, 6),
                           ),
@@ -85,7 +90,7 @@ class ExamResultScreen extends StatelessWidget {
                       "علامتك",
                       style: TextStyle(
                         fontSize: 20,
-                        color: Colors.black87.withOpacity(0.7),
+                        color: Colors.black87.withAlpha((0.7).toInt()),
                         fontWeight: FontWeight.w600,
                       ),
                     ),
@@ -96,6 +101,15 @@ class ExamResultScreen extends StatelessWidget {
                         fontSize: 22,
                         fontWeight: FontWeight.bold,
                         color: Colors.black87,
+                      ),
+                    ),
+                    const SizedBox(height: 16),
+                    Text(
+                      passed ? "نجحت في الامتحان 🎉" : "لم تنجح في الامتحان ❌",
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                        color: passed ? Colors.green : Colors.red,
                       ),
                     ),
                     const SizedBox(height: 30),
@@ -111,7 +125,7 @@ class ExamResultScreen extends StatelessWidget {
                     ),
                     const SizedBox(height: 16),
 
-                    // عرض الأسئلة المصححة فقط
+                    // عرض الأسئلة
                     ListView.separated(
                       shrinkWrap: true,
                       physics: const NeverScrollableScrollPhysics(),
@@ -122,11 +136,14 @@ class ExamResultScreen extends StatelessWidget {
                         final bool correct = q['is_correct'] ?? false;
                         final questionText = q['question_text'] ?? '';
                         final userAnswer = q['user_answer']?.toString() ?? '';
-                        final correctAnswer = q['correct_answer']?.toString() ?? '';
+                        final correctAnswer =
+                            q['correct_answer']?.toString() ?? '';
 
                         return Container(
                           decoration: BoxDecoration(
-                            color: correct ? Colors.green.shade50 : Colors.red.shade50,
+                            color: correct
+                                ? Colors.green.shade50
+                                : Colors.red.shade50,
                             borderRadius: BorderRadius.circular(15),
                             border: Border.all(
                               color: correct ? Colors.green : Colors.red,
@@ -189,40 +206,68 @@ class ExamResultScreen extends StatelessWidget {
                       },
                     ),
 
-                    const SizedBox(height: 80), // فراغ أسفل الزر
+                    const SizedBox(height: 80),
                   ],
                 ),
               ),
             ),
 
-            // زر اختيار امتحان جديد
+            // زر أو زرين حسب النجاح
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
-              child: SizedBox(
-                width: double.infinity,
-                height: 52,
-                child: ElevatedButton(
-                  onPressed: () {
-                    controller.resetExam();
-                    Get.off(() => GenerateExamScreen());
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: AppColors.primaryColor,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(14),
+              child: Column(
+                children: [
+                  if (canRetake)
+                    Column(
+                      children: [
+                        SizedBox(
+                          width: double.infinity,
+                          height: 52,
+                          child: ElevatedButton(
+                            onPressed: () {
+                              controller.resetExam();
+                              controller.regenerateSameExam();
+                              Get.off(() => GenerateExamScreen());
+                              // تأكد examType محفوظ داخل الكنترولر
+                            },
+                            style: ElevatedButton.styleFrom(
+                                backgroundColor: AppColors.primaryColor,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(14),
+                              ),
+                              elevation: 6,
+                              padding: const EdgeInsets.symmetric(vertical: 14),
+                            ),
+                            child: const Text(
+                              "إعادة الامتحان",
+                              style: TextStyle(
+                                fontSize: 15,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 10),
+                      ],
                     ),
-                    elevation: 6,
-                    shadowColor: AppColors.primaryColor.withOpacity(0.5),
-                    padding: const EdgeInsets.symmetric(vertical: 14),
-                  ),
-                  child: Row(
-                    textDirection: TextDirection.ltr,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    mainAxisSize: MainAxisSize.min,
-                    children: const [
-                      Icon(Icons.restart_alt, size: 24, color: Colors.white),
-                      SizedBox(width: 12),
-                      Text(
+                  SizedBox(
+                    width: double.infinity,
+                    height: 52,
+                    child: ElevatedButton(
+                      onPressed: () {
+                        controller.resetExam();
+                        Get.off(() => GenerateExamScreen());
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: AppColors.primaryColor,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(14),
+                        ),
+                        elevation: 6,
+                        padding: const EdgeInsets.symmetric(vertical: 14),
+                      ),
+                      child: const Text(
                         "اختيار امتحان جديد",
                         style: TextStyle(
                           fontSize: 15,
@@ -230,9 +275,9 @@ class ExamResultScreen extends StatelessWidget {
                           color: Colors.white,
                         ),
                       ),
-                    ],
+                    ),
                   ),
-                ),
+                ],
               ),
             ),
           ],

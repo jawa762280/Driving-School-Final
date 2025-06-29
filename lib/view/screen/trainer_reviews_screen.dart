@@ -58,8 +58,8 @@ class TrainerReviewsScreen extends StatelessWidget {
                             children: [
                               CircleAvatar(
                                 radius: 22.r,
-                                backgroundColor:
-                                    AppColors.primaryColor.withOpacity(0.1),
+                                backgroundColor: AppColors.primaryColor
+                                    .withAlpha((0.1 * 255).toInt()),
                                 child: Icon(Icons.person,
                                     color: AppColors.primaryColor, size: 24),
                               ),

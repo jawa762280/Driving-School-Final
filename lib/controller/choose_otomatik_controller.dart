@@ -21,6 +21,7 @@ class ChooseOtomatikController extends GetxController {
   };
   List<String> get days => dayTranslations.keys.toList();
   String trainingType = '';
+  String vitesType = '';
   void selectDay(String day) {
     selectedDay.value = day;
     update();
@@ -72,6 +73,27 @@ class ChooseOtomatikController extends GetxController {
         '&training_type=$trainingType';
     var response = await crud.getRequest(url);
     sessions.addAll(response['data']);
+    update();
+  }
+
+  selectSessions(id) async {
+    var response = await crud.postRequest(AppLinks.autobooksession, {
+      'session_id': id,
+      'transmission': vitesType,
+      'is_for_special_needs': trainingType == 'special_needs' ? '1' : '0',
+    });
+    if (response['data'] != null || response['data'].isNotEmpty) {
+      Get.snackbar(
+        'تمت العملية بنجاح',
+        'تم حجز الجلسة بنجاح',
+        snackPosition: SnackPosition.TOP,
+        backgroundColor: Colors.green.shade400,
+        colorText: Colors.white,
+        duration: const Duration(seconds: 3),
+        margin: const EdgeInsets.all(16),
+        borderRadius: 12,
+      );
+    }
     update();
   }
 }

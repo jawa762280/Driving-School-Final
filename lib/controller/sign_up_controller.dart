@@ -11,6 +11,9 @@ class SignUpController extends GetxController {
   Crud crud = Crud();
   var isLoading = false.obs;
   bool isLeftHandDisabled = false;
+  bool isMilitary = false;
+  TextEditingController nationalityController = TextEditingController();
+
   bool isShowPass = true;
   File? imageFile;
   String? emailError;
@@ -39,7 +42,6 @@ class SignUpController extends GetxController {
   signUp() async {
     if (!formState.currentState!.validate()) return;
 
-
     if (roleController.text.isEmpty ||
         phoneController.text.isEmpty ||
         addressController.text.isEmpty) {
@@ -65,6 +67,8 @@ class SignUpController extends GetxController {
         'license_expiry_date': licenseExpiryDate.text,
         'training_type': trainingType.text,
         'experience': experience.text,
+        ' ': nationalityController.text,
+        'is_military': isMilitary ? '1' : '0',
       };
       if (roleController.text.toLowerCase() == "student") {
         data['left_hand_disabled'] = isLeftHandDisabled ? '1' : '0';
@@ -142,6 +146,7 @@ class SignUpController extends GetxController {
     licenseExpiryDate = TextEditingController();
     trainingType = TextEditingController();
     experience = TextEditingController();
+    nationalityController = TextEditingController();
     super.onInit();
   }
 
@@ -158,6 +163,7 @@ class SignUpController extends GetxController {
     licenseExpiryDate.dispose();
     trainingType.dispose();
     experience.dispose();
+    nationalityController.dispose();
     super.onClose();
   }
 }
