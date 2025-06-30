@@ -1,11 +1,11 @@
 import 'package:driving_school/controller/generate_exam_controller.dart';
 import 'package:driving_school/core/constant/appcolors.dart';
+import 'package:driving_school/core/constant/approuts.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class GenerateExamScreen extends StatelessWidget {
-  final GenerateExamController controller = Get.put(GenerateExamController());
-
+  final GenerateExamController controller = Get.find();
   GenerateExamScreen({super.key});
 
   @override
@@ -20,147 +20,186 @@ class GenerateExamScreen extends StatelessWidget {
           backgroundColor: AppColors.primaryColor,
           foregroundColor: Colors.white,
           elevation: 2,
+          actions: [
+            IconButton(
+              icon: const Icon(Icons.refresh),
+              onPressed: () {
+                controller.loadCompletedExamsFromAPI();
+              },
+              tooltip: 'تحديث',
+            ),
+          ],
         ),
-        body: Padding(
-          padding: const EdgeInsets.all(16),
-          child: Obx(() {
-            if (controller.questions.isEmpty) {
-              return SingleChildScrollView(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Text(
-                      'اختر نوع الامتحان:',
-                      style:
-                          TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                    ),
-                    const SizedBox(height: 12),
-                    _buildExamTypeSelector(),
-                    const SizedBox(height: 16),
-                    _buildStartButton(),
-                  ],
-                ),
-              );
-            } else {
-              return Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  _buildTimer(),
-                  const SizedBox(height: 16),
-                  Expanded(child: _buildQuestionsList()),
-                  const SizedBox(height: 12),
-                  _buildSubmitButton(),
-                ],
-              );
-            }
-          }),
+       body: Obx(() {
+  if (controller.isLoading.value) {
+    return Center(child: CircularProgressIndicator());
+  }
+
+  return Padding(
+    padding: const EdgeInsets.all(16),
+    child: controller.questions.isEmpty
+      ? SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Text('اختر نوع الامتحان:', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+              const SizedBox(height: 12),
+              _buildExamTypeSelector(),
+              const SizedBox(height: 16),
+              _buildStartButton(),
+            ],
+          ),
+        )
+      : Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            _buildTimer(),
+            const SizedBox(height: 16),
+            Expanded(child: _buildQuestionsList()),
+            const SizedBox(height: 12),
+            _buildSubmitButton(),
+          ],
         ),
+  );
+}),
+
       ),
     );
   }
 
   Widget _buildExamTypeSelector() {
-    return Obx(() => Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: controller.examTypesMap.entries.map((entry) {
-            final label = entry.key;
-            final value = entry.value;
-            final isSelected = controller.selectedType.value == value;
-            controller.isCompleted = controller.completedTypes.contains(value);
+  return Obx(() => Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: controller.examTypesMap.entries.map((entry) {
+          final label = entry.key;
+          final value = entry.value;
+          final isSelected = controller.selectedType.value == value;
+          final isCompleted = controller.completedTypes.contains(value);
 
-            return GestureDetector(
-              onTap: controller.isCompleted
-                  ? null
-                  : () => controller.selectedType.value = value,
-              child: Container(
-                margin: const EdgeInsets.only(bottom: 12),
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-                decoration: BoxDecoration(
-                  color: controller.isCompleted
-                      ? Colors.green.shade50
-                      : isSelected
-                          ? AppColors.primaryColor
-                              .withAlpha((0.1 * 255).toInt())
-                          : Colors.white,
-                  border: Border.all(
-                    color: isSelected
-                        ? AppColors.primaryColor
-                        : Colors.grey.shade300,
-                    width: isSelected ? 2 : 1,
-                  ),
-                  borderRadius: BorderRadius.circular(14),
+          return GestureDetector(
+            onTap: isCompleted
+                ? null
+                : () => controller.selectedType.value = value,
+            child: Container(
+              margin: const EdgeInsets.only(bottom: 12),
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+              decoration: BoxDecoration(
+                color: isCompleted
+                    ? Colors.green.shade50
+                    : isSelected
+                        ? AppColors.primaryColor.withAlpha((0.1 * 255).toInt())
+                        : Colors.white,
+                border: Border.all(
+                  color: isSelected
+                      ? AppColors.primaryColor
+                      : Colors.grey.shade300,
+                  width: isSelected ? 2 : 1,
                 ),
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: Text(
-                        label,
-                        style: TextStyle(
-                          fontWeight: FontWeight.w600,
-                          color: controller.isCompleted
-                              ? Colors.green
-                              : isSelected
-                                  ? AppColors.primaryColor
-                                  : Colors.black,
-                        ),
+                borderRadius: BorderRadius.circular(14),
+              ),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Text(
+                      label,
+                      style: TextStyle(
+                        fontWeight: FontWeight.w600,
+                        color: isCompleted
+                            ? Colors.green
+                            : isSelected
+                                ? AppColors.primaryColor
+                                : Colors.black,
                       ),
                     ),
-                    if (controller.isCompleted)
-                      const Icon(Icons.check_circle, color: Colors.green),
-                    if (isSelected && !controller.isCompleted)
-                      Icon(Icons.radio_button_checked,
-                          color: AppColors.primaryColor),
-                  ],
-                ),
+                  ),
+                  if (isCompleted)
+                    const Icon(Icons.check_circle, color: Colors.green),
+                  if (isSelected && !isCompleted)
+                    Icon(Icons.radio_button_checked,
+                        color: AppColors.primaryColor),
+                ],
               ),
-            );
-          }).toList(),
-        ));
-  }
+            ),
+          );
+        }).toList(),
+      ));
+}
+
 
   Widget _buildStartButton() {
-    return SizedBox(
-      width: double.infinity,
-      child: ElevatedButton(
-        onPressed: () {
-          if (controller.selectedType.value.isEmpty) {
-            Get.snackbar(
-              'تنبيه',
-              'يرجى اختيار نوع الامتحان أولاً',
-              snackPosition: SnackPosition.BOTTOM,
-              backgroundColor: Colors.orange.shade100,
-              colorText: Colors.black87,
-              duration: const Duration(seconds: 2),
-              margin: const EdgeInsets.all(16),
-              borderRadius: 12,
-            );
-          } else {
-            controller.generateExam();
-          }
-        },
-        style: ElevatedButton.styleFrom(
-          backgroundColor: AppColors.primaryColor,
-          foregroundColor: Colors.white,
-          elevation: 3,
-          textStyle: const TextStyle(fontSize: 17, fontWeight: FontWeight.bold),
-          padding: const EdgeInsets.symmetric(vertical: 14),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(14),
+    bool allExamsCompleted =
+        controller.completedTypes.length == controller.examTypesMap.length;
+    Color unifiedButtonColor = Colors.green.shade500;
+
+    ButtonStyle unifiedButtonStyle = ElevatedButton.styleFrom(
+      backgroundColor: unifiedButtonColor,
+      foregroundColor: Colors.white,
+      elevation: 3,
+      textStyle: const TextStyle(fontSize: 17, fontWeight: FontWeight.bold),
+      padding: const EdgeInsets.symmetric(vertical: 14),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(14),
+      ),
+    );
+
+    return Column(
+      children: [
+        SizedBox(
+          width: double.infinity,
+          child: ElevatedButton(
+            onPressed: () {
+              if (controller.selectedType.value.isEmpty) {
+                Get.snackbar(
+                  'تنبيه',
+                  'يرجى اختيار نوع الامتحان أولاً',
+                  snackPosition: SnackPosition.BOTTOM,
+                  backgroundColor: Colors.orange.shade100,
+                  colorText: Colors.black87,
+                  duration: const Duration(seconds: 2),
+                  margin: const EdgeInsets.all(16),
+                  borderRadius: 12,
+                );
+              } else {
+                controller.generateExam();
+              }
+            },
+            style: unifiedButtonStyle,
+            child: Row(
+              textDirection: TextDirection.ltr,
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: const [
+                Icon(Icons.arrow_forward, color: Colors.white),
+                SizedBox(width: 10),
+                Text('ابدأ الامتحان'),
+              ],
+            ),
           ),
         ),
-        child: Row(
-          textDirection: TextDirection.ltr, // أجبر اتجاه النص لليسار لليمين
-
-          mainAxisSize: MainAxisSize.min,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: const [
-            Icon(Icons.arrow_forward, color: Colors.white),
-            SizedBox(width: 10),
-            Text('ابدأ الامتحان'),
-          ],
-        ),
-      ),
+        if (allExamsCompleted) ...[
+          const SizedBox(height: 12),
+          SizedBox(
+            width: double.infinity,
+            child: ElevatedButton(
+              onPressed: () {
+                Get.toNamed(AppRouts.evaluationStudentScreen);
+              },
+              style: unifiedButtonStyle,
+              child: Row(
+                textDirection: TextDirection.ltr,
+                mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: const [
+                  Icon(Icons.assessment, color: Colors.white),
+                  SizedBox(width: 10),
+                  Text('عرض النتائج'),
+                ],
+              ),
+            ),
+          ),
+        ],
+      ],
     );
   }
 

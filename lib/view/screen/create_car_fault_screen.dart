@@ -22,7 +22,8 @@ class CreateCarFault extends StatelessWidget {
             appBar: AppBar(
               title: const Text(
                 "إبلاغ عطل سيارة",
-                style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+                style:
+                    TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
               ),
               centerTitle: true,
               backgroundColor: AppColors.primaryColor,
@@ -44,7 +45,8 @@ class CreateCarFault extends StatelessWidget {
               return Column(
                 children: [
                   Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
+                    padding:
+                        EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
@@ -86,11 +88,14 @@ class CreateCarFault extends StatelessWidget {
                                 child: Padding(
                                   padding: const EdgeInsets.all(16),
                                   child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
                                       Row(
                                         children: [
-                                          Icon(Icons.directions_car, size: 28, color: AppColors.primaryColor),
+                                          Icon(Icons.directions_car,
+                                              size: 28,
+                                              color: AppColors.primaryColor),
                                           SizedBox(width: 10),
                                           Expanded(
                                             child: Text(
@@ -105,24 +110,39 @@ class CreateCarFault extends StatelessWidget {
                                       ),
                                       SizedBox(height: 10),
                                       Row(
-                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
                                         children: [
                                           Text(
-                                            car.isForSpecialNeeds ? "احتياجات خاصة" : "عادية",
+                                            car.isForSpecialNeeds
+                                                ? "احتياجات خاصة"
+                                                : "عادية",
                                             style: TextStyle(
                                               color: Colors.grey[600],
                                             ),
                                           ),
                                           ElevatedButton.icon(
                                             onPressed: () {
-                                              showFaultDialog(context, controller, car.id.toString());
+                                              showFaultDialog(
+                                                  context,
+                                                  controller,
+                                                  car.id.toString());
                                             },
-                                            icon: const Icon(Icons.warning_amber_outlined),
-                                            label: const Text("إبلاغ عطل"),
+                                            icon: const Icon(
+                                              Icons.warning_amber_outlined,
+                                              color: Colors.white,
+                                            ),
+                                            label: const Text(
+                                              "إبلاغ عطل",
+                                              style: TextStyle(
+                                                  color: Colors.white),
+                                            ),
                                             style: ElevatedButton.styleFrom(
-                                              backgroundColor: AppColors.lightGreen,
+                                              backgroundColor:
+                                                  AppColors.lightGreen,
                                               shape: RoundedRectangleBorder(
-                                                borderRadius: BorderRadius.circular(12),
+                                                borderRadius:
+                                                    BorderRadius.circular(12),
                                               ),
                                             ),
                                           ),
@@ -143,8 +163,8 @@ class CreateCarFault extends StatelessWidget {
   }
 }
 
-
-void showFaultDialog(BuildContext context, CreateCarFaultController controller, id) {
+void showFaultDialog(
+    BuildContext context, CreateCarFaultController controller, id) {
   showDialog(
     context: context,
     builder: (context) => AlertDialog(
@@ -180,7 +200,8 @@ void showFaultDialog(BuildContext context, CreateCarFaultController controller, 
               ),
               focusedBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(12),
-                borderSide: BorderSide(color: AppColors.primaryColor, width: 1.5),
+                borderSide:
+                    BorderSide(color: AppColors.primaryColor, width: 1.5),
               ),
             ),
           ),
@@ -189,7 +210,7 @@ void showFaultDialog(BuildContext context, CreateCarFaultController controller, 
       actions: [
         Obx(() => Center(
               child: controller.isLoading.value
-                  ?  CircularProgressIndicator(
+                  ? CircularProgressIndicator(
                       color: AppColors.primaryColor,
                     )
                   : MyButton(
@@ -202,4 +223,3 @@ void showFaultDialog(BuildContext context, CreateCarFaultController controller, 
     ),
   );
 }
-

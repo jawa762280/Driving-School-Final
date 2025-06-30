@@ -1,3 +1,4 @@
+import 'package:driving_school/controller/generate_exam_controller.dart';
 import 'package:driving_school/core/services/services.dart';
 import 'package:driving_school/routes.dart';
 import 'package:flutter/material.dart';
@@ -14,6 +15,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await initialServices();
   await initializeDateFormatting('ar');
+  Get.put(GenerateExamController(), permanent: true);
 
   runApp(const MyApp());
 }

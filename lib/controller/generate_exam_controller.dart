@@ -3,17 +3,19 @@ import 'dart:convert';
 
 import 'package:driving_school/core/constant/app_api.dart';
 import 'package:driving_school/core/services/crud.dart';
+import 'package:driving_school/data/model/evaluation_student_model.dart';
 import 'package:driving_school/data/model/exam_question_model.dart';
 import 'package:driving_school/data/model/exam_result_model.dart';
-import 'package:driving_school/main.dart';
 import 'package:driving_school/view/exam_result_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:http/http.dart' as http;
 
 class GenerateExamController extends GetxController {
   final Crud crud = Crud();
-
+  final GetStorage data = GetStorage();
+  var evaluations = <EvaluationStudentModel>[].obs;
   var isExamAlreadyPassed = false.obs;
   bool isCompleted = false;
   RxString startedAt = ''.obs;
@@ -172,6 +174,7 @@ class GenerateExamController extends GetxController {
   }
 
   Future<void> submitAnswers() async {
+    isLoading.value = true;
     final Map<String, String> userAnswers = {};
 
     for (int i = 0; i < questions.length; i++) {
@@ -184,6 +187,12 @@ class GenerateExamController extends GetxController {
       }
     }
 
+    if (userAnswers.isEmpty && !isTimeUp.value) {
+      Get.snackbar('خطأ', 'يجب اختيار إجابة واحدة على الأقل قبل التسليم');
+      return;
+    }
+
+    // إذا انتهى الوقت ولم توجد إجابات، نرسل الطلب ونتعامل مع النتيجة
     final response = await crud.postRequest(
       AppLinks.submitExam,
       {
@@ -193,23 +202,29 @@ class GenerateExamController extends GetxController {
     );
 
     if (response['success'] == true) {
-      Get.snackbar('تم', "تم تصحيح الاجابات المدخلة  ");
+      Get.snackbar('تم', "تم تصحيح الاجابات المدخلة");
 
       examResult.value = ExamResultModel.fromJson(response['data']);
 
-      // ✅ اعرض شاشة النتائج وانتظر حتى يرجع المستخدم
       await Get.to(() => ExamResultScreen());
 
-      // ✅ بعد رجوعه، نعيد تعيين الامتحان ونضيفه للمكتملين
       resetExam();
     } else {
       Get.snackbar('خطأ', 'فشل في إرسال الإجابات');
     }
+    isLoading.value = false;
   }
 
   void resetExam() {
     if (selectedType.value.isNotEmpty) {
-      completedTypes.add(selectedType.value);
+      // ابحث في قائمة التقييمات عن نوع الامتحان الحالي
+      final eval = evaluations.firstWhereOrNull(
+        (e) => e.type == selectedType.value && e.status.trim() == '✅ ناجح',
+      );
+
+      if (eval != null) {
+        completedTypes.add(selectedType.value);
+      }
     }
 
     questions.clear();
@@ -218,5 +233,38 @@ class GenerateExamController extends GetxController {
     examAttemptId.value = 0;
     timeLeft.value = 0;
     timer?.cancel();
+  }
+
+  Future<void> loadCompletedExamsFromAPI() async {
+    isLoading.value = true;
+    try {
+      final response = await crud.getRequest(AppLinks.evaluationStuent);
+
+      if (response != null && response['details'] != null) {
+        final List<dynamic> details = response['details'];
+        evaluations.value =
+            details.map((e) => EvaluationStudentModel.fromJson(e)).toList();
+        // استخرج فقط الامتحانات المجتازة
+        final passed = evaluations
+            .where((e) => e.status.trim() == '✅ ناجح')
+            .map((e) => e.type)
+            .toSet();
+
+        completedTypes.assignAll(passed);
+        completedTypes.refresh();
+        print('✅ الامتحانات المجتازة: ${completedTypes.toList()}');
+        update();
+      }
+    } catch (e) {
+      print("❌ Error fetching evaluation: $e");
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
+  @override
+  void onInit() {
+    super.onInit();
+    loadCompletedExamsFromAPI();
   }
 }

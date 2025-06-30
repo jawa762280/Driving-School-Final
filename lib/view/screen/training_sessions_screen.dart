@@ -145,9 +145,8 @@ class TrainingSessionsScreen extends StatelessWidget {
                   Get.snackbar(
                     "تم اختيار الجلسة",
                     "من $start إلى $end",
-                    snackPosition: SnackPosition.BOTTOM,
-                    backgroundColor: AppColors.primaryColor,
-                    colorText: Colors.white,
+                    snackPosition: SnackPosition.TOP,
+                    colorText: Colors.black,
                     borderRadius: 12,
                     margin: const EdgeInsets.all(12),
                   );
