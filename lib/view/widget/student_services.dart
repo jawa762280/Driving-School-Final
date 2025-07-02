@@ -54,8 +54,14 @@ class StudentServices extends StatelessWidget {
                               Get.toNamed(AppRouts.generateExamScreen);
                             } else if (index == 1) {
                               Get.toNamed(AppRouts.chooseOtomatikScreen);
-                            }else if (index == 2) {
+                            } else if (index == 2) {
                               Get.toNamed(AppRouts.evaluationStudentScreen);
+                            } else if (index == 4) {
+                              Get.toNamed(AppRouts.showPostsScreen);
+                            } else if (index == 7) {
+                              Get.toNamed(AppRouts.requestLicence);
+                            } else if (index == 8) {
+                              Get.toNamed(AppRouts.myLicenses);
                             }
                           },
                           child: Container(

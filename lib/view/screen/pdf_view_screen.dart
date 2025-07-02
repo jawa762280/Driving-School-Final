@@ -134,12 +134,14 @@ class _PdfViewScreenState extends State<PdfViewScreen> {
             });
           },
           onError: (error) {
+            // ignore: avoid_print
             print('PDFView error: $error');
             setState(() {
               errorLoading = true;
             });
           },
           onPageError: (page, error) {
+            // ignore: avoid_print
             print('Error on page $page: $error');
           },
         );

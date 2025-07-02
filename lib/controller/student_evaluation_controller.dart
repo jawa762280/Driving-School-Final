@@ -1,7 +1,6 @@
 import 'package:driving_school/core/constant/app_api.dart';
 import 'package:driving_school/core/services/crud.dart';
 import 'package:driving_school/data/model/evaluation_student_model.dart';
-import 'package:driving_school/view/screen/pdf_view_screen.dart';
 import 'package:get/get.dart';
 
 class StudentEvaluationController extends GetxController {

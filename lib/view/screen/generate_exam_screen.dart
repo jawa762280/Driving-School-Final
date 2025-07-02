@@ -145,6 +145,7 @@ class GenerateExamScreen extends StatelessWidget {
 
     return Column(
       children: [
+        if(!allExamsCompleted)
         SizedBox(
           width: double.infinity,
           child: ElevatedButton(

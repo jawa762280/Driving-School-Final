@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:driving_school/controller/sign_up_controller.dart';
 import 'package:driving_school/core/constant/appcolors.dart';
-import 'package:driving_school/core/functions/validinput.dart'; 
+import 'package:driving_school/core/functions/validinput.dart';
 import 'package:driving_school/view/widget/my_button.dart';
 import 'package:driving_school/view/widget/my_textformfield.dart';
 import 'package:get/get.dart';
@@ -365,8 +365,7 @@ class SignUpContainer extends StatelessWidget {
                               ),
                             ],
                           )
-                        : ClipRRect(
-                            borderRadius: BorderRadius.circular(12.r),
+                        : ClipOval(
                             child: Image.file(
                               controller.imageFile!,
                               fit: BoxFit.cover,

@@ -10,10 +10,6 @@ import 'package:driving_school/view/exam_result_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
-import 'package:driving_school/controller/generate_exam_controller.dart';
-import 'package:driving_school/core/constant/appcolors.dart';
-import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 
 class GenerateExamController extends GetxController {
   final Crud crud = Crud();

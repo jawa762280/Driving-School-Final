@@ -55,6 +55,8 @@ dependencies:
   dio: ^5.8.0+1
   path_provider: ^2.1.5
   open_file: ^3.5.10
+  file_picker: ^10.2.0
+  dropdown_button2: ^2.3.9
 
 flutter_launcher_icons:
   android: true

@@ -50,4 +50,9 @@ class AppLinks {
   static const String carFaults = "$init/car-faults";
   static const String evaluationStuent = "$init/student/evaluation";
   static const String generateCertificate = "$init/certificate/generate";
+  static const String licenses = "$init/licenses";
+  static const String licenseRequest = "$init/license-request";
+  static const String licenseRequestsMy = "$init/license-requests/my";
+  static const String showPosts = "$init/posts";
+  static const String likePost = "$init/posts";
 }

@@ -31,6 +31,10 @@ class AppRouts {
   static const String chooseOtomatikScreen = "/choose_otomatik_screen";
   static const String createFalutCar = "/create-fault-car";
   static const String showCarFaults = "/show-fault-car";
-    static const String evaluationStudentScreen = "/student_evaluation_screen";
+  static const String evaluationStudentScreen = "/student_evaluation_screen";
+  static const String myLicenses = "/my_licence_screen";
+  static const String requestLicence = "/request_licence_screen";
+  static const String licenseDetails = "/license_documents_screen";
+    static const String showPostsScreen = "/show_posts_screen";
 
 }

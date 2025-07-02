@@ -77,6 +77,7 @@ class LoginController extends GetxController {
         isLoading.value = false;
         if (response != null && response['status'] == 'success') {
           final userData = response['data']['user'];
+
           // ignore: avoid_print
           print('userData: ${response['data']}');
           final token = response['data']['token'];
@@ -86,7 +87,11 @@ class LoginController extends GetxController {
           if (response['data']['user']['role'].toString() == 'student') {
             final studentId = response['data']['user']['student']['id'];
             data.write('id', studentId);
+            final fullName =
+                "${response['data']['user']['student']['first_name']} ${response['data']['user']['student']['last_name']}";
+            data.write('userName', fullName);
           }
+
           data.write('token', response['data']['token']);
           data.write('refreshToken', response['data']['refresh_token']);
           data.write('tokenType', response['data']['token_type']);

@@ -1,7 +1,6 @@
 import 'package:driving_school/core/constant/app_api.dart';
 import 'package:driving_school/core/services/crud.dart';
 import 'package:driving_school/data/model/car_model.dart';
-import 'package:driving_school/main.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
