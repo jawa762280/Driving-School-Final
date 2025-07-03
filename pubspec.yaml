@@ -57,6 +57,7 @@ dependencies:
   open_file: ^3.5.10
   file_picker: ^10.2.0
   dropdown_button2: ^2.3.9
+  lucide_icons: ^0.257.0
 
 flutter_launcher_icons:
   android: true

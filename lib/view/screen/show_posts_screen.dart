@@ -177,28 +177,24 @@ class ShowPostsScreen extends StatelessWidget {
                                         const SizedBox(height: 10),
 
                                         // Likes
-                                        Row(
-                                          children: [
-                                            IconButton(
-                                              icon: Icon(
-                                                post['liked_by_auth_user'] ==
-                                                        true
-                                                    ? Icons.favorite
-                                                    : Icons.favorite_border,
-                                                color:
-                                                    post['liked_by_auth_user'] ==
-                                                            true
-                                                        ? Colors.red
-                                                        : Colors.grey,
-                                              ),
-                                              onPressed: () =>
-                                                  controller.toggleLike(
-                                                      post['id'], index),
-                                            ),
-                                            Text(
-                                                "${post['likes_count']} إعجاب"),
-                                          ],
+                                        GestureDetector(
+                                          onTap: () => controller.toggleLike(
+                                              post['id'], index),
+                                          onLongPress: () => controller
+                                              .showLikedStudentsDialog(
+                                                  context, post['id']),
+                                          child: Icon(
+                                            post['liked_by_auth_user'] == true
+                                                ? Icons.favorite
+                                                : Icons.favorite_border,
+                                            color: post['liked_by_auth_user'] ==
+                                                    true
+                                                ? Colors.red
+                                                : Colors.grey,
+                                          ),
                                         ),
+                                        const SizedBox(width: 6),
+                                        Text("${post['likes_count']} إعجاب"),
                                       ],
                                     ),
                                   ),

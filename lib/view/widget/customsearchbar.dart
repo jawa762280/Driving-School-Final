@@ -47,6 +47,7 @@ class CustomSearchBar extends StatelessWidget {
               child: Padding(
                 padding: EdgeInsets.symmetric(horizontal: 10.w),
                 child: TextField(
+                
                   onChanged: (value) {
                     Get.find<MySearchController>().search(value);
                   },

@@ -1,6 +1,7 @@
 // ignore_for_file: avoid_print
 
 import 'package:driving_school/core/constant/app_api.dart';
+import 'package:driving_school/core/constant/appcolors.dart';
 import 'package:driving_school/core/services/crud.dart';
 import 'package:driving_school/main.dart';
 import 'package:flutter/material.dart';
@@ -38,7 +39,29 @@ class TrainerScheduleController extends GetxController {
     final picked = await showTimePicker(
       context: Get.context!,
       initialTime: TimeOfDay.now(),
+      builder: (context, child) {
+        return Theme(
+          data: Theme.of(context).copyWith(
+            timePickerTheme: TimePickerThemeData(
+              dialHandColor: AppColors.primaryColor,
+              entryModeIconColor: AppColors.primaryColor,
+              hourMinuteTextColor: AppColors.primaryColor,
+              hourMinuteColor:
+                  AppColors.primaryColor.withAlpha((0.1 * 255).toInt()),
+              dialBackgroundColor:
+                  AppColors.primaryColor.withAlpha((0.1 * 255).toInt()),
+            ),
+            colorScheme: ColorScheme.light(
+              primary: AppColors.primaryColor,
+              onPrimary: Colors.white,
+              onSurface: Colors.black,
+            ),
+          ),
+          child: child!,
+        );
+      },
     );
+
     if (picked != null) {
       final isValid = picked.hour >= 9 && picked.hour < 20;
 
@@ -62,7 +85,25 @@ class TrainerScheduleController extends GetxController {
       initialDate: DateTime.now(),
       firstDate: DateTime.now(),
       lastDate: DateTime(2100),
+      builder: (context, child) {
+        return Theme(
+          data: Theme.of(context).copyWith(
+            colorScheme: ColorScheme.light(
+              primary: AppColors.primaryColor,
+              onPrimary: Colors.white,
+              onSurface: Colors.black,
+            ),
+            textButtonTheme: TextButtonThemeData(
+              style: TextButton.styleFrom(
+                foregroundColor: AppColors.primaryColor,
+              ),
+            ),
+          ),
+          child: child!,
+        );
+      },
     );
+
     if (picked != null) {
       if (isFrom) {
         validFrom.value = picked;
@@ -146,5 +187,11 @@ class TrainerScheduleController extends GetxController {
     validTo.value = null;
     isRecurring.value = true;
     formKey.currentState?.reset();
+  }
+
+  @override
+  void onClose() {
+    resetForm();
+    super.onClose();
   }
 }

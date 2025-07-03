@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:driving_school/core/constant/appcolors.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:driving_school/core/services/crud.dart';
@@ -12,6 +13,8 @@ class ShowPostsController extends GetxController {
   final Crud crud = Crud();
   int selectedFilterIndex = 0;
   String filterType = 'all';
+RxList<String> likedStudentNames = <String>[].obs;
+RxBool isLoadingLikes = false.obs;
 
   List<String> filterTypes = ['الكل', 'صور', 'PDF'];
 
@@ -63,6 +66,124 @@ class ShowPostsController extends GetxController {
     isLoading = false;
     update();
   }
+Future<void> fetchLikedStudents(int postId) async {
+  likedStudentNames.clear();
+  isLoadingLikes.value = true;
+
+  try {
+    var response = await crud.getRequest("${AppLinks.init}/posts/$postId/liked-students");
+
+    if (response['status'] == 'success') {
+      final List data = response['data'];
+      likedStudentNames.value = data.map<String>((user) {
+        final student = user['student'];
+        return "${student['first_name']} ${student['last_name']}";
+      }).toList();
+    } else {
+      Get.snackbar("خطأ", "تعذر تحميل قائمة الإعجابات");
+    }
+  } catch (e) {
+    Get.snackbar("خطأ", "حدث استثناء أثناء تحميل الإعجابات");
+  }
+
+  isLoadingLikes.value = false;
+}
+void showLikedStudentsDialog(BuildContext context, int postId) async {
+  try {
+    final response = await crud.getRequest("${AppLinks.init}/posts/$postId/liked-students");
+
+    if (response['status'] == 'success') {
+      final students = response['data'] as List;
+
+      if (students.isEmpty) {
+        Get.snackbar("لا إعجابات", "لا يوجد طلاب أعجبوا بهذا المنشور بعد");
+        return;
+      }
+
+      showModalBottomSheet(
+        context: context,
+        isScrollControlled: true,
+        backgroundColor: Colors.white,
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.vertical(top: Radius.circular(25)),
+        ),
+        builder: (context) {
+          return DraggableScrollableSheet(
+            initialChildSize: 0.5,
+            maxChildSize: 0.85,
+            minChildSize: 0.3,
+            expand: false,
+            builder: (context, scrollController) {
+              return Padding(
+                padding: const EdgeInsets.all(16),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Center(
+                      child: Container(
+                        width: 40,
+                        height: 5,
+                        margin: const EdgeInsets.only(bottom: 16),
+                        decoration: BoxDecoration(
+                          color: Colors.grey[300],
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                      ),
+                    ),
+                     Text(
+                      "الطلاب الذين أعجبوا بالمنشور",
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                        color: AppColors.primaryColor,
+                      ),
+                    ),
+                    const SizedBox(height: 16),
+                    Expanded(
+                      child: ListView.builder(
+                        controller: scrollController,
+                        itemCount: students.length,
+                        itemBuilder: (context, index) {
+                          final student = students[index]['student'];
+                          final fullName = "${student['first_name']} ${student['last_name']}";
+
+                          return Card(
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            elevation: 2,
+                            margin: const EdgeInsets.only(bottom: 12),
+                            child: ListTile(
+                              leading: CircleAvatar(
+                                backgroundImage: NetworkImage(student['image']),
+                              ),
+                              title: Text(
+                                fullName,
+                                style: const TextStyle(fontWeight: FontWeight.w600),
+                              ),
+                              subtitle: Text(student['address']),
+                            ),
+                          );
+                        },
+                      ),
+                    ),
+                  ],
+                ),
+              );
+            },
+          );
+        },
+      );
+    } else {
+      Get.snackbar("خطأ", "تعذر جلب قائمة الإعجابات");
+    }
+  } catch (e) {
+    Get.snackbar("خطأ", "حدث خطأ أثناء جلب البيانات");
+    print("❌ Error fetching liked students: $e");
+  }
+}
+
+
 
   Future<void> toggleLike(int postId, int index) async {
     var response =
