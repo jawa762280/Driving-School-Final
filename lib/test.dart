@@ -6,7 +6,7 @@ import 'package:driving_school/core/services/crud.dart';
 import 'package:driving_school/data/model/exam_question_model.dart';
 import 'package:driving_school/data/model/exam_result_model.dart';
 import 'package:driving_school/main.dart';
-import 'package:driving_school/view/exam_result_screen.dart';
+import 'package:driving_school/view/screen/exam_result_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
@@ -67,6 +67,7 @@ class GenerateExamController extends GetxController {
       );
 
       final decoded = jsonDecode(response.body);
+      // ignore: avoid_print
       print("🔍 RESPONSE ============= $decoded");
 
       if (response.statusCode == 200 && decoded.containsKey('questions')) {
@@ -125,7 +126,6 @@ class GenerateExamController extends GetxController {
         margin: const EdgeInsets.all(16),
         borderRadius: 12,
       );
-      print("⛔ HATA: $e");
     }
   }
 
@@ -197,10 +197,8 @@ class GenerateExamController extends GetxController {
 
       examResult.value = ExamResultModel.fromJson(response['data']);
 
-      // ✅ اعرض شاشة النتائج وانتظر حتى يرجع المستخدم
       await Get.to(() => ExamResultScreen());
 
-      // ✅ بعد رجوعه، نعيد تعيين الامتحان ونضيفه للمكتملين
       resetExam();
     } else {
       Get.snackbar('خطأ', 'فشل في إرسال الإجابات');

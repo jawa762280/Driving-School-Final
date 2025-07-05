@@ -57,7 +57,7 @@ class StudentServices extends StatelessWidget {
                             } else if (index == 2) {
                               Get.toNamed(AppRouts.chooseOtomatikScreen);
                             } else if (index == 3) {
-                              Get.toNamed(AppRouts.showPostsScreen);
+                              Get.toNamed(AppRouts.practicalExamScreen);
                             } else if (index == 4) {
                               Get.toNamed(AppRouts.showPostsScreen);
                             } else if (index == 5) {

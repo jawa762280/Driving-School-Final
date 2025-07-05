@@ -10,6 +10,7 @@ class MyLicensesController extends GetxController {
 
   getMyLicense() async {
     isLoading.value = true;
+    myLicenses.clear();
 
     var response = await crud.getRequest(AppLinks.licenseRequestsMy);
     if (response['success'] == true) {
@@ -30,6 +31,8 @@ class MyLicensesController extends GetxController {
 
   @override
   void onInit() {
+    myLicenses.clear();
+
     getMyLicense();
     super.onInit();
   }

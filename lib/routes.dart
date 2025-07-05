@@ -7,10 +7,12 @@ import 'package:driving_school/view/screen/create_car_fault_screen.dart';
 import 'package:driving_school/view/screen/exam_creation_screen.dart';
 import 'package:driving_school/view/screen/exams_home_screen.dart';
 import 'package:driving_school/view/screen/generate_exam_screen.dart';
+import 'package:driving_school/view/screen/license_details_screen.dart';
 import 'package:driving_school/view/screen/login_screen.dart';
 import 'package:driving_school/view/screen/my_licence_screen.dart';
 import 'package:driving_school/view/screen/onboarding_screen.dart';
 import 'package:driving_school/view/screen/forget_password_screen.dart';
+import 'package:driving_school/view/screen/practical_exam_screen.dart';
 import 'package:driving_school/view/screen/profile_screen.dart';
 import 'package:driving_school/view/screen/request_licence_screen.dart';
 import 'package:driving_school/view/screen/reset_password_screen.dart';
@@ -165,5 +167,13 @@ List<GetPage<dynamic>> routes = [
   GetPage(
     name: AppRouts.showPostsScreen,
     page: () => ShowPostsScreen(),
+  ),
+  GetPage(
+    name: AppRouts.licenseDetails,
+    page: () => LicenseDetailsScreen(),
+  ),
+  GetPage(
+    name: AppRouts.practicalExamScreen,
+    page: () => PracticalExamScreen(),
   ),
 ];

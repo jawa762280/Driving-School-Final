@@ -6,7 +6,7 @@ import 'package:driving_school/core/services/crud.dart';
 import 'package:driving_school/data/model/evaluation_student_model.dart';
 import 'package:driving_school/data/model/exam_question_model.dart';
 import 'package:driving_school/data/model/exam_result_model.dart';
-import 'package:driving_school/view/exam_result_screen.dart';
+import 'package:driving_school/view/screen/exam_result_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
@@ -69,7 +69,6 @@ class GenerateExamController extends GetxController {
       );
 
       final decoded = jsonDecode(response.body);
-      print("🔍 RESPONSE ============= $decoded");
 
       if (response.statusCode == 200 && decoded.containsKey('questions')) {
         final qData = decoded['questions']['exam_data'];
@@ -127,7 +126,6 @@ class GenerateExamController extends GetxController {
         margin: const EdgeInsets.all(16),
         borderRadius: 12,
       );
-      print("⛔ HATA: $e");
     }
   }
 
@@ -248,11 +246,9 @@ class GenerateExamController extends GetxController {
 
         completedTypes.assignAll(passed);
         completedTypes.refresh();
-        print('✅ الامتحانات المجتازة: ${completedTypes.toList()}');
         update();
       }
     } catch (e) {
-      print("❌ Error fetching evaluation: $e");
     } finally {
       isLoading.value = false;
     }
