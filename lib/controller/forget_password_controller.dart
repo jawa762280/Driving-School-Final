@@ -38,7 +38,6 @@ class ForgetPasswordController extends GetxController {
         Get.toNamed(AppRouts.verifyCodeScreen,
             arguments: {"email": emailController.text.trim()});
       } else {
-        // رسالة مخصصة من السيرفر
         String message = response?['message'] ??
             response?['errors']?['email']?[0] ??
             "حدث خطأ، حاول مرة أخرى";

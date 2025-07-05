@@ -34,7 +34,7 @@ void onInit() {
   } else if (args != null && args['trainer_id'] != null) {
     setTrainerId(args['trainer_id']);
   } else {
-    initTrainerIdAndFetch(); // fallback للمدرب الحالي
+    initTrainerIdAndFetch();
   }
 }
 
@@ -45,10 +45,8 @@ void onInit() {
 
     isTrainer = role == 'trainer';
 
-    // أولاً: إذا تم تمرير trainer_id عبر arguments
     trainerId = Get.arguments?['trainer_id']?.toString();
 
-    // ثانياً: إذا لم يتم تمريره، نحاول من التخزين المحلي
     trainerId ??= user?['trainer']['id']?.toString();
 
     if (trainerId == null) {

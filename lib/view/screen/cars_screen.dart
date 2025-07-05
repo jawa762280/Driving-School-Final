@@ -2,6 +2,7 @@ import 'package:driving_school/controller/cars_controller.dart';
 import 'package:driving_school/core/constant/appcolors.dart';
 import 'package:driving_school/view/widget/car_card.dart';
 import 'package:driving_school/view/widget/filter_button.dart';
+import 'package:driving_school/view/widget/loading.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -14,7 +15,7 @@ class CarsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final controller = Get.put(CarsController());
-    final filter = Rx<CarFilter>(CarFilter.all); // ⬅️ متغير للتصفية
+    final filter = Rx<CarFilter>(CarFilter.all); 
 
     return Scaffold(
       appBar: AppBar(
@@ -24,10 +25,9 @@ class CarsScreen extends StatelessWidget {
       ),
       body: Obx(() {
         if (controller.isLoading.value) {
-          return const Center(child: CircularProgressIndicator());
+          return const Loading();
         }
 
-        // 🔍 فلترة السيارات حسب الاختيار
         final filteredCars = controller.cars.where((car) {
           switch (filter.value) {
             case CarFilter.normal:

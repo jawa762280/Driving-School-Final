@@ -139,7 +139,7 @@ class CreateCarFault extends StatelessWidget {
                                             ),
                                             style: ElevatedButton.styleFrom(
                                               backgroundColor:
-                                                  AppColors.lightGreen,
+                                                  AppColors.primaryColor,
                                               shape: RoundedRectangleBorder(
                                                 borderRadius:
                                                     BorderRadius.circular(12),

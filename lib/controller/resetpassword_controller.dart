@@ -25,7 +25,6 @@ class ResetPasswordController extends GetxController {
     passController = TextEditingController();
     rePassController = TextEditingController();
 
-    // جلب المتغيرات من الشاشة السابقة (email و code)
     if (Get.arguments != null) {
       email = Get.arguments['email'] ?? "";
       code = Get.arguments['code'] ?? "";

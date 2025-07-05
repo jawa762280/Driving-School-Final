@@ -12,8 +12,8 @@ class MessageService {
     Get.snackbar(
       title,
       message,
-      backgroundColor: backgroundColor ?? AppColors.primaryColor,
-      colorText: Colors.white,
+      backgroundColor: backgroundColor,
+      colorText: Colors.black,
       snackPosition: SnackPosition.TOP,
       duration: duration,
       margin: const EdgeInsets.all(16),

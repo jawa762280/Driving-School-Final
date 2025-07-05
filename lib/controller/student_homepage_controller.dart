@@ -9,9 +9,9 @@ class StudentHomepageController extends GetxController {
   int currentpage = 0;
   List pages = [
     StudentHomePageScreen(),
-    ProfileScreen(),
-    SearchScreen(),
     BookingsSessionsScreen(),
+    SearchScreen(),
+    ProfileScreen(),
   ];
 
   changPage(int i) {

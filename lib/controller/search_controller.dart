@@ -52,13 +52,12 @@ class MySearchController extends GetxController {
       var trainer = filteredInstructors[i];
 
       var response = await crud.getRequest(
-          'http://192.168.1.107:8000/api/trainer/${trainer['trainer_id']}/reviews');
+          '${AppLinks.init}/trainer/${trainer['trainer_id']}/reviews');
 
       double totalRating = 0;
       int ratingCount = 0;
 
       if (response is List) {
-        // Eğer iç içe liste geldiyse düzleştir
         var flatList = response.expand((e) {
           if (e is List) {
             return e;
@@ -77,7 +76,6 @@ class MySearchController extends GetxController {
 
       double avgRating = ratingCount > 0 ? totalRating / ratingCount : 0;
 
-      // Eğitmene reviews ve avg_rating ekle
       filteredInstructors[i] = {
         ...trainer,
         'reviews': response,

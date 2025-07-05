@@ -22,13 +22,25 @@ class ShowTRainingSchedulesScreen extends StatelessWidget {
         backgroundColor: AppColors.primaryColor,
         centerTitle: true,
         iconTheme: const IconThemeData(color: Colors.white),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.refresh, color: Colors.white),
+            tooltip: 'تحديث',
+            onPressed: () {
+              controller.fetchTrainerSchedule();
+            },
+          ),
+        ],
       ),
       body: Obx(() {
         final role = controller.data.read('role') ?? '';
         final isTrainer = role == 'trainer';
 
         if (controller.isLoading.value) {
-          return const Center(child: CircularProgressIndicator());
+          return Center(
+              child: CircularProgressIndicator(
+            color: AppColors.primaryColor,
+          ));
         }
 
         if (controller.scheduleList.isEmpty) {

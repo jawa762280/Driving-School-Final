@@ -8,7 +8,7 @@ class Loading extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: Colors.black.withAlpha((0.3 * 255).toInt()),
+      color: Colors.grey.withAlpha((0.3 * 255).toInt()),
       child: Center(
         child: Column(
           mainAxisSize: MainAxisSize.min,

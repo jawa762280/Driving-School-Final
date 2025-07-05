@@ -26,7 +26,6 @@ class BookingController extends GetxController {
         error.value = 'لم يتم تمرير رقم الجلسة';
       }
     } else {
-      // الحالة: فقط عرض السيارات، بدون حجز
       sessionId = null;
     }
   }
@@ -57,7 +56,6 @@ class BookingController extends GetxController {
       Get.offAllNamed(AppRouts.studentHomePageScreen);
       Get.snackbar("نجاح", response['message'] ?? "تم الحجز");
     } else if (response != null && response['errors'] != null) {
-      // ✅ في حال وجود أخطاء تحقق من السيرفر
       final carError = response['errors']?['car']?[0];
 
       String errorMessage = "فشل في الحجز";
@@ -80,7 +78,6 @@ class BookingController extends GetxController {
         borderRadius: 12,
       );
     } else {
-      // ❌ خطأ غير معروف
       error.value = response?['message'] ?? "فشل في الحجز";
 
       Get.snackbar(

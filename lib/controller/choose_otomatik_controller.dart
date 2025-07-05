@@ -8,6 +8,9 @@ import '../core/constant/app_api.dart';
 import '../main.dart';
 
 class ChooseOtomatikController extends GetxController {
+  var isLoading = false.obs;
+  bool hasFetched = false;
+
   final selectedDay = ''.obs;
   final startTime = Rx<TimeOfDay?>(null);
   final startDate = Rx<DateTime?>(null);
@@ -68,6 +71,8 @@ class ChooseOtomatikController extends GetxController {
   }
 
   getSessions() async {
+    isLoading.value = true;
+    update();
     sessions.clear();
     final url = '${AppLinks.recommendedSessions}'
         '?preferred_date=${formatDate(startDate.value)}'
@@ -75,10 +80,15 @@ class ChooseOtomatikController extends GetxController {
         '&training_type=$trainingType';
     var response = await crud.getRequest(url);
     sessions.addAll(response['data']);
+    hasFetched = true;
+    update();
+
+    isLoading.value = false;
     update();
   }
 
   selectSessions(id) async {
+    isLoading.value = true;
     String token = data.read('token') ?? '';
     try {
       final response = await http.post(
@@ -134,7 +144,7 @@ class ChooseOtomatikController extends GetxController {
         borderRadius: 12,
       );
     }
-
+    isLoading.value = false;
     update();
   }
 }

@@ -1,5 +1,6 @@
 import 'package:driving_school/controller/choose_otomatik_controller.dart';
 import 'package:driving_school/core/constant/appcolors.dart';
+import 'package:driving_school/view/widget/loading.dart';
 import 'package:driving_school/view/widget/my_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -24,152 +25,178 @@ class ChooseOtomatikScreen extends StatelessWidget {
             backgroundColor: AppColors.primaryColor,
             elevation: 2,
           ),
-          body: ListView(
-            padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 20.h),
-            children: [
-              buildSectionTitle("⏰ اختر وقت البداية"),
-              buildBox(
-                child: buildTimeButton(
-                  controller.formatTime(controller.startTime.value),
-                  () => controller.pickTime(isStartTime: true),
-                  Icons.access_time,
-                ),
-              ),
-              SizedBox(height: 25.h),
-              buildSectionTitle("📅 اختر تاريخ البداية"),
-              buildBox(
-                child: buildTimeButton(
-                  controller.formatDate(controller.startDate.value),
-                  () => controller.pickDate(isFrom: false),
-                  Icons.calendar_today,
-                ),
-              ),
-              SizedBox(height: 25.h),
-              buildSectionTitle("🚦 اختر نوع التدريب"),
-              Row(
-                children: [
-                  Expanded(
-                    child: buildTrainingOption(
-                      selected: controller.trainingType == 'normal',
-                      label: 'عادي',
-                      icon: Icons.directions_car,
-                      onTap: () {
-                        controller.trainingType = 'normal';
-                        controller.update();
-                      },
-                    ),
-                  ),
-                  SizedBox(width: 15.w),
-                  Expanded(
-                    child: buildTrainingOption(
-                      selected: controller.trainingType == 'special_needs',
-                      label: 'احتياجات خاصة',
-                      icon: Icons.accessibility,
-                      onTap: () {
-                        controller.trainingType = 'special_needs';
-                        controller.update();
-                      },
-                    ),
-                  ),
-                ],
-              ),
-              SizedBox(height: 25.h),
-              buildSectionTitle("🚦 اختر نوع الفيتيس"),
-              Row(
-                children: [
-                  Expanded(
-                    child: buildTrainingOption(
-                      selected: controller.vitesType == 'automatic',
-                      label: 'أوتوماتيك',
-                      icon: Icons.transform_outlined,
-                      onTap: () {
-                        controller.vitesType = 'automatic';
-                        controller.update();
-                      },
-                    ),
-                  ),
-                  SizedBox(width: 15.w),
-                  Expanded(
-                    child: buildTrainingOption(
-                      selected: controller.vitesType == 'manual',
-                      label: 'عادي',
-                      icon: Icons.width_normal_outlined,
-                      onTap: () {
-                        controller.vitesType = 'manual';
-                        controller.update();
-                      },
-                    ),
-                  ),
-                ],
-              ),
-              SizedBox(height: 30.h),
-              MyButton(
-                text: '🔍 عرض الجلسات المقترحة',
-                onPressed: () => controller.getSessions(),
-              ),
-              SizedBox(height: 20.h),
-              if (controller.sessions.isNotEmpty)
-                ...controller.sessions.map((session) {
-                  final status = session['status'];
-                  return Container(
-                    margin: EdgeInsets.only(bottom: 12.h),
-                    padding: EdgeInsets.all(14),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      border: Border.all(
-                          color: AppColors.primaryColor
-                              .withAlpha((0.5 * 255).toInt())),
-                      borderRadius: BorderRadius.circular(12),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black12,
-                          blurRadius: 4,
-                          offset: Offset(0, 2),
-                        )
-                      ],
-                    ),
-                    child: InkWell(
-                      onTap: () {
-                        controller.selectSessions(session['id']);
-                      },
-                      child: ListTile(
-                        leading:
-                            Icon(Icons.event, color: AppColors.primaryColor),
-                        title: Text(
-                          "${session['start_time']} - ${session['end_time']}",
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold, fontSize: 15),
-                        ),
-                        subtitle: Text("🗓 ${session['session_date']}"),
-                        trailing: Container(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 12, vertical: 6),
-                          decoration: BoxDecoration(
-                            color: getStatusBackgroundColor(status),
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                          child: Text(
-                            getStatusText(status),
-                            style: TextStyle(
-                              fontSize: 12,
-                              fontWeight: FontWeight.bold,
-                              color: getStatusTextColor(status),
-                            ),
-                          ),
-                        ),
+          body: controller.isLoading.value
+              ? Loading()
+              : ListView(
+                  padding:
+                      EdgeInsets.symmetric(horizontal: 20.w, vertical: 20.h),
+                  children: [
+                    buildSectionTitle("⏰ اختر وقت البداية"),
+                    buildBox(
+                      child: buildTimeButton(
+                        controller.formatTime(controller.startTime.value),
+                        () => controller.pickTime(isStartTime: true),
+                        Icons.access_time,
                       ),
                     ),
-                  );
-                })
-              else
-                Center(
-                  child: Text(
-                    "لا توجد جلسات بعد",
-                    style: TextStyle(color: Colors.grey),
-                  ),
+                    SizedBox(height: 25.h),
+                    buildSectionTitle("📅 اختر تاريخ البداية"),
+                    buildBox(
+                      child: buildTimeButton(
+                        controller.formatDate(controller.startDate.value),
+                        () => controller.pickDate(isFrom: false),
+                        Icons.calendar_today,
+                      ),
+                    ),
+                    SizedBox(height: 25.h),
+                    buildSectionTitle("🚦 اختر نوع التدريب"),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: buildTrainingOption(
+                            selected: controller.trainingType == 'normal',
+                            label: 'عادي',
+                            icon: Icons.directions_car,
+                            onTap: () {
+                              controller.trainingType = 'normal';
+                              controller.update();
+                            },
+                          ),
+                        ),
+                        SizedBox(width: 15.w),
+                        Expanded(
+                          child: buildTrainingOption(
+                            selected:
+                                controller.trainingType == 'special_needs',
+                            label: 'احتياجات خاصة',
+                            icon: Icons.accessibility,
+                            onTap: () {
+                              controller.trainingType = 'special_needs';
+                              controller.update();
+                            },
+                          ),
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 25.h),
+                    buildSectionTitle("🚦 اختر نوع الفيتيس"),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: buildTrainingOption(
+                            selected: controller.vitesType == 'automatic',
+                            label: 'أوتوماتيك',
+                            icon: Icons.transform_outlined,
+                            onTap: () {
+                              controller.vitesType = 'automatic';
+                              controller.update();
+                            },
+                          ),
+                        ),
+                        SizedBox(width: 15.w),
+                        Expanded(
+                          child: buildTrainingOption(
+                            selected: controller.vitesType == 'manual',
+                            label: 'عادي',
+                            icon: Icons.width_normal_outlined,
+                            onTap: () {
+                              controller.vitesType = 'manual';
+                              controller.update();
+                            },
+                          ),
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 30.h),
+                    MyButton(
+                      text: '🔍 عرض الجلسات المقترحة',
+                      onPressed: () => controller.getSessions(),
+                    ),
+                    SizedBox(height: 20.h),
+                    if (controller.sessions.isNotEmpty)
+                      ...controller.sessions.map((session) {
+                        final status = session['status'];
+                        return Container(
+                          margin: EdgeInsets.only(bottom: 12.h),
+                          padding: EdgeInsets.all(14),
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            border: Border.all(
+                                color: AppColors.primaryColor
+                                    .withAlpha((0.5 * 255).toInt())),
+                            borderRadius: BorderRadius.circular(12),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black12,
+                                blurRadius: 4,
+                                offset: Offset(0, 2),
+                              )
+                            ],
+                          ),
+                          child: InkWell(
+                            onTap: () {
+                              controller.selectSessions(session['id']);
+                            },
+                            child: ListTile(
+                              leading: Icon(Icons.event,
+                                  color: AppColors.primaryColor),
+                              title: Text(
+                                "${session['start_time']} - ${session['end_time']}",
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold, fontSize: 15),
+                              ),
+                              subtitle: Text("🗓 ${session['session_date']}"),
+                              trailing: Container(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 12, vertical: 6),
+                                decoration: BoxDecoration(
+                                  color: getStatusBackgroundColor(status),
+                                  borderRadius: BorderRadius.circular(12),
+                                ),
+                                child: Text(
+                                  getStatusText(status),
+                                  style: TextStyle(
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.bold,
+                                    color: getStatusTextColor(status),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        );
+                      })
+                    else if (controller.hasFetched)
+                      Center(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(Icons.event_busy,
+                                color: Colors.grey.shade400, size: 60),
+                            SizedBox(height: 12.h),
+                            Text(
+                              "لا توجد جلسات متاحة حالياً",
+                              style: TextStyle(
+                                color: Colors.grey.shade600,
+                                fontSize: 16.sp,
+                                fontWeight: FontWeight.w600,
+                              ),
+                              textAlign: TextAlign.center,
+                            ),
+                            SizedBox(height: 6.h),
+                            Text(
+                              "حاول اختيار وقت أو تاريخ مختلف",
+                              style: TextStyle(
+                                color: Colors.grey.shade500,
+                                fontSize: 14.sp,
+                              ),
+                              textAlign: TextAlign.center,
+                            ),
+                          ],
+                        ),
+                      ),
+                  ],
                 ),
-            ],
-          ),
         );
       },
     );

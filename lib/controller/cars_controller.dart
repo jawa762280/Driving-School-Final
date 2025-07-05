@@ -19,16 +19,14 @@ class CarsController extends GetxController {
     try {
       isLoading(true);
 
-      // استدعاء API للحصول على بيانات السيارات
-      final response = await crud.getRequest(AppLinks.cars); 
-      // استبدل AppLinks.carsEndpoint برابط API الصحيح الخاص بالسيارات
+      final response = await crud.getRequest(AppLinks.cars);
 
       if (response != null && response['status'] == 'success') {
         cars.value = (response['data'] as List)
             .map((json) => CarModel.fromJson(json))
             .toList();
       } else {
-        cars.clear(); // لو في خطأ أو بيانات فارغة
+        cars.clear();
       }
     } catch (e) {
       cars.clear();

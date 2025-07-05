@@ -33,8 +33,7 @@ class CreateCarFaultController extends GetxController {
       Get.snackbar(
         'تم الإرسال',
         'تم إرسال العطل بنجاح',
-        backgroundColor: const Color(0xFF80C07D),
-        colorText: Colors.white,
+        colorText: Colors.black,
         snackPosition: SnackPosition.TOP,
         borderRadius: 12,
         margin: const EdgeInsets.all(12),

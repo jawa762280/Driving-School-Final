@@ -11,57 +11,98 @@ class MyLicenceScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetBuilder(
-      init: MyLicensesController(),
-      builder: (controller) {
-        final pendingLicenses = controller.myLicenses
-            .where((e) => e['status'] == 'pending')
-            .toList();
-        final approvedLicenses = controller.myLicenses
-            .where((e) => e['status'] == 'approved')
-            .toList();
+        init: MyLicensesController(),
+        builder: (controller) {
+          final pendingLicenses = controller.myLicenses
+              .where((e) => e['status'] == 'pending')
+              .toList();
+          final approvedLicenses = controller.myLicenses
+              .where((e) => e['status'] == 'approved')
+              .toList();
 
-        return Scaffold(
-          backgroundColor: const Color(0xFFF2F4F8),
-          appBar: AppBar(
-            title: const Text(
-              "رخصاتي",
-              style:
-                  TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
-            ),
-            centerTitle: true,
-            backgroundColor: AppColors.primaryColor,
-            iconTheme: const IconThemeData(color: Colors.white),
-            elevation: 2,
-          ),
-          body: ListView(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
-            children: [
-              if (pendingLicenses.isNotEmpty) ...[
-                _buildSectionTitle("📝 الرخص قيد الانتظار"),
-                const SizedBox(height: 12),
-                for (var license in pendingLicenses)
-                  _buildFancyCard(license, Colors.orange),
-              ],
-              if (approvedLicenses.isNotEmpty) ...[
-                const SizedBox(height: 32),
-                _buildSectionTitle("✅ الرخص المعتمدة"),
-                const SizedBox(height: 12),
-                for (var license in approvedLicenses)
-                  _buildFancyCard(license, Colors.green),
-              ],
-              if (pendingLicenses.isEmpty && approvedLicenses.isEmpty)
-                const Center(
-                  child: Padding(
-                    padding: EdgeInsets.only(top: 40),
-                    child: Text("لا توجد بيانات حالياً",
-                        style: TextStyle(color: Colors.grey)),
+          return Scaffold(
+            backgroundColor: const Color(0xFFF2F4F8),
+            appBar: AppBar(
+              title: const Text(
+                "رخصاتي",
+                style:
+                    TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+              ),
+              centerTitle: true,
+              backgroundColor: AppColors.primaryColor,
+              iconTheme: const IconThemeData(color: Colors.white),
+              elevation: 2,
+                actions: [
+                  IconButton(
+                    icon: const Icon(Icons.refresh, color: Colors.white),
+                    tooltip: 'تحديث',
+                    onPressed: () {
+                      controller.getMyLicense();
+                    },
                   ),
-                ),
-            ],
-          ),
-        );
-      },
-    );
+                ],
+            ),
+            body: Obx(() {
+              if (controller.isLoading.value) {
+                return Center(
+                  child: CircularProgressIndicator(
+                    color: AppColors.primaryColor,
+                  ),
+                );
+              }
+
+              return ListView(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
+                children: [
+                  if (pendingLicenses.isNotEmpty) ...[
+                    _buildSectionTitle("📝 الرخص قيد الانتظار"),
+                    const SizedBox(height: 12),
+                    for (var license in pendingLicenses)
+                      _buildFancyCard(license, Colors.orange),
+                  ],
+                  if (approvedLicenses.isNotEmpty) ...[
+                    const SizedBox(height: 32),
+                    _buildSectionTitle("✅ الرخص المعتمدة"),
+                    const SizedBox(height: 12),
+                    for (var license in approvedLicenses)
+                      _buildFancyCard(license, Colors.green),
+                  ],
+                  if (pendingLicenses.isEmpty && approvedLicenses.isEmpty)
+                    Center(
+                      child: Padding(
+                        padding: const EdgeInsets.only(top: 100),
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: const [
+                            Icon(Icons.hourglass_empty,
+                                size: 80, color: Colors.grey),
+                            SizedBox(height: 16),
+                            Text(
+                              "لا توجد بيانات حالياً",
+                              style: TextStyle(
+                                fontSize: 18,
+                                color: Colors.grey,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                            SizedBox(height: 8),
+                            Text(
+                              "لم تقم بأي طلب رخصة حتى الآن",
+                              style: TextStyle(
+                                fontSize: 14,
+                                color: Colors.grey,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                ],
+              );
+            }),
+          );
+        });
   }
 
   Widget _buildSectionTitle(String title) {

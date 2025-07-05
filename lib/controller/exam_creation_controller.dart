@@ -26,7 +26,6 @@ class ExamCreationController extends GetxController {
   }
 
   Future<void> submitExam() async {
-    // تحقق من أن كل سؤال يحتوي على 2 إلى 4 خيارات
     for (final q in questions) {
       if (q.choices.length < 2 || q.choices.length > 4) {
         Get.snackbar('خطأ', 'يجب أن يحتوي كل سؤال على 2 إلى 4 اختيارات');

@@ -50,7 +50,7 @@ class Buttomappbarhometrainer extends StatelessWidget {
                   ),
                 ),
                 BottomNavigationBarItem(
-                  label: 'الملف الشخصي',
+                  label: 'الجلسات',
                   icon: Container(
                     width: 50,
                     height: 50,
@@ -98,7 +98,7 @@ class Buttomappbarhometrainer extends StatelessWidget {
                   ),
                 ),
                 BottomNavigationBarItem(
-                  label: 'الطلبات',
+                  label: 'الملف الشخصي',
                   icon: Container(
                     width: 50,
                     height: 50,

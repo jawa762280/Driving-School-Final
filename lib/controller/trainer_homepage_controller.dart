@@ -9,9 +9,9 @@ class TrainerHomepageController extends GetxController {
   int currentpage = 0;
   List pages = [
     TrainerHomePageScreen(),
-    ProfileScreen(),
-    SearchScreen(),
     BookingsSessionsScreen(),
+    SearchScreen(),
+    ProfileScreen(),
   ];
 
   changPage(int i) {

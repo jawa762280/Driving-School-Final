@@ -148,7 +148,6 @@ class GenerateExamController extends GetxController {
       // ignore: avoid_print
       print("✅ الامتحان بدأ رسميًا عند: ${response['started_at']}");
 
-      // ⏱ ابدأ المؤقت بعد بدء الامتحان رسميًا
       timer?.cancel();
       timer = Timer.periodic(Duration(seconds: 1), (_) {
         if (timeLeft.value > 0) {
@@ -192,7 +191,6 @@ class GenerateExamController extends GetxController {
       return;
     }
 
-    // إذا انتهى الوقت ولم توجد إجابات، نرسل الطلب ونتعامل مع النتيجة
     final response = await crud.postRequest(
       AppLinks.submitExam,
       {
@@ -217,7 +215,6 @@ class GenerateExamController extends GetxController {
 
   void resetExam() {
     if (selectedType.value.isNotEmpty) {
-      // ابحث في قائمة التقييمات عن نوع الامتحان الحالي
       final eval = evaluations.firstWhereOrNull(
         (e) => e.type == selectedType.value && e.status.trim() == '✅ ناجح',
       );
@@ -244,7 +241,6 @@ class GenerateExamController extends GetxController {
         final List<dynamic> details = response['details'];
         evaluations.value =
             details.map((e) => EvaluationStudentModel.fromJson(e)).toList();
-        // استخرج فقط الامتحانات المجتازة
         final passed = evaluations
             .where((e) => e.status.trim() == '✅ ناجح')
             .map((e) => e.type)
@@ -265,6 +261,9 @@ class GenerateExamController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    loadCompletedExamsFromAPI();
+    String? userType = data.read('role').toString();
+    if (userType == 'student') {
+      loadCompletedExamsFromAPI();
+    }
   }
 }

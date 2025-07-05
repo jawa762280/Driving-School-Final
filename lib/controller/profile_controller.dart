@@ -91,12 +91,6 @@ class ProfileController extends GetxController {
     try {
       String token = data.read('token') ?? '';
 
-      // if (token.isEmpty) {
-      //   await data.erase();
-      //   Get.offAllNamed('/login');
-      //   return;
-      // }
-
       var response = await crud.logout(token, AppLinks.logout);
 
       if (response != null &&
@@ -116,61 +110,6 @@ class ProfileController extends GetxController {
 
   void showLogoutDialog() {
     isLoading.value = false;
-
-    // Get.dialog(
-    //   Obx(() => AlertDialog(
-    //         shape:
-    //             RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-    //         title: const Text(
-    //           'تأكيد تسجيل الخروج',
-    //           style: TextStyle(fontWeight: FontWeight.bold),
-    //         ),
-    //         content: const Text(
-    //           'هل أنت متأكد أنك تريد تسجيل الخروج من الحساب؟',
-    //           textAlign: TextAlign.center,
-    //         ),
-    //         actionsAlignment: MainAxisAlignment.spaceBetween,
-    //         actions: [
-    //           ElevatedButton(
-    //             onPressed: isLoading.value ? null : () => Get.back(),
-    //             style: ElevatedButton.styleFrom(backgroundColor: Colors.green),
-    //             child: isLoading.value
-    //                 ? const SizedBox(
-    //                     width: 20,
-    //                     height: 20,
-    //                     child: CircularProgressIndicator(
-    //                       color: Colors.white,
-    //                       strokeWidth: 2,
-    //                     ),
-    //                   )
-    //                 : const Text(
-    //                     'إلغاء',
-    //                     style: TextStyle(color: Colors.white),
-    //                   ),
-    //           ),
-    //           ElevatedButton(
-    //             onPressed: () {
-    //               logout();
-    //             },
-    //             style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
-    //             child: isLoading.value
-    //                 ? const SizedBox(
-    //                     width: 20,
-    //                     height: 20,
-    //                     child: CircularProgressIndicator(
-    //                       color: Colors.white,
-    //                       strokeWidth: 2,
-    //                     ),
-    //                   )
-    //                 : const Text(
-    //                     'تأكيد',
-    //                     style: TextStyle(color: Colors.white),
-    //                   ),
-    //           ),
-    //         ],
-    //       )),
-    //   barrierDismissible: false,
-    // );
     Get.defaultDialog(
       title: '',
       contentPadding: EdgeInsets.zero,

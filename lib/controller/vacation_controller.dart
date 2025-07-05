@@ -59,7 +59,6 @@ void setAvailableDatesFromSessions(List<dynamic> sessions) {
         reason.value = '';
         success.value = true;
       } else if (response != null && response['status'] == false) {
-        // هنا عندنا خطأ من السيرفر (مثلاً 422)
         String errorMessage = response['message'] ?? 'حدث خطأ في البيانات';
         Get.snackbar("خطأ", errorMessage);
         success.value = false;

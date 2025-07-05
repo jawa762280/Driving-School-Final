@@ -27,7 +27,7 @@ class VerifyCodeController extends GetxController {
     if (Get.arguments != null && Get.arguments["email"] != null) {
       emailController.text = Get.arguments["email"];
     }
-    codeSentTime = DateTime.now(); // يُفترض أن الكود أُرسل عند الدخول للصفحة
+    codeSentTime = DateTime.now(); 
     super.onInit();
   }
 
@@ -58,7 +58,6 @@ class VerifyCodeController extends GetxController {
         },
       );
 
-      // 🔐 فحص حالة 429 (محاولات كثيرة جدًا)
       if (response != null &&
           response['message'] != null &&
           response['message'].toString().contains("محاولات كثيرة")) {
@@ -69,7 +68,6 @@ class VerifyCodeController extends GetxController {
         return;
       }
 
-      // ⏳ فحص حالة انتهاء صلاحية الكود
       if (response != null &&
           response['status'] == 'fail' &&
           response['message'].toString().contains("انتهت صلاحية")) {
@@ -85,7 +83,7 @@ class VerifyCodeController extends GetxController {
       } else {
         attempts++;
         if (attempts >= 6) {
-          startLockoutDialog(300); // وقت افتراضي
+          startLockoutDialog(300); 
         } else {
           Get.snackbar(
               "فشل التحقق", response?['message'] ?? "رمز التحقق غير صحيح");
@@ -98,7 +96,6 @@ class VerifyCodeController extends GetxController {
     }
   }
 
-  /// دالة لعرض رسالة عند وجود محاولات كثيرة جدًا (429)
   void showTooManyRequestsDialog(String message) {
     if (Get.isDialogOpen ?? false) return;
 
@@ -125,7 +122,6 @@ class VerifyCodeController extends GetxController {
     );
   }
 
-  /// استخراج عدد الثواني من الرسالة
   int _extractWaitSecondsFromMessage(String message) {
     final regex = RegExp(r"\d+");
     final match = regex.firstMatch(message);
@@ -138,7 +134,6 @@ class VerifyCodeController extends GetxController {
     countdown.value = waitTime;
     canRetry.value = false;
 
-    // showLockoutDialog();
 
     timer = Timer.periodic(const Duration(seconds: 1), (timer) {
       countdown.value--;
@@ -223,7 +218,7 @@ class VerifyCodeController extends GetxController {
       );
 
       if (response != null && response['status'] == 'success') {
-        codeSentTime = DateTime.now(); // تخزين وقت إرسال الكود
+        codeSentTime = DateTime.now(); 
         Get.snackbar(
           "تم الإرسال",
           "تم إرسال رمز تحقق جديد إلى بريدك الإلكتروني",

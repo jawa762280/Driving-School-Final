@@ -26,7 +26,19 @@ class TrainingSessionsScreen extends StatelessWidget {
       ),
       body: Obx(() {
         if (controller.isLoading.value) {
-          return const Center(child: CircularProgressIndicator());
+          return Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                CircularProgressIndicator(color: AppColors.primaryColor),
+                SizedBox(height: 16),
+                Text(
+                  "جارٍ تحميل الجلسات...",
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+                ),
+              ],
+            ),
+          );
         }
 
         if (controller.errorMessage.isNotEmpty) {

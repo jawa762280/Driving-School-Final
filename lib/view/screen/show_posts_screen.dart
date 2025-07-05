@@ -1,3 +1,4 @@
+import 'package:driving_school/view/widget/loading.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
@@ -22,7 +23,7 @@ class ShowPostsScreen extends StatelessWidget {
             foregroundColor: Colors.white,
           ),
           body: controller.isLoading
-              ? const Center(child: CircularProgressIndicator())
+              ? const Loading()
               : Column(
                   children: [
                     // 🔍 الفلترة
@@ -177,24 +178,41 @@ class ShowPostsScreen extends StatelessWidget {
                                         const SizedBox(height: 10),
 
                                         // Likes
-                                        GestureDetector(
-                                          onTap: () => controller.toggleLike(
-                                              post['id'], index),
-                                          onLongPress: () => controller
-                                              .showLikedStudentsDialog(
-                                                  context, post['id']),
-                                          child: Icon(
-                                            post['liked_by_auth_user'] == true
-                                                ? Icons.favorite
-                                                : Icons.favorite_border,
-                                            color: post['liked_by_auth_user'] ==
-                                                    true
-                                                ? Colors.red
-                                                : Colors.grey,
-                                          ),
+                                        // Likes Row
+                                        Row(
+                                          children: [
+                                            IconButton(
+                                              icon: Icon(
+                                                post['liked_by_auth_user'] ==
+                                                        true
+                                                    ? Icons.favorite
+                                                    : Icons.favorite_border,
+                                                color:
+                                                    post['liked_by_auth_user'] ==
+                                                            true
+                                                        ? Colors.red
+                                                        : Colors.grey,
+                                              ),
+                                              onPressed: () =>
+                                                  controller.toggleLike(
+                                                      post['id'], index),
+                                            ),
+                                            GestureDetector(
+                                              onTap: () {
+                                                controller
+                                                    .showLikedStudentsDialog(
+                                                        context, post['id']);
+                                              },
+                                              child: Text(
+                                                "${post['likes_count']} إعجاب",
+                                                style: TextStyle(
+                                                  color: AppColors.primaryColor,
+                                                  fontWeight: FontWeight.bold,
+                                                ),
+                                              ),
+                                            ),
+                                          ],
                                         ),
-                                        const SizedBox(width: 6),
-                                        Text("${post['likes_count']} إعجاب"),
                                       ],
                                     ),
                                   ),

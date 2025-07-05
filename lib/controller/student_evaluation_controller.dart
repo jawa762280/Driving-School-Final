@@ -26,7 +26,6 @@ class StudentEvaluationController extends GetxController {
 
       final response = await crud.getRequest(AppLinks.evaluationStuent);
 
-      // نفترض أن response هو Map مفكك من JSON
       if (response != null && response['details'] != null) {
         final List<dynamic> details = response['details'];
         evaluations.value =
@@ -55,14 +54,12 @@ class StudentEvaluationController extends GetxController {
 
         String localPath = response['certificate_url'];
 
-        // تحويل المسار إلى رابط ويب صالح
         String publicUrl = localPath.replaceAll('\\', '/').replaceAll(
             'C:/xampp/htdocs/DrivingSchoolSystem/storage/app/public',
             'http://192.168.1.107:8000/storage');
 
         print('رابط الشهادة بعد التحويل: "$publicUrl"');
 
-        // تحديث المتغيرات لتغيير واجهة المستخدم
         certificateUrl.value = publicUrl;
         isCertificateGenerated.value = true;
       } else {

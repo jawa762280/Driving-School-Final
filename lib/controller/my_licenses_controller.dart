@@ -6,12 +6,17 @@ class MyLicensesController extends GetxController {
   Crud crud = Crud();
   List myLicenses = [];
   List licenses = [];
+  RxBool isLoading = false.obs;
 
   getMyLicense() async {
+    isLoading.value = true;
+
     var response = await crud.getRequest(AppLinks.licenseRequestsMy);
     if (response['success'] == true) {
       myLicenses.addAll(response['data']);
     }
+    isLoading.value = false;
+
     update();
   }
 

@@ -86,14 +86,16 @@ class ProfileScreen extends StatelessWidget {
                 ),
                 child: Column(
                   children: [
-                    buildMenuTile(
-                      Icons.schedule,
-                      'جلسات التدريب',
-                      onTap: () {
-                        Get.toNamed(AppRouts.trainingSessionsScreen);
-                      },
-                    ),
-                    const Divider(height: 1),
+                    if (data.read('role').toString() == 'trainer') ...[
+                      buildMenuTile(
+                        Icons.schedule,
+                        'جلسات التدريب',
+                        onTap: () {
+                          Get.toNamed(AppRouts.trainingSessionsScreen);
+                        },
+                      ),
+                      const Divider(height: 1),
+                    ],
                     buildMenuTile(
                       Icons.directions_car,
                       ' عرض السيارات',

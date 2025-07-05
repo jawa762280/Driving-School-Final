@@ -16,14 +16,25 @@ class ShowVacationsScreen extends StatelessWidget {
       appBar: AppBar(
         title: const Text("إجازاتي", style: TextStyle(color: Colors.white)),
         centerTitle: true,
-        iconTheme: IconThemeData(color: Colors.white), 
-
+        iconTheme: IconThemeData(color: Colors.white),
         backgroundColor: AppColors.primaryColor,
         elevation: 3,
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.refresh, color: Colors.white),
+            tooltip: 'تحديث',
+            onPressed: () {
+              controller.fetchVacations();
+            },
+          ),
+        ],
       ),
       body: Obx(() {
         if (controller.isLoading.value) {
-          return const Center(child: CircularProgressIndicator());
+          return Center(
+              child: CircularProgressIndicator(
+            color: AppColors.primaryColor,
+          ));
         }
 
         if (controller.errorMessage.isNotEmpty) {

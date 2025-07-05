@@ -30,7 +30,6 @@ class ShowExamByTypeController extends GetxController {
         response['exam']['questions'] != null) {
       exam.value = DisplayExam.fromJson(response['exam']);
     } else {
-      // نحاول جلب رسالة الخطأ من السيرفر، وإذا لم تكن موجودة نعرض رسالة افتراضية
       final String message =
           response?['message']?.toString().trim().isNotEmpty == true
               ? response!['message']

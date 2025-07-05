@@ -1,11 +1,11 @@
 import 'dart:io';
+import 'package:driving_school/core/constant/app_api.dart';
 import 'package:driving_school/main.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:dio/dio.dart';
-import 'package:open_file/open_file.dart'; // تأكد إنها مضافة بالأعلى
-
+import 'package:open_file/open_file.dart';
 
 class PdfController extends GetxController {
   var isLoading = false.obs;
@@ -38,38 +38,35 @@ class PdfController extends GetxController {
   }
 
   void downloadCertificate(BuildContext context, String fileName) async {
-  final Dio dio = Dio();
-  final String token = data.read("token");
-  final String downloadUrl = 'http://192.168.1.107:8000/api/certificate/download';
+    final Dio dio = Dio();
+    final String token = data.read("token");
 
-  final headers = {
-    'Accept': 'application/json',
-    'Content-Type': 'application/pdf',
-    'Accept-Encoding': 'gzip',
-    'Authorization': 'Bearer $token',
-  };
+    final headers = {
+      'Accept': 'application/json',
+      'Content-Type': 'application/pdf',
+      'Accept-Encoding': 'gzip',
+      'Authorization': 'Bearer $token',
+    };
 
-  try {
-    final dir = await getApplicationDocumentsDirectory();
-    final savePath = '${dir.path}/$fileName';
+    try {
+      final dir = await getApplicationDocumentsDirectory();
+      final savePath = '${dir.path}/$fileName';
 
-    await dio.download(
-      downloadUrl,
-      savePath,
-      options: Options(headers: headers),
-    );
+      await dio.download(
+        AppLinks.downloadUrl,
+        savePath,
+        options: Options(headers: headers),
+      );
 
-    print('✅ تم تحميل الشهادة في: $savePath');
+      print('✅ تم تحميل الشهادة في: $savePath');
 
-    // 🔓 فتح الملف تلقائيًا بعد التحميل
-    final result = await OpenFile.open(savePath);
-    print('📄 حالة فتح الملف: ${result.message}');
+      final result = await OpenFile.open(savePath);
+      print('📄 حالة فتح الملف: ${result.message}');
 
-    Get.snackbar('تم', 'تم تحميل الشهادة بنجاح ✅');
-  } catch (e) {
-    print('❌ خطأ أثناء تحميل الشهادة: $e');
-    Get.snackbar('خطأ', 'فشل تحميل الشهادة');
+      Get.snackbar('تم', 'تم تحميل الشهادة بنجاح ✅');
+    } catch (e) {
+      print('❌ خطأ أثناء تحميل الشهادة: $e');
+      Get.snackbar('خطأ', 'فشل تحميل الشهادة');
+    }
   }
-}
-
 }

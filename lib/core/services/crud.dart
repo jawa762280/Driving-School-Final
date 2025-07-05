@@ -12,7 +12,7 @@ import 'package:path/path.dart';
 import 'package:http/http.dart' as http;
 
 class Crud extends GetxController {
-  final data = GetStorage(); // توحيد متغير التخزين
+  final data = GetStorage();
 
   Future<bool> refreshToken() async {
     String? refreshToken = data.read('refreshToken');
@@ -26,6 +26,7 @@ class Crud extends GetxController {
       headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json',
+        'Accept-Encoding': 'gzip'
       },
       body: jsonEncode({'refresh_token': refreshToken}),
     );
@@ -41,28 +42,23 @@ class Crud extends GetxController {
       print("✅ Token refreshed successfully");
       return true;
     } else {
-    // إذا كان الـ refresh token غير صالح أو منتهي
-    print("❌ Failed to refresh token: ${response.body}");
+      print("❌ Failed to refresh token: ${response.body}");
 
-    // امسح التوكنات القديمة وارجع false
-    data.remove('token');
-    data.remove('refreshToken');
+      data.remove('token');
+      data.remove('refreshToken');
 
-    Get.offAllNamed(AppRouts.loginScreen);
+      Get.offAllNamed(AppRouts.loginScreen);
 
-    return false;
+      return false;
+    }
   }
-}
 
-  /// ⏱️ إعادة المحاولة بعد التجديد إن لزم
   Future<T?> retryOnUnauthorized<T>(Future<T?> Function() requestFn) async {
     T? response = await requestFn();
 
-    // إذا كانت الاستجابة عبارة عن Map وجاء كود الحالة 401
     if (response is Map && response['statusCode'] == 401) {
       bool refreshed = await refreshToken();
       if (refreshed) {
-        // إذا نجح تجديد التوكن، أعيد تنفيذ الطلب مرة ثانية
         return await requestFn();
       }
     }
@@ -79,6 +75,7 @@ class Crud extends GetxController {
           headers: {
             'Authorization': 'Bearer $token',
             'Accept': 'application/json',
+            'Accept-Encoding': 'gzip'
           },
         );
 
@@ -116,6 +113,7 @@ class Crud extends GetxController {
             'Authorization': 'Bearer $token',
             'Accept': 'application/json',
             'Content-Type': 'application/json',
+            'Accept-Encoding': 'gzip'
           },
           body: jsonEncode(dataMap),
         );
@@ -155,7 +153,6 @@ class Crud extends GetxController {
     });
   }
 
-  // دالة رفع ملف مع بيانات (POST)
   fileRequestPOST(String url, Map<String, String> dataMap, File? file) async {
     try {
       var request = http.MultipartRequest('POST', Uri.parse(url));
@@ -163,14 +160,12 @@ class Crud extends GetxController {
 
       print(token);
 
-      // إضافة الهيدرز
       request.headers.addAll({
         'Accept': 'application/json',
         'Authorization': 'Bearer $token',
         'userLang': 'ar',
       });
 
-      // إضافة الملف إذا موجود
       if (file != null) {
         var length = await file.length();
         var stream = http.ByteStream(file.openRead());
@@ -183,10 +178,8 @@ class Crud extends GetxController {
         request.files.add(multipartFile);
       }
 
-      // إضافة البيانات
       request.fields.addAll(dataMap);
 
-      // إرسال الطلب
       var response = await request.send();
       var responseBody = await http.Response.fromStream(response);
 
@@ -215,7 +208,6 @@ class Crud extends GetxController {
     }
   }
 
-  // دوال ملفات متعددة ...
   multiFileRequestMoreImagePath(String url, Map<String, String> datas,
       List<XFile> files, List<String> imagePaths) async {
     return await retryOnUnauthorized(() async {
@@ -223,11 +215,11 @@ class Crud extends GetxController {
         var request = http.MultipartRequest('POST', Uri.parse(url));
         String token = data.read('token') ?? '';
 
-        // إضافة الهيدرز مع التوكن
         request.headers.addAll({
           'Authorization': 'Bearer $token',
           'Accept': 'application/json',
           'userLang': 'ar',
+          'Accept-Encoding': 'gzip'
         });
 
         for (int i = 0; i < files.length; i++) {
@@ -257,7 +249,6 @@ class Crud extends GetxController {
           var responseBody = jsonDecode(response.body);
           return responseBody;
         } else if (response.statusCode == 401) {
-          // حالة غير موثق
           return {'statusCode': 401};
         } else if (response.statusCode == 422) {
           var errorResponse = jsonDecode(response.body);
@@ -361,6 +352,7 @@ class Crud extends GetxController {
           headers: {
             'Authorization': 'Bearer $token',
             'Accept': 'application/json',
+            'Accept-Encoding': 'gzip'
           },
         );
 
@@ -386,11 +378,11 @@ class Crud extends GetxController {
 
       print(token);
 
-      // إضافة الهيدرز
       request.headers.addAll({
         'Accept': 'application/json',
         'Authorization': 'Bearer $token',
         'userLang': 'ar',
+        'Accept-Encoding': 'gzip'
       });
 
       if (file != null) {
@@ -433,6 +425,7 @@ class Crud extends GetxController {
           headers: {
             'Authorization': 'Bearer $token',
             'Accept': 'application/json',
+            'Accept-Encoding': 'gzip'
           },
         );
 

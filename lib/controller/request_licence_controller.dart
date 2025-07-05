@@ -4,12 +4,12 @@ import 'package:driving_school/core/constant/app_api.dart';
 import 'package:driving_school/core/services/crud.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 
 class RequestLicenceController extends GetxController {
   RxBool isLoading = false.obs;
+  RxBool isPageLoading = false.obs;
 
   TextEditingController licenceCodeController = TextEditingController();
   TextEditingController licenceTypeController = TextEditingController();
@@ -60,15 +60,33 @@ class RequestLicenceController extends GetxController {
     update();
   }
 
-  getLicences() async {
-    var response = await crud
-        .getRequest('${AppLinks.licenses}?code=${licenceCodeController.text}');
-    if (response['status'] == 'success') {
-      licenceTypes.clear();
-      licenceTypes.addAll(response['data']);
+  void refreshData() {
+    if (licenceCodeController.text.isNotEmpty) {
+      getLicences();
+    } else {
+      Get.snackbar(
+        'تنبيه',
+        'يرجى اختيار نوع الرخصة أولاً',
+        colorText: Colors.black,
+        snackPosition: SnackPosition.TOP,
+        borderRadius: 12,
+        margin: const EdgeInsets.all(12),
+        duration: const Duration(seconds: 2),
+      );
     }
-    update();
   }
+
+  getLicences() async {
+  isPageLoading.value = true; 
+  var response = await crud.getRequest('${AppLinks.licenses}?code=${licenceCodeController.text}');
+  if (response['status'] == 'success') {
+    licenceTypes.clear();
+    licenceTypes.addAll(response['data']);
+  }
+  isPageLoading.value = false;
+  update();
+}
+
 
   sendRequest() async {
     isLoading.value = true;

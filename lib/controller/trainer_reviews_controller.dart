@@ -6,18 +6,20 @@ class TrainerReviewsController extends GetxController {
   List reviews = [];
   Crud crud = Crud();
   String id = '';
+  RxBool isLoading = false.obs;
 
   getReviews() async {
+    isLoading.value = true;
     var response =
         await crud.getRequest('${AppLinks.init}/trainer/$id/reviews');
 
     List filteredReviews =
         response.where((e) => e is Map && e.isNotEmpty).toList();
-
+    reviews.clear();
     if (filteredReviews.isNotEmpty) {
       reviews.addAll(filteredReviews);
     }
-
+    isLoading.value = false;
     update();
   }
 

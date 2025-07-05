@@ -91,13 +91,10 @@ class ContainerSearch extends StatelessWidget {
           Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              // زر "عرض جداول التدريب" (يظهر للجميع)
-              ElevatedButton.icon(
+              buildActionButton(
+                icon: Icons.table_chart_outlined,
+                label: "عرض جداول التدريب",
                 onPressed: () {
-                  // ignore: avoid_print
-                  print(
-                      "trainerId to fetch schedule: $trainerId"); // طباعة للتأكد من الـ ID
-
                   final controller =
                       Get.isRegistered<ShowTrainingSchedulesController>()
                           ? Get.find<ShowTrainingSchedulesController>()
@@ -105,68 +102,66 @@ class ContainerSearch extends StatelessWidget {
                   controller.setTrainerId(trainerId);
                   Get.toNamed(AppRouts.showTRainingSchedulesScreen);
                 },
-                icon: Icon(Icons.table_chart_outlined, size: 18.sp),
-                label: Text("عرض جداول التدريب",
-                    style: TextStyle(fontSize: 13.sp)),
-                style: ElevatedButton.styleFrom(
-                  foregroundColor: Colors.white,
-                  backgroundColor: AppColors.primaryColor,
-                  padding:
-                      EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.h),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12.r),
-                  ),
-                ),
               ),
-              if (userRole ==
-                  'student') // زر "حجز جلسة تدريب" (يظهر فقط للطلاب)
-                Column(
-                  children: [
-                    SizedBox(height: 10.h),
-                    ElevatedButton.icon(
-                      onPressed: () {
-                        Get.toNamed(AppRouts.trainingSessionsScreen,
-                            arguments: {
-                              'trainer_id': trainerId,
-                            });
-                      },
-                      icon: Icon(Icons.event_available_outlined, size: 18.sp),
-                      label: Text("حجز جلسة تدريب",
-                          style: TextStyle(fontSize: 13.sp)),
-                      style: ElevatedButton.styleFrom(
-                        foregroundColor: Colors.white,
-                        backgroundColor: AppColors.primaryColor,
-                        padding: EdgeInsets.symmetric(
-                            horizontal: 12.w, vertical: 6.h),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12.r),
-                        ),
-                      ),
-                    ),
-                  ],
+              if (userRole == 'student') ...[
+                SizedBox(height: 10.h),
+                buildActionButton(
+                  icon: Icons.event_available_outlined,
+                  label: "حجز جلسة تدريب",
+                  onPressed: () {
+                    Get.toNamed(AppRouts.trainingSessionsScreen, arguments: {
+                      'trainer_id': trainerId,
+                    });
+                  },
                 ),
-              ElevatedButton.icon(
+              ],
+              SizedBox(height: 10.h),
+              buildActionButton(
+                icon: Icons.star_border_sharp,
+                label: "عرض تقييمات المدرب",
                 onPressed: () {
                   Get.toNamed(AppRouts.trainerReviewsScreen, arguments: {
                     'trainer_id': trainerId,
                   });
                 },
-                icon: Icon(Icons.star_border_sharp, size: 18.sp),
-                label: Text("عرض تقييمات المدرب",
-                    style: TextStyle(fontSize: 13.sp)),
-                style: ElevatedButton.styleFrom(
-                  foregroundColor: Colors.white,
-                  backgroundColor: AppColors.primaryColor,
-                  padding:
-                      EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.h),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12.r),
-                  ),
-                ),
               ),
             ],
           ),
         ],
+      ),
+    );
+  }
+
+  Widget buildActionButton({
+    required IconData icon,
+    required String label,
+    required VoidCallback onPressed,
+  }) {
+    return SizedBox(
+      height: 45.h,
+      child: ElevatedButton(
+        onPressed: onPressed,
+        style: ElevatedButton.styleFrom(
+          backgroundColor: AppColors.primaryColor,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12.r),
+          ),
+          padding: EdgeInsets.symmetric(horizontal: 16.w),
+        ),
+        child: Directionality(
+          textDirection: TextDirection.ltr,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(icon, size: 20.sp, color: Colors.white),
+              SizedBox(width: 8.w),
+              Text(
+                label,
+                style: TextStyle(fontSize: 14.sp, color: Colors.white),
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }

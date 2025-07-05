@@ -29,7 +29,7 @@ class TrainerScheduleController extends GetxController {
     'الأربعاء': 'wednesday',
     'الخميس': 'thursday',
   };
-  List<String> get days => dayTranslations.keys.toList(); // ✅
+  List<String> get days => dayTranslations.keys.toList(); 
 
   void selectDay(String day) {
     selectedDay.value = day;
@@ -126,7 +126,6 @@ class TrainerScheduleController extends GetxController {
   }
 
   void submitSchedule() async {
-    if (!formKey.currentState!.validate()) return;
     isLoading.value = true;
 
     final trainer = data.read('user')['trainer'];
@@ -157,7 +156,7 @@ class TrainerScheduleController extends GetxController {
     };
 
     final scheduleData = {
-      "schedules": [schedule] // قائمة حتى لو فيها جدول واحد فقط
+      "schedules": [schedule] 
     };
 
     try {

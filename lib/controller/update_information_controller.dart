@@ -43,7 +43,7 @@ class UpdateInformationController extends GetxController {
     if (match != null) {
       return match.group(0)!;
     }
-    return rawUrl; // fallback
+    return rawUrl; 
   }
 
   updateInformation() async {

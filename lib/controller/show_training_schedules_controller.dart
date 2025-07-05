@@ -8,13 +8,13 @@ class ShowTrainingSchedulesController extends GetxController {
   final GetStorage data = GetStorage();
 
   List<Map<String, dynamic>> scheduleList = [];
-  var isLoading = true.obs; // observable boolean
+  var isLoading = true.obs; 
 
   int? externalTrainerId;
 
   void setTrainerId(int id) {
     // ignore: avoid_print
-    print("Set externalTrainerId: $id"); // طباعة
+    print("Set externalTrainerId: $id"); 
 
     externalTrainerId = id;
     fetchTrainerSchedule();
@@ -48,9 +48,8 @@ class ShowTrainingSchedulesController extends GetxController {
         (role == 'trainer' ? user['trainer']['id']?.toString() : null);
 
     // ignore: avoid_print
-    print("Fetching schedules for trainerId: $trainerId"); // طباعة
+    print("Fetching schedules for trainerId: $trainerId"); 
 
-    // ✅ أوقف التنفيذ إذا trainerId غير متوفّر
     if (trainerId == null) {
       // ignore: avoid_print
       print("⚠️ لم يتم تحديد trainerId بعد، سيتم تجاهل الطلب.");

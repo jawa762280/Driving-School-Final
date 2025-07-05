@@ -18,77 +18,93 @@ class ShowCarFaults extends StatelessWidget {
             centerTitle: true,
             backgroundColor: AppColors.primaryColor,
             foregroundColor: Colors.white,
+            actions: [
+              IconButton(
+                icon: const Icon(Icons.refresh, color: Colors.white),
+                tooltip: 'تحديث',
+                onPressed: () {
+                  ctrl.showFaults();
+                },
+              ),
+            ],
           ),
-          body: ctrl.faults.isEmpty
-              ? const Center(child: CircularProgressIndicator())
-              : ListView.builder(
-                  padding:
-                      EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
-                  itemCount: ctrl.faults.length,
-                  itemBuilder: (ctx, idx) {
-                    final f = ctrl.faults[idx];
-                    final car = f['car'];
-                    final trainerName = f['trainer']['trainer_name'];
-                    final status = f['status'];
-                    final comment = f['comment'];
+          body: Obx(() {
+            if (ctrl.isLoading.value) {
+              return const Center(child: CircularProgressIndicator(color: Colors.green));
+            }
 
-                    return Container(
-                      margin: EdgeInsets.only(bottom: 16.h),
-                      padding: EdgeInsets.all(16.w),
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(16.r),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black.withOpacity(0.05),
-                            blurRadius: 8,
-                            offset: const Offset(0, 4),
-                          )
-                        ],
-                      ),
-                      child: Column(
-                        children: [
-                          // العنوان والرابط
-                          Row(
-                            children: [
-                              Container(
-                                width: 60.w,
-                                height: 60.w,
-                                decoration: BoxDecoration(
-                                  color:
-                                      AppColors.primaryColor.withOpacity(0.1),
-                                  borderRadius: BorderRadius.circular(30.r),
-                                ),
-                                child: Icon(Icons.directions_car,
-                                    color: AppColors.primaryColor, size: 32.sp),
-                              ),
-                              SizedBox(width: 12.w),
-                              Expanded(
-                                child: Text(
-                                  '${car['make']} ${car['model']}',
-                                  style: TextStyle(
-                                    fontSize: 18.sp,
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.black87,
-                                  ),
-                                ),
-                              ),
-                              _statusChip(status),
-                            ],
-                          ),
-                          Divider(color: Colors.grey.shade300, height: 24.h),
-                          // التفاصيل
-                          _infoRow(Icons.person_outline, "مقدم البلاغ:",
-                              trainerName),
-                          SizedBox(height: 8.h),
-                          _infoRow(Icons.comment_outlined, "العطل:", comment),
-                        ],
-                      ),
-                    );
-                  },
-                ),
+            if (ctrl.faults.isEmpty) {
+              return const Center(child: Text("لا توجد أعطال حالياً"));
+            }
+
+            return ListView.builder(
+              padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
+              itemCount: ctrl.faults.length,
+              itemBuilder: (ctx, idx) {
+                final f = ctrl.faults[idx];
+                final car = f['car'];
+                final trainerName = f['trainer']['trainer_name'];
+                final status = f['status'];
+                final comment = f['comment'];
+
+                return _buildFaultCard(car, trainerName, status, comment);
+              },
+            );
+          }),
         );
       },
+    );
+  }
+
+  Widget _buildFaultCard(car, trainerName, status, comment) {
+    return Container(
+      margin: EdgeInsets.only(bottom: 16.h),
+      padding: EdgeInsets.all(16.w),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(16.r),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.05),
+            blurRadius: 8,
+            offset: const Offset(0, 4),
+          )
+        ],
+      ),
+      child: Column(
+        children: [
+          Row(
+            children: [
+              Container(
+                width: 60.w,
+                height: 60.w,
+                decoration: BoxDecoration(
+                  color: AppColors.primaryColor.withOpacity(0.1),
+                  borderRadius: BorderRadius.circular(30.r),
+                ),
+                child: Icon(Icons.directions_car,
+                    color: AppColors.primaryColor, size: 32.sp),
+              ),
+              SizedBox(width: 12.w),
+              Expanded(
+                child: Text(
+                  '${car['make']} ${car['model']}',
+                  style: TextStyle(
+                    fontSize: 18.sp,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black87,
+                  ),
+                ),
+              ),
+              _statusChip(status),
+            ],
+          ),
+          Divider(color: Colors.grey.shade300, height: 24.h),
+          _infoRow(Icons.person_outline, "مقدم البلاغ:", trainerName),
+          SizedBox(height: 8.h),
+          _infoRow(Icons.comment_outlined, "العطل:", comment),
+        ],
+      ),
     );
   }
 

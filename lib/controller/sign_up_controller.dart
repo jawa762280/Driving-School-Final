@@ -77,17 +77,14 @@ class SignUpController extends GetxController {
       String apiUrl = selectedRole == "trainer"
           ? AppLinks.signUpTrainer
           : AppLinks.signUpStudent;
-      // إرسال الطلب
       var response = await crud.fileRequestPOST(apiUrl, data, imageFile);
       isLoading.value = false;
-      // معالجة الرد
       if (response == null) {
         Get.snackbar("خطأ", "لا يوجد رد من الخادم");
         return;
       }
       // ignore: avoid_print
       print(response);
-      // حالة النجاح
       if (response['status'] == "success") {
         MessageService.showSnackbar(
             title: "نجاح", message: response['message']);
@@ -96,13 +93,10 @@ class SignUpController extends GetxController {
           "user_id": response['data']['user_id'],
         });
       }
-      // حالة وجود أخطاء (422)
       else if (response['errors'] != null) {
-        // مسح الأخطاء السابقة
         emailError = null;
         phoneError = null;
 
-        // تجميع رسائل الخطأ
         if (response['errors']['email'] != null) {
           emailError = response['errors']['email'][0];
         }
@@ -110,15 +104,13 @@ class SignUpController extends GetxController {
           phoneError = response['errors']['phone_number'][0];
         }
 
-        // عرض رسالة الخطأ الرئيسية مع التفاصيل
         MessageService.showSnackbar(
           title: "خطأ في التسجيل",
           message: response['message'] ?? "بيانات غير صالحة",
         );
 
-        update(); // لتحديث حالة الحقول في الواجهة
+        update(); 
       }
-      // حالات أخرى
       else {
         MessageService.showSnackbar(
           title: "خطأ",
