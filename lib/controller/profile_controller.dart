@@ -95,7 +95,7 @@ class ProfileController extends GetxController {
 
       if (response != null &&
           (response['status'] == 'success' || response['message'] != null)) {
-        Get.snackbar('نجاح', response['message'] ?? 'تم تسجيل الخروج بنجاح');
+        Get.snackbar('نجاح', 'تم تسجيل الخروج بنجاح');
         await data.erase();
         Get.offAllNamed('/login');
       } else {

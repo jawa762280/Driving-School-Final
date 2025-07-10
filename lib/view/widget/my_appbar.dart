@@ -1,16 +1,21 @@
-import 'package:driving_school/core/constant/appcolors.dart';
-import 'package:driving_school/core/constant/approuts.dart';
+import 'package:driving_school/controller/notifications_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:driving_school/core/constant/appcolors.dart';
+import 'package:driving_school/core/constant/approuts.dart';
 
 class MyAppBar extends StatelessWidget {
   const MyAppBar({super.key, required this.image, required this.widget});
+
   final Image image;
   final Widget widget;
 
   @override
   Widget build(BuildContext context) {
+    final NotificationsController controller =
+        Get.put(NotificationsController());
+
     return Container(
       padding: EdgeInsets.all(10.w),
       width: double.infinity,
@@ -33,16 +38,53 @@ class MyAppBar extends StatelessWidget {
           Row(
             children: [
               SizedBox(width: 10.w),
-              IconButton(
-                icon: Icon(
-                  Icons.notifications_active_outlined,
-                  size: 28.sp,
-                  color: AppColors.primaryColor,
-                ),
-                onPressed: () {
-                  Get.toNamed(AppRouts.notificationsScreen);
-                },
-              ),
+              Obx(() {
+                final unreadCount = controller.notifications
+                    .where((n) => n['read_at'] == null)
+                    .length;
+
+                return Stack(
+                  clipBehavior: Clip.none,
+                  children: [
+                    IconButton(
+                      icon: Icon(
+                        Icons.notifications,
+                        size: 28.sp,
+                        color: AppColors.primaryColor,
+                      ),
+                      onPressed: () {
+                        Get.toNamed(AppRouts.notificationsScreen);
+                      },
+                    ),
+                    if (unreadCount > 0)
+                      Positioned(
+                        right: 4,
+                        top: 4,
+                        child: Container(
+                          padding: const EdgeInsets.all(4),
+                          decoration: BoxDecoration(
+                            color: Colors.red,
+                            shape: BoxShape.circle,
+                          ),
+                          constraints: const BoxConstraints(
+                            minWidth: 20,
+                            minHeight: 20,
+                          ),
+                          child: Center(
+                            child: Text(
+                              unreadCount.toString(),
+                              style: const TextStyle(
+                                color: Colors.white,
+                                fontSize: 11,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                  ],
+                );
+              }),
               widget,
             ],
           ),

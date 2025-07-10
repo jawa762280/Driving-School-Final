@@ -71,7 +71,6 @@ class BookingsSessionsController extends GetxController {
           colorText: Colors.black,
           duration: Duration(seconds: 2),
         );
-        getReviewsStudent();
 
         update();
         Navigator.pop(Get.context!); // إغلاق النافذة

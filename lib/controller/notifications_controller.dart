@@ -1,9 +1,12 @@
+import 'dart:async';
+import 'package:audioplayers/audioplayers.dart';
 import 'package:get/get.dart';
 import 'package:driving_school/core/services/crud.dart';
 import 'package:driving_school/core/constant/app_api.dart';
 
 class NotificationsController extends GetxController {
   final Crud _crud = Crud();
+  final AudioPlayer _audioPlayer = AudioPlayer();
 
   var isLoading = true.obs;
   var notifications = <Map<String, dynamic>>[].obs;
@@ -12,17 +15,39 @@ class NotificationsController extends GetxController {
   void onInit() {
     super.onInit();
     fetchNotifications();
+    Timer.periodic(const Duration(seconds: 2), (timer) {
+      fetchNotifications();
+    });
   }
 
   Future<void> fetchNotifications() async {
-    isLoading(true);
+    final prevCount = notifications.where((n) => n['read_at'] == null).length;
+
     final response = await _crud.getRequest(AppLinks.notifications);
     if (response != null) {
       notifications.value = List<Map<String, dynamic>>.from(response);
+
+      final newCount = notifications.where((n) => n['read_at'] == null).length;
+
+      // ✅ إذا في إشعار جديد، شغل صوت
+      if (newCount > prevCount) {
+        _playNotificationSound();
+      }
     } else {
       Get.snackbar("خطأ", "فشل في تحميل الإشعارات");
     }
+
     isLoading(false);
+  }
+
+  void _playNotificationSound() async {
+    try {
+      await _audioPlayer.stop();
+      await _audioPlayer
+          .play(AssetSource('sounds/mixkit-confirmation-tone-2867.wav'));
+    } catch (e) {
+      print('🔴 Error playing sound: $e');
+    }
   }
 
   Future<void> markNotificationAsRead(String id) async {
@@ -41,12 +66,12 @@ class NotificationsController extends GetxController {
       Get.snackbar("خطأ", "فشل في تحديث حالة الإشعار");
     }
   }
+
   Future<void> markAllAsRead() async {
-  for (var notification in notifications) {
-    if (notification['read_at'] == null) {
-      await markNotificationAsRead(notification['id']);
+    for (var notification in notifications) {
+      if (notification['read_at'] == null) {
+        await markNotificationAsRead(notification['id']);
+      }
     }
   }
-}
-
 }
