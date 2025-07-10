@@ -3,24 +3,35 @@ import 'package:driving_school/core/services/crud.dart';
 import 'package:get/get.dart';
 
 class TrainerReviewsController extends GetxController {
-  List reviews = [];
+  RxList reviews = <dynamic>[].obs;
   Crud crud = Crud();
   String id = '';
   RxBool isLoading = false.obs;
+  RxBool hasReview = false.obs;
 
   getReviews() async {
     isLoading.value = true;
     var response =
         await crud.getRequest('${AppLinks.init}/trainer/$id/reviews');
 
-    List filteredReviews =
-        response.where((e) => e is Map && e.isNotEmpty).toList();
+    print('Full response: $response');
+    print('Data part: ${response['data']}');
+
+    var data = response['data'];
+    hasReview.value = response['has_review'] == true;
+
     reviews.clear();
-    if (filteredReviews.isNotEmpty) {
-      reviews.addAll(filteredReviews);
+
+    if (data is List && data.isNotEmpty) {
+      List cleanedReviews =
+          data.where((e) => e is Map && e.isNotEmpty).toList();
+      print('Cleaned reviews: $cleanedReviews');
+      reviews.addAll(cleanedReviews);
+    } else {
+      print('Data is empty or not a list');
     }
+
     isLoading.value = false;
-    update();
   }
 
   @override

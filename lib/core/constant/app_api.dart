@@ -1,7 +1,7 @@
 class AppLinks {
   static const String init = 'http://192.168.1.107:8000/api';
   // static const String init = 'http://127.0.0.1:8000/api';
-  // static const String init = 'http://192.168.80.83:8000/api';
+  // static const String init = 'http://192.168.75.83:8000/api';
 
   static const String login = '$init/login';
   static const String signUpStudent = '$init/student/register';
@@ -10,6 +10,7 @@ class AppLinks {
   static const String verifyCodeSignUp = '$init/email/verify';
   static const String resendVerifyCodeSignUp = '$init/resend-email-code';
   static const String resetPassword = '$init/reset-password';
+
   static const String verifyCode = '$init/verify-reset-code';
   static const String forgetPassword = '$init/send-reset-code';
   static const String resendVerifyCode = '$init/resend-reset-code';
@@ -57,4 +58,5 @@ class AppLinks {
   static const String likePost = "$init/posts";
   static const String downloadUrl = "$init/certificate/download";
   static const String practicalExamMy = "$init/practical-exams/my";
+  static const String notifications = "$init/notifications";
 }

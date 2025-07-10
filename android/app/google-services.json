@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "164056244939",
+    "project_id": "driving-school-project-c7918",
+    "storage_bucket": "driving-school-project-c7918.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:164056244939:android:750cc7bb700896632bf14e",
+        "android_client_info": {
+          "package_name": "com.driving.school"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBxEumZqyqdHoR1dJKL5y0o_nUj_2AXGjc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

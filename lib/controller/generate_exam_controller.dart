@@ -6,7 +6,7 @@ import 'package:driving_school/core/services/crud.dart';
 import 'package:driving_school/data/model/evaluation_student_model.dart';
 import 'package:driving_school/data/model/exam_question_model.dart';
 import 'package:driving_school/data/model/exam_result_model.dart';
-import 'package:driving_school/view/screen/exam_result_screen.dart';
+import 'package:driving_school/view/exam_result_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';

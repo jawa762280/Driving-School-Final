@@ -7,6 +7,7 @@ import 'package:get_storage/get_storage.dart';
 class BookingsSessionsController extends GetxController {
   final Crud crud = Crud();
   var userRole = ''.obs;
+  TextEditingController comment = TextEditingController();
 
   var sessions = [].obs;
   var isLoading = false.obs;
@@ -16,9 +17,7 @@ class BookingsSessionsController extends GetxController {
   final GetStorage data = GetStorage();
   String level = 'beginner';
   int levelCount = 0;
-  TextEditingController comment = TextEditingController();
-  double rating = 3;
-  List reviews = [];
+  var reviews = <dynamic>[].obs;
 
   @override
   void onInit() {
@@ -49,6 +48,7 @@ class BookingsSessionsController extends GetxController {
 
   getReviewsStudent() async {
     var response = await crud.getRequest(AppLinks.studentFeedbacks);
+
     reviews.clear();
     reviews.addAll(response['data']);
     update();
@@ -62,7 +62,7 @@ class BookingsSessionsController extends GetxController {
         'level': level,
         'notes': comment.text,
       });
-      Navigator.pop(Get.context!);
+
       if (response['level'].toString() != 'null') {
         Get.snackbar(
           "نجاح",
@@ -71,44 +71,10 @@ class BookingsSessionsController extends GetxController {
           colorText: Colors.black,
           duration: Duration(seconds: 2),
         );
-        Get.back();
-        List<dynamic> reviews = data.read('trainer-review') ?? [];
-        reviews.add({
-          'booking_id': id,
-          'trainer_id': data.read('user')['trainer']['id'].toString(),
-        });
-        data.write('trainer-review', reviews);
-        getReviews();
-      }
-    } catch (e) {
-      Get.snackbar("خطأ", "حدث خطأ أثناء إرسال التقييم");
-    } finally {
-      isLoading.value = false;
-      update();
-    }
-  }
-
-  sendFeedbackStudent(id) async {
-    isLoading.value = true;
-    try {
-      var response = await crud.postRequest(AppLinks.trainerReviews, {
-        'trainer_id': id,
-        'comment': comment.text,
-        'rating': rating,
-      });
-
-      print('MyResponse $response');
-
-      if (response['status'] == true) {
-        Get.back();
-        List<dynamic> reviews = data.read('student-review') ?? [];
-        reviews.add({
-          'trainer_id': id,
-          'rating': rating.toString(),
-          'comment': comment.text,
-        });
-        data.write('student-review', reviews);
         getReviewsStudent();
+
+        update();
+        Navigator.pop(Get.context!); // إغلاق النافذة
       }
     } catch (e) {
       Get.snackbar("خطأ", "حدث خطأ أثناء إرسال التقييم");
@@ -150,7 +116,7 @@ class BookingsSessionsController extends GetxController {
           backgroundColor: Colors.green.shade100,
           colorText: Colors.black,
           duration: Duration(seconds: 2));
-      await fetchSessions(); 
+      await fetchSessions();
     } else {
       final errorMsg = response?['message'] ?? 'فشل في إلغاء الجلسة';
       Get.snackbar("خطأ", errorMsg,

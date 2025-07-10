@@ -10,6 +10,7 @@ import 'package:driving_school/view/screen/generate_exam_screen.dart';
 import 'package:driving_school/view/screen/license_details_screen.dart';
 import 'package:driving_school/view/screen/login_screen.dart';
 import 'package:driving_school/view/screen/my_licence_screen.dart';
+import 'package:driving_school/view/screen/notification_screen.dart';
 import 'package:driving_school/view/screen/onboarding_screen.dart';
 import 'package:driving_school/view/screen/forget_password_screen.dart';
 import 'package:driving_school/view/screen/practical_exam_screen.dart';
@@ -132,7 +133,7 @@ List<GetPage<dynamic>> routes = [
     name: AppRouts.trainerExamScreen,
     page: () => TrainerExamsScreen(),
   ),
-   GetPage(
+  GetPage(
     name: AppRouts.examHomeScreen,
     page: () => ExamsHomeScreen(),
   ),
@@ -140,22 +141,21 @@ List<GetPage<dynamic>> routes = [
     name: AppRouts.generateExamScreen,
     page: () => GenerateExamScreen(),
   ),
-   GetPage(
+  GetPage(
     name: AppRouts.chooseOtomatikScreen,
     page: () => ChooseOtomatikScreen(),
   ),
-   GetPage(
+  GetPage(
     name: AppRouts.createFalutCar,
     page: () => CreateCarFault(),
   ),
-   GetPage(
+  GetPage(
     name: AppRouts.showCarFaults,
     page: () => ShowCarFaults(),
   ),
   GetPage(
-    name: AppRouts.evaluationStudentScreen,
-    page: () => StudentEvaluationScreen()
-  ),
+      name: AppRouts.evaluationStudentScreen,
+      page: () => StudentEvaluationScreen()),
   GetPage(
     name: AppRouts.requestLicence,
     page: () => RequestLicenceScreen(),
@@ -175,5 +175,9 @@ List<GetPage<dynamic>> routes = [
   GetPage(
     name: AppRouts.practicalExamScreen,
     page: () => PracticalExamScreen(),
+  ),
+  GetPage(
+    name: AppRouts.notificationsScreen,
+    page: () => NotificationsScreen(),
   ),
 ];

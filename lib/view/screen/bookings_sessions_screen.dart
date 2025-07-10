@@ -1,4 +1,3 @@
-import 'package:animated_rating_stars/animated_rating_stars.dart';
 import 'package:driving_school/view/widget/my_button.dart';
 import 'package:driving_school/view/widget/my_textformfield.dart';
 import 'package:flutter/material.dart';
@@ -6,8 +5,6 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:driving_school/controller/bookings_sessions_controller.dart';
 import 'package:driving_school/core/constant/appcolors.dart';
-
-import '../../main.dart';
 
 class BookingsSessionsScreen extends StatelessWidget {
   const BookingsSessionsScreen({super.key});
@@ -93,13 +90,6 @@ class BookingsSessionsScreen extends StatelessWidget {
                       ? "$startTime - $endTime"
                       : 'غير محدد';
 
-                  final matchingReview = controller.reviews.firstWhere(
-                    (element) =>
-                        element['session_id'].toString() ==
-                        session['session']['id'].toString(),
-                    orElse: () => null,
-                  );
-
                   final status = session['status'] ?? 'pending';
                   final statusData = getStatusData(status);
                   // ignore: avoid_print
@@ -112,6 +102,12 @@ class BookingsSessionsScreen extends StatelessWidget {
                   final carModel =
                       session['car']?['model'] ?? 'موديل غير معروف';
                   final transmission = session['car']?['transmission'] ?? '';
+                  final matchingReview = controller.reviews.firstWhere(
+                    (element) =>
+                        element['session_id'].toString() ==
+                        session['session']['id'].toString(),
+                    orElse: () => null,
+                  );
 
                   return Container(
                     margin: const EdgeInsets.only(bottom: 20),
@@ -247,7 +243,7 @@ class BookingsSessionsScreen extends StatelessWidget {
                               const SizedBox(width: 10),
                               Expanded(
                                 child: Text(
-                                  'التعليق:  ${matchingReview['notes']}',
+                                  'ملاحظات المدرب:  ${matchingReview['notes']}',
                                   style: TextStyle(
                                     fontSize: 15,
                                     color: Colors.black,
@@ -355,40 +351,9 @@ class BookingsSessionsScreen extends StatelessWidget {
 
                         SizedBox(height: 15),
 
-                        userRole == 'student' && status == 'completed'
-                            ? (data.read('student-review') as List).any(
-                                    (review) =>
-                                        review['trainer_id'].toString() ==
-                                        session['trainer']['id'].toString())
-                                ? SizedBox()
-                                : InkWell(
-                                    onTap: () {
-                                      studentReviewDialog(
-                                        context,
-                                        session['trainer']['id'],
-                                      );
-                                    },
-                                    child: Container(
-                                      padding: EdgeInsets.all(15),
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(12),
-                                        color: AppColors.primaryColor,
-                                      ),
-                                      child: Text(
-                                        'تقييم المدرب',
-                                        // session['trainer']['id'].toString(),
-                                        textAlign: TextAlign.center,
-                                        style: TextStyle(
-                                          fontSize: 15,
-                                          color: Colors.white,
-                                        ),
-                                      ),
-                                    ),
-                                  )
-                            : SizedBox(),
                         if (userRole == 'trainer' &&
                             status == 'completed' &&
-                            matchingReview == null)
+                            session['is_rated'] == false)
                           InkWell(
                             onTap: () {
                               showMyDialog(context, (session['id']));
@@ -589,72 +554,4 @@ Widget buildBox(String text, int i) {
   );
 }
 
-void studentReviewDialog(BuildContext context, id) {
-  showDialog(
-      barrierDismissible: false,
-      context: context,
-      builder: (context) => Dialog(
-            shape:
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-            child: GetBuilder(
-                init: BookingsSessionsController(),
-                builder: (controller) {
-                  return Obx(() {
-                    return Padding(
-                      padding: const EdgeInsets.all(20),
-                      child: controller.isLoading.value
-                          ? const SizedBox(
-                              height: 100,
-                              child: Center(child: CircularProgressIndicator()),
-                            )
-                          : Column(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Text('قيم المدرب'),
-                                SizedBox(height: 20),
-                                AnimatedRatingStars(
-                                  initialRating: 3.5,
-                                  minRating: 0.0,
-                                  maxRating: 5.0,
-                                  filledColor: Colors.amber,
-                                  emptyColor: Colors.grey,
-                                  filledIcon: Icons.star,
-                                  halfFilledIcon: Icons.star_half,
-                                  emptyIcon: Icons.star_border,
-                                  onChanged: (double rating) {
-                                    controller.rating = rating;
-                                    controller.update();
-                                  },
-                                  displayRatingValue: true,
-                                  interactiveTooltips: false,
-                                  customFilledIcon: Icons.star,
-                                  customHalfFilledIcon: Icons.star_half,
-                                  customEmptyIcon: Icons.star_border,
-                                  starSize: 30.0,
-                                  animationDuration:
-                                      Duration(milliseconds: 300),
-                                  animationCurve: Curves.easeInOut,
-                                  readOnly: false,
-                                ),
-                                SizedBox(height: 20),
-                                MyTextformfield(
-                                  maxLines: 5,
-                                  mycontroller: controller.comment,
-                                  keyboardType: TextInputType.visiblePassword,
-                                  hintText: 'ملاحظة للمدرب',
-                                  filled: true,
-                                ),
-                                SizedBox(height: 20),
-                                MyButton(
-                                  onPressed: () {
-                                    controller.sendFeedbackStudent(id);
-                                  },
-                                  text: "ارسال",
-                                ),
-                              ],
-                            ),
-                    );
-                  });
-                }),
-          ));
-}
+

@@ -73,6 +73,8 @@ class LoginController extends GetxController {
         final response = await Crud().postRequest(AppLinks.login, {
           'email': email,
           'password': password,
+          'fcm_token':mytoken,
+
         });
         isLoading.value = false;
         if (response != null && response['status'] == 'success') {
@@ -82,6 +84,7 @@ class LoginController extends GetxController {
           final token = response['data']['token'];
           myServices.saveToken(token);
           data.write('user', userData);
+          
           data.write('role', response['data']['user']['role'].toString());
           if (response['data']['user']['role'].toString() == 'student') {
             final studentId = response['data']['user']['student']['id'];

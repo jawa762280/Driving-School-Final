@@ -12,6 +12,7 @@ import 'package:driving_school/view/widget/my_textformfield.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
+import 'package:driving_school/data/nationalities.dart';
 
 class UpdateInformationContainer extends StatelessWidget {
   const UpdateInformationContainer({super.key});
@@ -328,6 +329,112 @@ class UpdateInformationContainer extends StatelessWidget {
                       ],
                     )
                   : SizedBox(),
+              SizedBox(height: 15.h),
+              if (controller.roleController.text == 'student') ...[
+                SizedBox(height: 16.h),
+                Text("الجنسية",
+                    style: TextStyle(color: Colors.grey[800], fontSize: 11.sp)),
+                SizedBox(height: 15.h),
+                DropdownButtonFormField<String>(
+                  decoration: InputDecoration(
+                    filled: true,
+                    fillColor: Colors.grey[100],
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12.r),
+                      borderSide: BorderSide.none,
+                    ),
+                    contentPadding:
+                        EdgeInsets.symmetric(horizontal: 12.w, vertical: 14.h),
+                  ),
+                  hint: Text(
+                    controller.nationalityController.text.isNotEmpty
+                        ? controller.nationalityController.text
+                        : '',
+                    style: TextStyle(color: Colors.black),
+                  ),
+                  items: nationalities
+                      .map((nation) => DropdownMenuItem(
+                            value: nation,
+                            child: Text(nation),
+                          ))
+                      .toList(),
+                  onChanged: (val) {
+                    controller.nationalityController.text = val!;
+                    controller.update();
+                  },
+                  validator: (value) => value == null || value.isEmpty
+                      ? 'يرجى اختيار الجنسية'
+                      : null,
+                ),
+                SizedBox(height: 16.h),
+                Text("هل تتبع إلى وزارة الدفاع؟",
+                    style: TextStyle(color: Colors.grey[800], fontSize: 11.sp)),
+                SizedBox(height: 8.h),
+                Container(
+                  padding:
+                      EdgeInsets.symmetric(horizontal: 12.w, vertical: 10.h),
+                  decoration: BoxDecoration(
+                    color: Colors.grey[100],
+                    borderRadius: BorderRadius.circular(12.r),
+                  ),
+                  child: Row(
+                    children: [
+                      Checkbox(
+                        activeColor: AppColors.primaryColor,
+                        value: controller.isMilitary,
+                        onChanged: (val) {
+                          controller.isMilitary = val ?? false;
+                          controller.update();
+                        },
+                      ),
+                      Expanded(
+                        child: Text(
+                          "     هل أنت عسكري وتتبع لوزارة الدفاع",
+                          style: TextStyle(fontSize: 13.sp),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                SizedBox(height: 16.h),
+                Text("ذوي الاحتياجات الخاصة",
+                    style: TextStyle(color: Colors.grey[800], fontSize: 11.sp)),
+                SizedBox(height: 8.h),
+                Container(
+                  padding:
+                      EdgeInsets.symmetric(horizontal: 12.w, vertical: 10.h),
+                  decoration: BoxDecoration(
+                    color: Colors.grey[100],
+                    borderRadius: BorderRadius.circular(12.r),
+                  ),
+                  child: Row(
+                    children: [
+                      Checkbox(
+                        activeColor: AppColors.primaryColor,
+                        value: controller.isLeftHandDisabled,
+                        onChanged: (val) {
+                          controller.isLeftHandDisabled = val!;
+                          controller.update();
+                        },
+                      ),
+                      Expanded(
+                        child: Text(
+                          "هل أنت من ذوي الإعاقة باليد اليسرى؟",
+                          style: TextStyle(fontSize: 13.sp),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsets.only(top: 6.h, right: 8.w),
+                  child: Text(
+                    "نقبل فقط حالات الإعاقة باليد اليسرى حصرا",
+                    style: TextStyle(fontSize: 11.sp, color: Colors.grey[600]),
+                  ),
+                ),
+              ],
+
               SizedBox(height: 15.h),
 
               InkWell(

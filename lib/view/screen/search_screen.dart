@@ -62,6 +62,7 @@ class SearchScreen extends StatelessWidget {
                                   email: instructor['email'] ?? '',
                                   trainerId: instructor['trainer_id'],
                                   userRole: controller.currentUserRole.value,
+                                  hasReview: instructor['has_review'] ?? false,
                                   reviews: Row(
                                     mainAxisAlignment: MainAxisAlignment.start,
                                     children: [

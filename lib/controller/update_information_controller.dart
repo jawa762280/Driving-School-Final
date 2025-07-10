@@ -31,6 +31,9 @@ class UpdateInformationController extends GetxController {
   TextEditingController experience = TextEditingController();
   TextEditingController password = TextEditingController();
   TextEditingController email = TextEditingController();
+  bool isLeftHandDisabled = false;
+  bool isMilitary = false;
+  TextEditingController nationalityController = TextEditingController();
 
   void showPass() {
     isShowPass = !isShowPass;
@@ -43,7 +46,7 @@ class UpdateInformationController extends GetxController {
     if (match != null) {
       return match.group(0)!;
     }
-    return rawUrl; 
+    return rawUrl;
   }
 
   updateInformation() async {
@@ -56,6 +59,7 @@ class UpdateInformationController extends GetxController {
       'role': data.read('role').toString(),
       'gender': genderController.text,
     };
+
     experience.text !=
             data
                 .read('user')[data.read('role').toString()]['experience']
@@ -89,6 +93,13 @@ class UpdateInformationController extends GetxController {
         ? datas.addAll({
             'license_expiry_date': licenseExpiryDate.text,
             'training_type': trainingType.text,
+          })
+        : null;
+    data.read('role').toString() == 'student'
+        ? datas.addAll({
+            'is_military': isMilitary ? '1' : '0',
+            'left_hand_disabled': isLeftHandDisabled ? '1' : '0',
+            'nationality': nationalityController.text,
           })
         : null;
     String apiLink = data.read('role').toString() == 'trainer'
@@ -145,6 +156,21 @@ class UpdateInformationController extends GetxController {
         data.read('user')[data.read('role').toString()]['training_type'] ?? '';
     experience.text =
         data.read('user')[data.read('role').toString()]['experience'] ?? '';
+    /////////////////////
+    nationalityController.text =
+        data.read('user')[data.read('role').toString()]['nationality'] ?? '';
+    data.read('user')[data.read('role').toString()]['is_military'].toString() ==
+            '0'
+        ? isMilitary = false
+        : isMilitary = true;
+    data
+                .read('user')[data.read('role').toString()]
+                    ['left_hand_disabled']
+                .toString() ==
+            '0'
+        ? isLeftHandDisabled = false
+        : isLeftHandDisabled = true;
+    //////////////////
     imageUrl =
         'http${data.read('user')[data.read('role').toString()]['image'].toString().split('http').last}';
 

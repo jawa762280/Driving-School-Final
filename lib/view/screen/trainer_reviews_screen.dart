@@ -9,177 +9,157 @@ class TrainerReviewsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GetBuilder(
-        init: TrainerReviewsController(),
-        builder: (controller) {
-          return Scaffold(
-              appBar: AppBar(
-                title: const Text(
-                  "تقييمات المدرب",
-                  style: TextStyle(color: Colors.white),
+    final controller = Get.put(TrainerReviewsController());
+
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text("تقييمات المدرب"),
+        backgroundColor: AppColors.primaryColor,
+        centerTitle: true,
+        iconTheme: IconThemeData(color: Colors.white),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.refresh, color: Colors.white),
+            tooltip: 'تحديث',
+            onPressed: () {
+              controller.getReviews();
+            },
+          ),
+        ],
+      ),
+      backgroundColor: Colors.grey.shade300,
+      body: Obx(() {
+        if (controller.isLoading.value) {
+          return const Center(
+            child: CircularProgressIndicator(
+              color: Colors.green,
+            ),
+          );
+        } else if (controller.reviews.isEmpty) {
+          return Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(Icons.rate_review,
+                    size: 60, color: Colors.grey.shade400),
+                const SizedBox(height: 16),
+                Text(
+                  'لا توجد تقييمات حتى الآن',
+                  style:
+                      TextStyle(fontSize: 16, color: Colors.grey.shade600),
                 ),
-                backgroundColor: AppColors.primaryColor,
-                centerTitle: true,
-                iconTheme: IconThemeData(color: Colors.white),
-                actions: [
-                  IconButton(
-                    icon: const Icon(Icons.refresh, color: Colors.white),
-                    tooltip: 'تحديث',
-                    onPressed: () {
-                      controller.getReviews();
-                    },
+              ],
+            ),
+          );
+        } else {
+          return ListView.builder(
+            padding: EdgeInsets.symmetric(vertical: 50, horizontal: 16),
+            itemCount: controller.reviews.length,
+            itemBuilder: (context, i) {
+              var review = controller.reviews[i];
+              // ... بقية تصميم البطاقة كما في كودك
+              return Container(
+                margin: EdgeInsets.only(bottom: 20.h),
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    colors: [Colors.white, Colors.grey.shade100],
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
                   ),
-                ],
-              ),
-              backgroundColor: Colors.grey.shade300,
-              body: Obx(() {
-                if (controller.isLoading.value) {
-                  return const Center(
-                    child: CircularProgressIndicator(
-                      color: Colors.green,
+                  borderRadius: BorderRadius.circular(20.r),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black12,
+                      blurRadius: 10,
+                      offset: Offset(0, 6),
                     ),
-                  );
-                } else if (controller.reviews.isEmpty) {
-                  return Center(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
+                  ],
+                ),
+                padding: EdgeInsets.all(16),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    // محتويات التقييم (صورة الطالب، الاسم، النجوم، التعليق) كما في كودك السابق
+                    Row(
                       children: [
-                        Icon(Icons.rate_review,
-                            size: 60, color: Colors.grey.shade400),
-                        const SizedBox(height: 16),
-                        Text(
-                          'لا توجد تقييمات حتى الآن',
-                          style: TextStyle(
-                              fontSize: 16, color: Colors.grey.shade600),
+                        CircleAvatar(
+                          radius: 22.r,
+                          backgroundColor: AppColors.primaryColor.withAlpha((0.1 * 255).toInt()),
+                          child: Icon(Icons.person,
+                              color: AppColors.primaryColor,
+                              size: 24),
+                        ),
+                        SizedBox(width: 12),
+                        Expanded(
+                          child: Text(
+                            review['student_name'].toString(),
+                            style: TextStyle(
+                              fontSize: 16.sp,
+                              fontWeight: FontWeight.bold,
+                              color: AppColors.primaryColor,
+                            ),
+                          ),
                         ),
                       ],
                     ),
-                  );
-                } else {
-                  return ListView(
-                    padding: EdgeInsets.symmetric(vertical: 50, horizontal: 16),
-                    children: [
-                      ListView.builder(
-                        shrinkWrap: true,
-                        physics: NeverScrollableScrollPhysics(),
-                        itemCount: controller.reviews.length,
-                        itemBuilder: (context, i) {
-                          var review = controller.reviews[i];
-                          return Container(
-                            margin: EdgeInsets.only(bottom: 20.h),
-                            decoration: BoxDecoration(
-                              gradient: LinearGradient(
-                                colors: [Colors.white, Colors.grey.shade100],
-                                begin: Alignment.topLeft,
-                                end: Alignment.bottomRight,
+                    SizedBox(height: 12),
+                    Row(
+                      children: [
+                        Wrap(
+                          spacing: 2,
+                          children: List.generate(
+                            int.tryParse(review['rating'].toString()) ?? 0,
+                            (index) => Icon(Icons.star_rounded,
+                                color: Colors.amber, size: 20),
+                          ),
+                        ),
+                        SizedBox(width: 8),
+                        Text(
+                          '${review['rating'].toString()}/5',
+                          style: TextStyle(
+                            fontSize: 14.sp,
+                            fontWeight: FontWeight.w500,
+                            color: Colors.black87,
+                          ),
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 10),
+                    Container(
+                      width: double.infinity,
+                      padding: EdgeInsets.all(12),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(12.r),
+                        border: Border.all(color: Colors.grey.shade300),
+                      ),
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Icon(Icons.format_quote_rounded,
+                              color: AppColors.primaryColor, size: 20),
+                          SizedBox(width: 8),
+                          Expanded(
+                            child: Text(
+                              review['comment']?.toString() ?? 'لا يوجد تعليق',
+                              style: TextStyle(
+                                fontSize: 14.sp,
+                                fontWeight: FontWeight.w400,
+                                color: Colors.black87,
+                                height: 1.4,
                               ),
-                              borderRadius: BorderRadius.circular(20.r),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Colors.black12,
-                                  blurRadius: 10,
-                                  offset: Offset(0, 6),
-                                ),
-                              ],
                             ),
-                            padding: EdgeInsets.all(16),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                // 🧍‍♂️ صورة واسم الطالب
-                                Row(
-                                  children: [
-                                    CircleAvatar(
-                                      radius: 22.r,
-                                      backgroundColor: AppColors.primaryColor
-                                          .withAlpha((0.1 * 255).toInt()),
-                                      child: Icon(Icons.person,
-                                          color: AppColors.primaryColor,
-                                          size: 24),
-                                    ),
-                                    SizedBox(width: 12),
-                                    Expanded(
-                                      child: Text(
-                                        review['student_name'].toString(),
-                                        style: TextStyle(
-                                          fontSize: 16.sp,
-                                          fontWeight: FontWeight.bold,
-                                          color: AppColors.primaryColor,
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                SizedBox(height: 12),
-
-                                // 🌟 التقييم بالنجوم والرقم
-                                Row(
-                                  children: [
-                                    Wrap(
-                                      spacing: 2,
-                                      children: List.generate(
-                                        int.tryParse(
-                                                review['rating'].toString()) ??
-                                            0,
-                                        (index) => Icon(Icons.star_rounded,
-                                            color: Colors.amber, size: 20),
-                                      ),
-                                    ),
-                                    SizedBox(width: 8),
-                                    Text(
-                                      '${review['rating'].toString()}/5',
-                                      style: TextStyle(
-                                        fontSize: 14.sp,
-                                        fontWeight: FontWeight.w500,
-                                        color: Colors.black87,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                SizedBox(height: 10),
-
-                                // 💬 التعليق
-                                Container(
-                                  width: double.infinity,
-                                  padding: EdgeInsets.all(12),
-                                  decoration: BoxDecoration(
-                                    color: Colors.white,
-                                    borderRadius: BorderRadius.circular(12.r),
-                                    border:
-                                        Border.all(color: Colors.grey.shade300),
-                                  ),
-                                  child: Row(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Icon(Icons.format_quote_rounded,
-                                          color: AppColors.primaryColor,
-                                          size: 20),
-                                      SizedBox(width: 8),
-                                      Expanded(
-                                        child: Text(
-                                          review['comment']?.toString() ??
-                                              'لا يوجد تعليق',
-                                          style: TextStyle(
-                                            fontSize: 14.sp,
-                                            fontWeight: FontWeight.w400,
-                                            color: Colors.black87,
-                                            height: 1.4,
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ],
-                            ),
-                          );
-                        },
-                      )
-                    ],
-                  );
-                }
-              }));
-        });
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              );
+            },
+          );
+        }
+      }),
+    );
   }
 }

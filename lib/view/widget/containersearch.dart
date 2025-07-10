@@ -1,7 +1,11 @@
+import 'package:animated_rating_stars/animated_rating_stars.dart';
+import 'package:driving_school/controller/search_controller.dart';
 import 'package:driving_school/controller/show_training_schedules_controller.dart';
 import 'package:driving_school/core/constant/appcolors.dart';
 import 'package:driving_school/core/constant/appimages.dart';
 import 'package:driving_school/core/constant/approuts.dart';
+import 'package:driving_school/view/widget/my_button.dart';
+import 'package:driving_school/view/widget/my_textformfield.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -14,7 +18,8 @@ class ContainerSearch extends StatelessWidget {
     required this.email,
     required this.trainerId,
     required this.userRole,
-    this.reviews, // 'student' أو 'trainer'
+    this.reviews,
+    required this.hasReview, // 'student' أو 'trainer'
   });
 
   final String image;
@@ -23,9 +28,12 @@ class ContainerSearch extends StatelessWidget {
   final int trainerId;
   final String userRole;
   final Widget? reviews;
+  final bool hasReview;
 
   @override
   Widget build(BuildContext context) {
+    print('trainerId: $trainerId - hasReview: $hasReview');
+
     ImageProvider<Object> buildImageProvider(String imagePath) {
       if (imagePath.startsWith('http')) {
         return NetworkImage(imagePath);
@@ -82,7 +90,43 @@ class ContainerSearch extends StatelessWidget {
                   ],
                 ),
               ),
-              Icon(Icons.chevron_right, color: AppColors.primaryColor),
+              GestureDetector(
+                onTap: hasReview
+                    ? null
+                    : () {
+                        studentReviewDialog(context, trainerId);
+                      },
+                child: Container(
+                  padding:
+                      EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.h),
+                  decoration: BoxDecoration(
+                    color:
+                        hasReview ? Colors.grey.shade200 : Colors.green.shade50,
+                    borderRadius: BorderRadius.circular(12.r),
+                  ),
+                  child: Row(
+                    textDirection: TextDirection.ltr,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Icon(
+                        Icons.star,
+                        color: hasReview ? Colors.grey : AppColors.primaryColor,
+                        size: 20.sp,
+                      ),
+                      SizedBox(width: 4.w),
+                      Text(
+                        hasReview ? 'تم التقييم' : 'تقييم',
+                        style: TextStyle(
+                          fontSize: 12.sp,
+                          color:
+                              hasReview ? Colors.grey : AppColors.primaryColor,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
             ],
           ),
           SizedBox(height: 14.h),
@@ -165,4 +209,74 @@ class ContainerSearch extends StatelessWidget {
       ),
     );
   }
+}
+
+void studentReviewDialog(BuildContext context, id) {
+  showDialog(
+      barrierDismissible: false,
+      context: context,
+      builder: (context) => Dialog(
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+            child: GetBuilder(
+                init: MySearchController(),
+                builder: (controller) {
+                  return Obx(() {
+                    return Padding(
+                      padding: const EdgeInsets.all(20),
+                      child: controller.isLoading.value
+                          ? const SizedBox(
+                              height: 100,
+                              child: Center(child: CircularProgressIndicator()),
+                            )
+                          : Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Text('قيم المدرب'),
+                                SizedBox(height: 20),
+                                AnimatedRatingStars(
+                                  initialRating: 3.5,
+                                  minRating: 0.0,
+                                  maxRating: 5.0,
+                                  filledColor: Colors.amber,
+                                  emptyColor: Colors.grey,
+                                  filledIcon: Icons.star,
+                                  halfFilledIcon: Icons.star_half,
+                                  emptyIcon: Icons.star_border,
+                                  onChanged: (double rating) {
+                                    controller.rating = rating;
+                                    controller.update();
+                                  },
+                                  displayRatingValue: true,
+                                  interactiveTooltips: false,
+                                  customFilledIcon: Icons.star,
+                                  customHalfFilledIcon: Icons.star_half,
+                                  customEmptyIcon: Icons.star_border,
+                                  starSize: 30.0,
+                                  animationDuration:
+                                      Duration(milliseconds: 300),
+                                  animationCurve: Curves.easeInOut,
+                                  readOnly: false,
+                                ),
+                                SizedBox(height: 20),
+                                MyTextformfield(
+                                  maxLines: 5,
+                                  mycontroller: controller.comment,
+                                  keyboardType: TextInputType.visiblePassword,
+                                  hintText: 'ملاحظة للمدرب',
+                                  filled: true,
+                                ),
+                                SizedBox(height: 20),
+                                MyButton(
+                                  onPressed: () {
+                                    controller.sendFeedbackStudent(id);
+                                  },
+                                  text: "ارسال",
+                                ),
+                              ],
+                            ),
+                    );
+                  });
+                }),
+          ));
 }
