@@ -1,27 +1,54 @@
-import 'package:flutter/material.dart';
-
 class TrainerServiceModel {
-  final IconData icon;
+  final String imagePath;
   final String title;
+  final String subtitle;
 
   TrainerServiceModel({
-    required this.icon,
+    required this.imagePath,
     required this.title,
+    required this.subtitle,
   });
 }
 
 final List<TrainerServiceModel> trainerServices = [
   TrainerServiceModel(
-      icon: Icons.directions_car, title: "انشاء جداول التدريب "),
+    imagePath: 'assets/images/noun-calendar-5022159.png',
+    title: "إنشاء جدول تدريب",
+    subtitle: "ابدأ بإنشاء جداول التدريب الخاصة بك",
+  ),
   TrainerServiceModel(
-      icon: Icons.schedule_outlined, title: "عرض جداولي التدريب "),
-  TrainerServiceModel(icon: Icons.schedule_outlined, title: "طلب اجازة "),
-  TrainerServiceModel(icon: Icons.schedule_outlined, title: "عرض الاجازات"),
+    imagePath: 'assets/images/schedule.png',
+    title: "عرض جداول التدريب",
+    subtitle: "شاهد جميع الجداول التدريبية الخاصة بك",
+  ),
   TrainerServiceModel(
-      icon: Icons.text_snippet_outlined, title: "انشاء امتحان "),
+    imagePath: 'assets/images/vacation.png',
+    title: "طلب إجازة",
+    subtitle: "أرسل طلب إجازتك بسهولة",
+  ),
   TrainerServiceModel(
-      icon: Icons.text_snippet_outlined, title: " عرض الامتحانات"),
-  TrainerServiceModel(icon: Icons.car_crash_outlined, title: "إبلاغ عطل سيارة"),
+    imagePath: 'assets/images/vacation.png',
+    title: "عرض الإجازات",
+    subtitle: "اطلع على سجل الإجازات الخاصة بك",
+  ),
   TrainerServiceModel(
-      icon: Icons.car_rental_outlined, title: "عرض أعطال سيارات"),
+    imagePath: 'assets/images/test2.png',
+    title: "إنشاء امتحان",
+    subtitle: "قم بإعداد امتحان جديد للطلاب",
+  ),
+  TrainerServiceModel(
+    imagePath: 'assets/images/noun-exam-7921292.png',
+    title: "عرض الامتحانات",
+    subtitle: "راجع جميع الامتحانات السابقة",
+  ),
+  TrainerServiceModel(
+    imagePath: 'assets/images/breakdown2.png',
+    title: "إبلاغ عطل سيارة",
+    subtitle: "سجّل الأعطال التي تواجهها في السيارة",
+  ),
+  TrainerServiceModel(
+    imagePath: 'assets/images/breakdown4.png',
+    title: "عرض أعطال السيارات",
+    subtitle: "استعرض الأعطال المسجلة مسبقًا",
+  ),
 ];

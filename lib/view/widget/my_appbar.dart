@@ -14,7 +14,7 @@ class MyAppBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final NotificationsController controller =
-        Get.put(NotificationsController());
+        Get.find<NotificationsController>();
 
     return Container(
       padding: EdgeInsets.all(10.w),
@@ -46,20 +46,26 @@ class MyAppBar extends StatelessWidget {
                 return Stack(
                   clipBehavior: Clip.none,
                   children: [
-                    IconButton(
-                      icon: Icon(
-                        Icons.notifications,
-                        size: 28.sp,
-                        color: AppColors.primaryColor,
-                      ),
-                      onPressed: () {
+                    InkWell(
+                      borderRadius:
+                          BorderRadius.circular(20), 
+                      onTap: () {
                         Get.toNamed(AppRouts.notificationsScreen);
                       },
+                      child: Padding(
+                        padding:
+                            const EdgeInsets.all(8.0), 
+                        child: Icon(
+                          Icons.notifications_active_outlined,
+                          size: 28.sp,
+                          color: AppColors.primaryColor,
+                        ),
+                      ),
                     ),
                     if (unreadCount > 0)
                       Positioned(
-                        right: 4,
-                        top: 4,
+                        right: 0,
+                        top: 0,
                         child: Container(
                           padding: const EdgeInsets.all(4),
                           decoration: BoxDecoration(

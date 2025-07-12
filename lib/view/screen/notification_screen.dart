@@ -5,7 +5,7 @@ import 'package:intl/intl.dart';
 import 'package:driving_school/controller/notifications_controller.dart';
 
 class NotificationsScreen extends StatelessWidget {
-  final NotificationsController controller = Get.put(NotificationsController());
+  final NotificationsController controller = Get.find();
 
   NotificationsScreen({super.key});
 
@@ -53,9 +53,7 @@ class NotificationsScreen extends StatelessWidget {
                 margin: const EdgeInsets.only(bottom: 12),
                 padding: const EdgeInsets.all(12),
                 decoration: BoxDecoration(
-                  color: isRead
-                      ? Colors.grey.shade100
-                      : AppColors.primaryColor.withOpacity(0.08),
+                  color: isRead ? Colors.grey.shade100 : Colors.green.shade200,
                   borderRadius: BorderRadius.circular(14),
                   border: Border.all(
                     color:
@@ -137,8 +135,7 @@ class NotificationsScreen extends StatelessWidget {
                                   child: Text(
                                     "تمييز كمقروء",
                                     style: TextStyle(
-                                        color: AppColors.primaryColor,
-                                        fontSize: 12),
+                                        color: Colors.white, fontSize: 12),
                                   ),
                                 ),
                             ],

@@ -7,18 +7,23 @@ import 'package:driving_school/core/constant/app_api.dart';
 class NotificationsController extends GetxController {
   final Crud _crud = Crud();
   final AudioPlayer _audioPlayer = AudioPlayer();
-
+late Timer timer;
   var isLoading = true.obs;
   var notifications = <Map<String, dynamic>>[].obs;
 
-  @override
-  void onInit() {
-    super.onInit();
+ @override
+void onInit() {
+  super.onInit();
+  fetchNotifications();
+  timer = Timer.periodic(const Duration(seconds: 10), (timer) {
     fetchNotifications();
-    Timer.periodic(const Duration(seconds: 2), (timer) {
-      fetchNotifications();
-    });
-  }
+  });
+}
+  @override
+void onClose() {
+  timer.cancel();
+  super.onClose();
+}
 
   Future<void> fetchNotifications() async {
     final prevCount = notifications.where((n) => n['read_at'] == null).length;

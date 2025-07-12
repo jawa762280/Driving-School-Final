@@ -1,24 +1,49 @@
-import 'package:flutter/material.dart';
-
 class StudentServiceModel {
-  final IconData icon;
+  final String imagePath;
   final String title;
+  final String subtitle;
 
   StudentServiceModel({
-    required this.icon,
+    required this.imagePath,
     required this.title,
+    required this.subtitle,
   });
 }
 
 final List<StudentServiceModel> studentServices = [
-  StudentServiceModel(icon: Icons.edit_document, title: "اختبار نظري"),
   StudentServiceModel(
-    icon: Icons.real_estate_agent_sharp,
-    title: "عرض نتائجي",
+    imagePath: 'assets/images/exam.png',
+    title: "اختبار نظري",
+    subtitle: "ابدأ الاختبار النظري",
   ),
-  StudentServiceModel(icon: Icons.account_box, title: "حجز اوتوماتيكي"),
-  StudentServiceModel(icon: Icons.directions_car, title: "موعد اختبار عملي"),
-  StudentServiceModel(icon: Icons.phone_in_talk, title: "عرض المدونات"),
-  StudentServiceModel(icon: Icons.insert_drive_file_rounded, title: "طلب رخصة"),
-  StudentServiceModel(icon: Icons.file_copy_sharp, title: "رخصاتي"),
+  StudentServiceModel(
+    imagePath: 'assets/images/resulte.png',
+    title: "عرض نتائجي",
+    subtitle: "نتائجك في التدريب والاختبارات",
+  ),
+  StudentServiceModel(
+    imagePath: 'assets/images/booking.png',
+    title: "حجز اوتوماتيكي",
+    subtitle: "احجز مواعيدك بسهولة",
+  ),
+  StudentServiceModel(
+    imagePath: 'assets/images/noun-driving-testing-4647644.png',
+    title: "موعد اختبار عملي",
+    subtitle: "تحقق من مواعيدك العملية",
+  ),
+  StudentServiceModel(
+    imagePath: 'assets/images/noun-post-it-4192177.png',
+    title: "عرض المدونات",
+    subtitle: "اقرأ آخر المقالات",
+  ),
+  StudentServiceModel(
+    imagePath: 'assets/images/noun-license-7944334.png',
+    title: "طلب رخصة",
+    subtitle: "قدّم طلب رخصتك هنا",
+  ),
+  StudentServiceModel(
+    imagePath: 'assets/images/driver-license.png',
+    title: "رخصاتي",
+    subtitle: "استعرض رخصك الحالية",
+  ),
 ];
