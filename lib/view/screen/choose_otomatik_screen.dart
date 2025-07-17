@@ -31,7 +31,7 @@ class ChooseOtomatikScreen extends StatelessWidget {
                   padding:
                       EdgeInsets.symmetric(horizontal: 20.w, vertical: 20.h),
                   children: [
-                    buildSectionTitle("⏰ اختر وقت البداية"),
+                    buildSectionTitle("⏰ اختر الوقت"),
                     buildBox(
                       child: buildTimeButton(
                         controller.formatTime(controller.startTime.value),
@@ -40,7 +40,7 @@ class ChooseOtomatikScreen extends StatelessWidget {
                       ),
                     ),
                     SizedBox(height: 25.h),
-                    buildSectionTitle("📅 اختر تاريخ البداية"),
+                    buildSectionTitle("📅 اختر التاريخ "),
                     buildBox(
                       child: buildTimeButton(
                         controller.formatDate(controller.startDate.value),

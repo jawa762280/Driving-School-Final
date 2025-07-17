@@ -7,7 +7,10 @@ class AppImages {
   static const String iconApp = "$rootImage/Icon.png";
   static const String appPhoto = "$rootImage/App_photo.png";
   static const String defaultUser = "$rootImage/defaultUser.png";
-    static const String test = "$rootImage/test.png";
+  static const String test = "$rootImage/test.png";
   static const String exam = "$rootImage/exam.png";
+  static const String specialneedscar =
+      "$rootImage/noun-disabled-person-6241943.png";
 
+  static const String car = "$rootImage/noun-car-7644306.png";
 }

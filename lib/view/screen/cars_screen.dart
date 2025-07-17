@@ -15,13 +15,17 @@ class CarsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final controller = Get.put(CarsController());
-    final filter = Rx<CarFilter>(CarFilter.all); 
+    final filter = Rx<CarFilter>(CarFilter.all);
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text("السيارات المتوفرة"),
+        title: const Text(
+          "السيارات المتوفرة",
+          style: TextStyle(color: Colors.white),
+        ),
         centerTitle: true,
         backgroundColor: AppColors.primaryColor,
+        foregroundColor: Colors.white,
       ),
       body: Obx(() {
         if (controller.isLoading.value) {

@@ -90,43 +90,47 @@ class ContainerSearch extends StatelessWidget {
                   ],
                 ),
               ),
-              GestureDetector(
-                onTap: hasReview
-                    ? null
-                    : () {
-                        studentReviewDialog(context, trainerId);
-                      },
-                child: Container(
-                  padding:
-                      EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.h),
-                  decoration: BoxDecoration(
-                    color:
-                        hasReview ? Colors.grey.shade200 : Colors.green.shade50,
-                    borderRadius: BorderRadius.circular(12.r),
-                  ),
-                  child: Row(
-                    textDirection: TextDirection.ltr,
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Icon(
-                        Icons.star,
-                        color: hasReview ? Colors.grey : AppColors.primaryColor,
-                        size: 20.sp,
-                      ),
-                      SizedBox(width: 4.w),
-                      Text(
-                        hasReview ? 'تم التقييم' : 'تقييم',
-                        style: TextStyle(
-                          fontSize: 12.sp,
+              if (userRole == 'student')
+                GestureDetector(
+                  onTap: hasReview
+                      ? null
+                      : () {
+                          studentReviewDialog(context, trainerId);
+                        },
+                  child: Container(
+                    padding:
+                        EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.h),
+                    decoration: BoxDecoration(
+                      color: hasReview
+                          ? Colors.grey.shade200
+                          : Colors.green.shade50,
+                      borderRadius: BorderRadius.circular(12.r),
+                    ),
+                    child: Row(
+                      textDirection: TextDirection.ltr,
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(
+                          Icons.star,
                           color:
                               hasReview ? Colors.grey : AppColors.primaryColor,
-                          fontWeight: FontWeight.w500,
+                          size: 20.sp,
                         ),
-                      ),
-                    ],
+                        SizedBox(width: 4.w),
+                        Text(
+                          hasReview ? 'تم التقييم' : 'تقييم',
+                          style: TextStyle(
+                            fontSize: 12.sp,
+                            color: hasReview
+                                ? Colors.grey
+                                : AppColors.primaryColor,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
-              ),
             ],
           ),
           SizedBox(height: 14.h),

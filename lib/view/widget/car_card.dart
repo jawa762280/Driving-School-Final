@@ -1,5 +1,6 @@
 import 'package:driving_school/controller/booking_controller.dart';
 import 'package:driving_school/core/constant/appcolors.dart';
+import 'package:driving_school/core/constant/appimages.dart';
 import 'package:driving_school/data/model/car_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -48,12 +49,11 @@ class CarCard extends StatelessWidget {
                         width: 90.w,
                         height: 90.h,
                         color: Colors.grey.shade200,
-                        child: Icon(
+                        child: Image.asset(
                           car.isForSpecialNeeds
-                              ? Icons.accessible
-                              : Icons.directions_car,
-                          size: 48.sp,
-                          color: AppColors.primaryColor,
+                              ? AppImages.specialneedscar
+                              : AppImages.car,
+                          // color: AppColors.primaryColor,
                         ),
                       ),
               ),

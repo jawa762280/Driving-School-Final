@@ -23,7 +23,7 @@ class ShowCarFaults extends StatelessWidget {
                 icon: const Icon(Icons.refresh, color: Colors.white),
                 tooltip: 'تحديث',
                 onPressed: () {
-                  ctrl.showFaults();
+                  ctrl.fetchFaults();
                 },
               ),
             ],

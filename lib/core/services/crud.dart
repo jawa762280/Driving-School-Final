@@ -370,7 +370,7 @@ class Crud extends GetxController {
     });
   }
 
-  fileRequest(String url, Map<String, String> datas, File? file) async {
+  fileRequest(String url, Map<String, String> datas, File? file, String s) async {
     return await retryOnUnauthorized(() async {
       var request = http.MultipartRequest('POST', Uri.parse(url));
 

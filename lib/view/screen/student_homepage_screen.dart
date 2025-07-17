@@ -13,6 +13,7 @@ class StudentHomePageScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Get.put(StudentHomepageController());
+    
 
     return Directionality(
       textDirection: TextDirection.rtl,

@@ -1,3 +1,4 @@
+import 'package:driving_school/view/screen/map_page_screen.dart';
 import 'package:driving_school/view/widget/my_button.dart';
 import 'package:driving_school/view/widget/my_textformfield.dart';
 import 'package:flutter/material.dart';
@@ -7,10 +8,48 @@ import 'package:driving_school/controller/bookings_sessions_controller.dart';
 import 'package:driving_school/core/constant/appcolors.dart';
 
 class BookingsSessionsScreen extends StatelessWidget {
+
   const BookingsSessionsScreen({super.key});
+  Widget _buildRouteButton(Map<String, dynamic> session, BookingsSessionsController controller) {
+  final status = session['status'] ?? 'pending';
+  final route = session['route'] as Map<String, dynamic>?;
+  if (status == 'booked' && route == null) {
+    // مدرب لم يحدد المسار بعد
+    return TextButton.icon(
+      icon: Icon(Icons.edit_location, color: Colors.orange),
+      label: Text('تحديد مسار الجلسة', style: TextStyle(color: Colors.orange)),
+      onPressed: () async {
+        final ok = await Get.to<bool>(
+          () => MapPageScreen(bookingId: session['id']),
+        );
+        if (ok == true) controller.fetchSessions();
+      },
+    );
+  } else if (status == 'booked' && route != null) {
+    // المسار موجود مسبقاً
+    return IconButton(
+      icon: Icon(Icons.map, color: AppColors.primaryColor),
+      tooltip: 'عرض الخريطة',
+      onPressed: () {
+        Get.to(() => MapPageScreen(
+          bookingId: session['id'],
+          startLat: double.parse('${route['start_lat']}'),
+          startLng: double.parse('${route['start_lng']}'),
+          endLat:   double.parse('${route['end_lat']}'),
+          endLng:   double.parse('${route['end_lng']}'),
+        ));
+      },
+    );
+  }
+  return const SizedBox.shrink();
+}
+
+  
 
   @override
   Widget build(BuildContext context) {
+
+    
     return GetBuilder<BookingsSessionsController>(
         init: BookingsSessionsController(),
         builder: (controller) {
@@ -268,6 +307,17 @@ class BookingsSessionsScreen extends StatelessWidget {
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceBetween,
                                   children: [
+                                    if (status == 'booked')
+                                      IconButton( 
+                                        icon: Icon(Icons.map,
+                                            color: AppColors.primaryColor),
+                                        tooltip: 'عرض الخريطة',
+                                        onPressed: () {
+                                          Get.to(() => MapPageScreen(
+                                                bookingId: session['id'],
+                                              ));
+                                        },
+                                      ),
                                     // زر البدء (يمين)
                                     ElevatedButton.icon(
                                       style: ElevatedButton.styleFrom(
@@ -553,5 +603,3 @@ Widget buildBox(String text, int i) {
     ),
   );
 }
-
-

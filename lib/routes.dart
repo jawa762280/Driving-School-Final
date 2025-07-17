@@ -2,6 +2,8 @@ import 'package:driving_school/core/constant/approuts.dart';
 import 'package:driving_school/core/middleware/mymiddleware.dart';
 import 'package:driving_school/view/screen/bookings_sessions_screen.dart';
 import 'package:driving_school/view/screen/cars_screen.dart';
+import 'package:driving_school/view/screen/chat_people_screen.dart';
+import 'package:driving_school/view/screen/chat_screen.dart';
 import 'package:driving_school/view/screen/choose_otomatik_screen.dart';
 import 'package:driving_school/view/screen/create_car_fault_screen.dart';
 import 'package:driving_school/view/screen/exam_creation_screen.dart';
@@ -179,5 +181,13 @@ List<GetPage<dynamic>> routes = [
   GetPage(
     name: AppRouts.notificationsScreen,
     page: () => NotificationsScreen(),
+  ),
+  GetPage(
+    name: AppRouts.chatPeopleScreen,
+    page: () => ChatPeopleScreen(),
+  ),
+  GetPage(
+    name: AppRouts.chatScreen,
+    page: () => ChatScreen(),
   ),
 ];

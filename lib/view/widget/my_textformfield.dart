@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class MyTextformfield extends StatelessWidget {
-  const MyTextformfield({
+  final FocusNode _focusNode = FocusNode();
+
+  MyTextformfield({
     super.key,
     this.mycontroller,
     this.keyboardType,
@@ -38,13 +40,18 @@ class MyTextformfield extends StatelessWidget {
   Widget build(BuildContext context) {
     return TextFormField(
       maxLines: maxLines ?? 1,
-      initialValue: value,
+      focusNode: _focusNode,
+
+      // initialValue: value,
       onTap: onTapTextField,
       obscureText: obscureText == null || obscureText == false ? false : true,
       validator: valid,
       controller: mycontroller,
       onTapOutside: (event) {
-        FocusManager.instance.primaryFocus!.unfocus();
+        final f = FocusManager.instance.primaryFocus;
+        if (f != null && f.context != null) {
+          f.unfocus();
+        }
       },
       keyboardType: keyboardType,
       readOnly: readOnly,

@@ -20,7 +20,7 @@ class TrainerServices extends StatelessWidget {
           colors: [
             Colors.white,
             AppColors.primaryColor.withAlpha((255 * 0.01).toInt()),
-          ],
+          ],  
         ),
       ),
       child: Column(

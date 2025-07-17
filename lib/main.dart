@@ -72,7 +72,6 @@ void main() async {
   await initialServices();
   await initializeDateFormatting('ar');
   Get.put(GenerateExamController(), permanent: true);
-  Get.put(NotificationsController());
 
   runApp(const MyApp());
 }

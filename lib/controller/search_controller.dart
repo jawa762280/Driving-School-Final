@@ -31,6 +31,8 @@ class MySearchController extends GetxController {
   }
 
   Future<void> fetchInstructors({String query = ''}) async {
+    isLoading.value = true;
+
     try {
       final response = await crud.getRequest(
         '${AppLinks.searchTrainers}?first_name=$query',
@@ -52,6 +54,8 @@ class MySearchController extends GetxController {
       }
     } catch (e) {
       Get.snackbar("خطأ", "تعذر الاتصال بالخادم");
+    } finally {
+      isLoading.value = false;
     }
   }
 
@@ -72,7 +76,8 @@ class MySearchController extends GetxController {
       bool hasReview = false;
 
       if (response != null && response['data'] is List) {
-List<Map<String, dynamic>> flatReviews = extractReviews(response['data']);
+        List<Map<String, dynamic>> flatReviews =
+            extractReviews(response['data']);
 
         for (var item in response['data']) {
           if (item is Map<String, dynamic>) {
@@ -126,119 +131,119 @@ List<Map<String, dynamic>> flatReviews = extractReviews(response['data']);
     update();
   }
 
- sendFeedbackStudent(int trainerId) async {
-  isLoading.value = true;
-  try {
-    var response = await crud.postRequest(AppLinks.trainerReviews, {
-      'trainer_id': trainerId,
-      'comment': comment.text,
-      'rating': rating,
-    });
+  sendFeedbackStudent(int trainerId) async {
+    isLoading.value = true;
+    try {
+      var response = await crud.postRequest(AppLinks.trainerReviews, {
+        'trainer_id': trainerId,
+        'comment': comment.text,
+        'rating': rating,
+      });
 
-    print('MyResponse $response');
+      print('MyResponse $response');
 
-    if (response['status'] == true) {
-      await updateTrainerReview(trainerId);
+      if (response['status'] == true) {
+        await updateTrainerReview(trainerId);
 
-      Get.snackbar(
-        "تم التقييم بنجاح",
-        "شكراً لك على تقييمك للمدرب.",
-        colorText: Colors.black,
-        duration: Duration(seconds: 2),
-      );
+        Get.snackbar(
+          "تم التقييم بنجاح",
+          "شكراً لك على تقييمك للمدرب.",
+          colorText: Colors.black,
+          duration: Duration(seconds: 2),
+        );
 
-      Get.back(); 
+        Get.back();
 
-      // إعادة تعيين الحقول (اختياري)
-      comment.clear();
-      rating = 3;
+        // إعادة تعيين الحقول (اختياري)
+        comment.clear();
+        rating = 3;
+        update();
+      } else {
+        Get.snackbar(
+          "تنبيه",
+          "لا يمكنك تقييم هذا المدرب لأنك لم تكمل جلسة تدريبية معه.",
+          colorText: Colors.black,
+          snackPosition: SnackPosition.TOP,
+        );
+      }
+    } catch (e) {
+      Get.snackbar("خطأ", "حدث خطأ أثناء إرسال التقييم");
+    } finally {
+      isLoading.value = false;
       update();
-    } else {
-      Get.snackbar(
-        "تنبيه",
-        "لا يمكنك تقييم هذا المدرب لأنك لم تكمل جلسة تدريبية معه.",
-        colorText: Colors.black,
-        snackPosition: SnackPosition.TOP,
-      );
     }
-  } catch (e) {
-    Get.snackbar("خطأ", "حدث خطأ أثناء إرسال التقييم");
-  } finally {
-    isLoading.value = false;
-    update();
   }
-}
-
 
   Future<void> updateTrainerReview(int trainerId) async {
-  int index = filteredInstructors.indexWhere((e) => e['trainer_id'] == trainerId);
-  if (index == -1) return;
+    int index =
+        filteredInstructors.indexWhere((e) => e['trainer_id'] == trainerId);
+    if (index == -1) return;
 
-  final response = await crud.getRequest(
-    '${AppLinks.init}/trainer/$trainerId/reviews',
-  );
+    final response = await crud.getRequest(
+      '${AppLinks.init}/trainer/$trainerId/reviews',
+    );
 
-  double totalRating = 0;
-  int ratingCount = 0;
-  bool hasReview = false;
-List<Map<String, dynamic>> flatReviews = extractReviews(response['data']);
+    double totalRating = 0;
+    int ratingCount = 0;
+    bool hasReview = false;
+    List<Map<String, dynamic>> flatReviews = extractReviews(response['data']);
 
-  if (response != null && response['data'] is List) {
-    for (var item in response['data']) {
-      if (item is Map<String, dynamic>) {
-        flatReviews.add(item);
-      } else if (item is List) {
-        for (var subItem in item) {
-          if (subItem is Map<String, dynamic>) {
-            flatReviews.add(subItem);
+    if (response != null && response['data'] is List) {
+      for (var item in response['data']) {
+        if (item is Map<String, dynamic>) {
+          flatReviews.add(item);
+        } else if (item is List) {
+          for (var subItem in item) {
+            if (subItem is Map<String, dynamic>) {
+              flatReviews.add(subItem);
+            }
+          }
+        }
+      }
+
+      for (var review in flatReviews) {
+        if (review['rating'] != null) {
+          totalRating += double.tryParse(review['rating'].toString()) ?? 0;
+          ratingCount++;
+
+          if (review['student_id'].toString() == studentId.toString()) {
+            hasReview = true;
           }
         }
       }
     }
 
-    for (var review in flatReviews) {
-      if (review['rating'] != null) {
-        totalRating += double.tryParse(review['rating'].toString()) ?? 0;
-        ratingCount++;
+    double avgRating = ratingCount > 0 ? totalRating / ratingCount : 0;
 
-        if (review['student_id'].toString() == studentId.toString()) {
-          hasReview = true;
-        }
-      }
-    }
+    filteredInstructors[index] = {
+      ...filteredInstructors[index],
+      'reviews': flatReviews,
+      'avg_rating': avgRating,
+      'has_review': hasReview,
+    };
+
+    update();
   }
 
-  double avgRating = ratingCount > 0 ? totalRating / ratingCount : 0;
+  List<Map<String, dynamic>> extractReviews(dynamic rawData) {
+    List<Map<String, dynamic>> reviews = [];
 
-  filteredInstructors[index] = {
-    ...filteredInstructors[index],
-    'reviews': flatReviews,
-    'avg_rating': avgRating,
-    'has_review': hasReview,
-  };
-
-  update();
-}
-List<Map<String, dynamic>> extractReviews(dynamic rawData) {
-  List<Map<String, dynamic>> reviews = [];
-
-  if (rawData is List) {
-    for (var item in rawData) {
-      if (item is Map<String, dynamic>) {
-        reviews.add(item);
-      } else if (item is List) {
-        for (var subItem in item) {
-          if (subItem is Map<String, dynamic>) {
-            reviews.add(subItem);
+    if (rawData is List) {
+      for (var item in rawData) {
+        if (item is Map<String, dynamic>) {
+          reviews.add(item);
+        } else if (item is List) {
+          for (var subItem in item) {
+            if (subItem is Map<String, dynamic>) {
+              reviews.add(subItem);
+            }
           }
         }
       }
+    } else if (rawData is Map<String, dynamic>) {
+      reviews.add(rawData);
     }
-  } else if (rawData is Map<String, dynamic>) {
-    reviews.add(rawData);
+
+    return reviews;
   }
-
-  return reviews;
-}
-
 }

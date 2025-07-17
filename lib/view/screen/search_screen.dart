@@ -13,6 +13,8 @@ class SearchScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final MySearchController controller = Get.put(MySearchController());
+    controller.fetchInstructors(); // ✅ إضافة هذا السطر لحل المشكلة
+
     return Directionality(
       textDirection: TextDirection.rtl,
       child: Scaffold(
@@ -40,50 +42,58 @@ class SearchScreen extends StatelessWidget {
                   },
                 ),
                 SizedBox(height: 30.h),
-                Expanded(
-                    child: Obx(() => RefreshIndicator(
-                        onRefresh: () async {
-                          await controller.fetchInstructors();
-                        },
-                        child: ListView.builder(
-                          itemCount: controller.filteredInstructors.length,
-                          itemBuilder: (context, index) {
-                            final instructor =
-                                controller.filteredInstructors[index];
-                            final double avgRating =
-                                instructor['avg_rating'] ?? 0;
+                Expanded(child: Obx(() {
+                  if (controller.isLoading.value) {
+                    return Center(
+                        child: CircularProgressIndicator(
+                      color: Colors.green,
+                    ));
+                  }
 
-                            return Column(
-                              children: [
-                                ContainerSearch(
-                                  image: instructor['image'] ?? '',
-                                  name:
-                                      '${instructor['first_name']} ${instructor['last_name']}',
-                                  email: instructor['email'] ?? '',
-                                  trainerId: instructor['trainer_id'],
-                                  userRole: controller.currentUserRole.value,
-                                  hasReview: instructor['has_review'] ?? false,
-                                  reviews: Row(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    children: [
-                                      ...List.generate(5, (starIndex) {
-                                        return Icon(
-                                          starIndex < avgRating.round()
-                                              ? Icons.star
-                                              : Icons.star_border,
-                                          color: Colors.amber,
-                                          size: 20,
-                                        );
-                                      }),
-                                      SizedBox(width: 6),
-                                    ],
-                                  ),
+                  return RefreshIndicator(
+                      onRefresh: () async {
+                        await controller.fetchInstructors();
+                      },
+                      child: ListView.builder(
+                        itemCount: controller.filteredInstructors.length,
+                        itemBuilder: (context, index) {
+                          final instructor =
+                              controller.filteredInstructors[index];
+                          final double avgRating =
+                              instructor['avg_rating'] ?? 0;
+
+                          return Column(
+                            children: [
+                              ContainerSearch(
+                                image: instructor['image'] ?? '',
+                                name:
+                                    '${instructor['first_name']} ${instructor['last_name']}',
+                                email: instructor['email'] ?? '',
+                                trainerId: instructor['trainer_id'],
+                                userRole: controller.currentUserRole.value,
+                                hasReview: instructor['has_review'] ?? false,
+                                reviews: Row(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: [
+                                    ...List.generate(5, (starIndex) {
+                                      return Icon(
+                                        starIndex < avgRating.round()
+                                            ? Icons.star
+                                            : Icons.star_border,
+                                        color: Colors.amber,
+                                        size: 20,
+                                      );
+                                    }),
+                                    SizedBox(width: 6),
+                                  ],
                                 ),
-                                SizedBox(height: 5),
-                              ],
-                            );
-                          },
-                        ))))
+                              ),
+                              SizedBox(height: 5),
+                            ],
+                          );
+                        },
+                      ));
+                }))
               ],
             ),
           ),

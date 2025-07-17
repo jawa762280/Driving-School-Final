@@ -37,5 +37,7 @@ class AppRouts {
   static const String licenseDetails = "/license_documents_screen";
   static const String showPostsScreen = "/show_posts_screen";
   static const String practicalExamScreen = "/practical_exam_screen";
-  static const String notificationsScreen = "/notifications_controller";
+  static const String notificationsScreen = "/notification_screen";
+  static const String chatPeopleScreen = "/chat_people_screen";
+  static const String chatScreen = "/chat_screen";
 }

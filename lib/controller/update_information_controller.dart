@@ -107,11 +107,7 @@ class UpdateInformationController extends GetxController {
         : '${AppLinks.updateInformation}/${data.read('user')[data.read('role').toString()]['id']}';
     isLoading.value = true;
     update();
-    var response = await crud.fileRequest(
-      apiLink,
-      datas,
-      imageFile,
-    );
+    var response = await crud.fileRequest(apiLink, datas, imageFile, 'image');
     isLoading.value = false;
     update();
     if (response['status'] == 'success') {

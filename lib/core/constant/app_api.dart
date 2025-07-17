@@ -1,7 +1,7 @@
 class AppLinks {
   static const String init = 'http://192.168.1.107:8000/api';
   // static const String init = 'http://127.0.0.1:8000/api';
-  // static const String init = 'http://192.168.75.83:8000/api';
+  // static const String init = 'http://192.168.124.83:8000/api';
 
   static const String login = '$init/login';
   static const String signUpStudent = '$init/student/register';
@@ -59,4 +59,13 @@ class AppLinks {
   static const String downloadUrl = "$init/certificate/download";
   static const String practicalExamMy = "$init/practical-exams/my";
   static const String notifications = "$init/notifications";
+  static const String sendMessages = "$init/chat/send";
+  static const String chatMessages = "$init/chat/messages";
+  static const String chatConversations = "$init/chat/conversations";
+  static const String markMessageRead = "$init/messages/read";
+  static const unreadCount = '$init/unread-count';
+  static const unreadCountByConversation =
+      '$init/unread-count-by-conversation';
+        static const defineRoute = '$init/bookings';
+
 }
