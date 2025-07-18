@@ -1,3 +1,4 @@
+import 'package:driving_school/controller/chat_people_controller.dart';
 import 'package:driving_school/controller/generate_exam_controller.dart';
 import 'package:driving_school/controller/notifications_controller.dart';
 import 'package:driving_school/core/services/services.dart';
@@ -72,6 +73,7 @@ void main() async {
   await initialServices();
   await initializeDateFormatting('ar');
   Get.put(GenerateExamController(), permanent: true);
+
 
   runApp(const MyApp());
 }

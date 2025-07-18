@@ -106,7 +106,7 @@ class ChatScreen extends StatelessWidget {
                                     ),
                                   ),
 
-                                  // مسافة صغيرة
+                                  // مسافة صغيرة  
                                   const SizedBox(height: 4),
 
                                   // توقيت الرسالة بخط صغير

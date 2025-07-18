@@ -8,10 +8,11 @@ import 'package:driving_school/main.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:file_picker/file_picker.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:pusher_channels_flutter/pusher_channels_flutter.dart';
 
 import '../../core/services/crud.dart';
-
+  
 class ChatController extends GetxController {
   final Crud crud = Crud();
 
@@ -145,19 +146,14 @@ class ChatController extends GetxController {
   }
 
   Future<void> _loadHistory() async {
-    // 1) احفظ عدد الرسائل قبل التحديث
     final prevLen = chatMessages.length;
-
-    // 2) جلب المحادثة من السيرفر
-    final url = '${AppLinks.chatMessages}/$conversationId';
-    final resp = await crud.getRequest(url);
+    final resp =
+        await crud.getRequest('${AppLinks.chatMessages}/$conversationId');
 
     if (resp['data'] != null) {
-      // 3) حدّث القائمة
       chatMessages = List<Map<String, dynamic>>.from(resp['data']);
       update();
 
-      // 4) علّم الرسائل مقروءة مرة واحدة فقط (أول تحميل)
       if (!_firstLoadDone) {
         final myId = data.read('user')['id'].toString();
         for (var msg in chatMessages) {
@@ -168,12 +164,21 @@ class ChatController extends GetxController {
           }
         }
         update();
+
+        // **هنا نحدّث قائمة المحادثات وعدد ال unread badges **
+        if (Get.isRegistered<ChatPeopleController>()) {
+          final pplCtl = Get.find<ChatPeopleController>();
+          pplCtl.markConversationRead(conversationId!);
+
+          await pplCtl.fetchTotalUnread();
+          await pplCtl.fetchUnreadByConversation();
+        }
+
+        _firstLoadDone = true;
       }
 
-      // 5) سكّروول أوتوماتيكي عند أول تحميل أو عند وصول رسائل جديدة
       if (!_firstLoadDone || chatMessages.length > prevLen) {
         scrollToBottom();
-        _firstLoadDone = true;
       }
     }
   }
@@ -237,12 +242,54 @@ class ChatController extends GetxController {
     }
   }
 
-  Future<void> openFiles() async {
-    final result = await FilePicker.platform.pickFiles();
-    if (result != null) {
-      file = File(result.files.single.path!);
-      await sendMessage();
+  Future<void> sendFileMessage() async {
+    final result = await FilePicker.platform.pickFiles(
+      type: FileType.custom,
+      allowedExtensions: ['png', 'jpg', 'jpeg', 'pdf'],
+    );
+    if (result == null) return;
+
+    final file = XFile(result.files.single.path!);
+    isSending.value = true;
+    update();
+
+    try {
+      final resp = await crud.multiFileRequestMoreImagePath(
+        AppLinks.sendMessages, // endpoint رفع الرسالة
+        {'receiver_id': toID!}, // الحقول الإضافية
+        [file], // قائمة الملفات
+        ['file'], // **اسم الحقل في الـ form-data**
+      );
+
+      if (resp != null && resp['data'] != null) {
+        final msg = resp['data'];
+        chatMessages.add({
+          'id': msg['id'],
+          'sender_id': data.read('user')['id'],
+          'content': msg['content'] ?? '',
+          'file_url': msg['file_url'],
+          'created_at': msg['created_at'],
+          'is_me': true,
+          'is_read': true,
+          'type': 'file',
+        });
+        scrollToBottom();
+      }
+    } finally {
+      isSending.value = false;
+      update();
     }
+  }
+
+  Future<void> openFiles() async {
+    final result = await FilePicker.platform.pickFiles(
+      type: FileType.custom,
+      allowedExtensions: ['png', 'jpg', 'jpeg', 'pdf'],
+    );
+    if (result == null) return;
+
+    file = File(result.files.single.path!);
+    await sendFileMessage();
   }
 
   void scrollToBottom() {
