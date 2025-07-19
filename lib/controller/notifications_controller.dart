@@ -19,9 +19,9 @@ class NotificationsController extends GetxController {
     // أول جلب
     fetchNotifications();
     // وشغل polling كل 30 ثانية
-    timer = Timer.periodic(const Duration(seconds: 30), (_) {
-      fetchNotifications();
-    });
+    // timer = Timer.periodic(const Duration(seconds: 30), (_) {
+    //   fetchNotifications();
+    // });
   }
 
   @override

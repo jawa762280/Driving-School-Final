@@ -108,7 +108,6 @@ class ProfileScreen extends StatelessWidget {
                       Icons.info_outline,
                       'معلومات عنا ',
                       onTap: () {
-                         Get.toNamed(AppRouts.chatPeopleScreen);
 
                       },
                     ),

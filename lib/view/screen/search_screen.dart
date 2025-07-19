@@ -70,6 +70,8 @@ class SearchScreen extends StatelessWidget {
                                     '${instructor['first_name']} ${instructor['last_name']}',
                                 email: instructor['email'] ?? '',
                                 trainerId: instructor['trainer_id'],
+                                userId: instructor['user_id'], // ← هنا
+
                                 userRole: controller.currentUserRole.value,
                                 hasReview: instructor['has_review'] ?? false,
                                 reviews: Row(
@@ -87,6 +89,7 @@ class SearchScreen extends StatelessWidget {
                                     SizedBox(width: 6),
                                   ],
                                 ),
+                                
                               ),
                               SizedBox(height: 5),
                             ],

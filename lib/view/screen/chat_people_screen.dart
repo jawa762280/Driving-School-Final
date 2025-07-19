@@ -15,65 +15,64 @@ class ChatPeopleScreen extends StatelessWidget {
       init: ChatPeopleController(),
       builder: (ctl) {
         return Scaffold(
-         appBar: AppBar(
-  backgroundColor: AppColors.primaryColor,
-  foregroundColor: Colors.white,
-  title: Row(
-    children: [
-      const Text(
-        "المحادثات",
-        style: TextStyle(fontWeight: FontWeight.bold),
-      ),
-      const Spacer(),
-      // هنا الحقل الجديد
-      Obx(() {
-        final total = ctl.totalUnread.value;
-        return Padding(
-          padding: const EdgeInsets.only(right: 8),
-          child: Stack(
-            clipBehavior: Clip.none,
-            children: [
-              Icon(Icons.message, size: 28, color: Colors.white),
-              if (total > 0)
-                Positioned(
-                  right: -4,
-                  top: -4,
-                  child: Container(
-                    padding: const EdgeInsets.all(2),
-                    decoration: const BoxDecoration(
-                      color: Colors.red,
-                      shape: BoxShape.circle,
-                    ),
-                    constraints: const BoxConstraints(
-                      minWidth: 16,
-                      minHeight: 16,
-                    ),
-                    child: Text(
-                      '$total',
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 10,
-                      ),
-                      textAlign: TextAlign.center,
-                    ),
-                  ),
+          appBar: AppBar(
+            backgroundColor: AppColors.primaryColor,
+            foregroundColor: Colors.white,
+            title: Row(
+              children: [
+                const Text(
+                  "المحادثات",
+                  style: TextStyle(fontWeight: FontWeight.bold),
                 ),
-            ],
+                const Spacer(),
+                // هنا الحقل الجديد
+                Obx(() {
+                  final total = ctl.totalUnread.value;
+                  return Padding(
+                    padding: const EdgeInsets.only(right: 8),
+                    child: Stack(
+                      clipBehavior: Clip.none,
+                      children: [
+                        Icon(Icons.message, size: 28, color: Colors.white),
+                        if (total > 0)
+                          Positioned(
+                            right: -4,
+                            top: -4,
+                            child: Container(
+                              padding: const EdgeInsets.all(2),
+                              decoration: const BoxDecoration(
+                                color: Colors.red,
+                                shape: BoxShape.circle,
+                              ),
+                              constraints: const BoxConstraints(
+                                minWidth: 16,
+                                minHeight: 16,
+                              ),
+                              child: Text(
+                                '$total',
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 10,
+                                ),
+                                textAlign: TextAlign.center,
+                              ),
+                            ),
+                          ),
+                      ],
+                    ),
+                  );
+                }),
+                IconButton(
+                  icon: const Icon(Icons.refresh),
+                  tooltip: 'تحديث',
+                  onPressed: () async {
+                    await ctl.fetchTotalUnread();
+                    await ctl.getPeoples();
+                  },
+                ),
+              ],
+            ),
           ),
-        );
-      }),
-      IconButton(
-        icon: const Icon(Icons.refresh),
-        tooltip: 'تحديث',
-        onPressed: () async {
-          await ctl.fetchTotalUnread();
-          await ctl.getPeoples();
-        },
-      ),
-    ],
-  ),
-),
-
           body: Column(
             children: [
               // شريط البحث
@@ -98,7 +97,7 @@ class ChatPeopleScreen extends StatelessWidget {
 
               // قائمة المحادثات
               Expanded(
-                child: ctl.isLoading
+                child: ctl.isLoading.value
                     ? const Center(
                         child: CircularProgressIndicator(
                         color: Colors.green,
@@ -119,6 +118,7 @@ class ChatPeopleScreen extends StatelessWidget {
                               final unread = ctl.unreadCount(chat);
 
                               return ListTile(
+                                dense: true,
                                 onTap: () {
                                   final pplCtl =
                                       Get.find<ChatPeopleController>();
@@ -132,6 +132,8 @@ class ChatPeopleScreen extends StatelessWidget {
                                     await pplCtl.fetchTotalUnread();
                                     await pplCtl.fetchUnreadByConversation();
                                     pplCtl.markConversationRead(chat['id']);
+                                          await pplCtl.resubscribeChannels();
+
 
                                     // (هنا ليس ضرورياً مناداة update() لأن داخل fetchUnreadByConversation فعلنا update())
                                   });
@@ -172,38 +174,43 @@ class ChatPeopleScreen extends StatelessWidget {
                                   maxLines: 1,
                                   overflow: TextOverflow.ellipsis,
                                 ),
-                                trailing: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    if (ctl.isLastMessageMine(chat)) ...[
-                                      Icon(Icons.done,
-                                          size: 20,
-                                          color: AppColors.primaryColor),
-                                      const SizedBox(height: 4),
+                                trailing: FittedBox(
+                                  fit: BoxFit.scaleDown,
+                                  alignment: Alignment.center,
+                                  child: Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      if (ctl.isLastMessageMine(chat)) ...[
+                                        Icon(Icons.done,
+                                            size: 20,
+                                            color: AppColors.primaryColor),
+                                        const SizedBox(height: 4),
+                                      ],
+                                      Text(
+                                        ctl.formatTime(
+                                            ctl.getLastMessageTime(chat)),
+                                        style: TextStyle(
+                                            fontSize: 12,
+                                            color: Colors.grey.shade600),
+                                      ),
+                                      if (unread > 0)
+                                        Container(
+                                          margin: const EdgeInsets.only(top: 4),
+                                          padding: const EdgeInsets.all(6),
+                                          decoration: BoxDecoration(
+                                            color: AppColors.primaryColor,
+                                            shape: BoxShape.circle,
+                                          ),
+                                          child: Text(
+                                            unread.toString(),
+                                            style: const TextStyle(
+                                                color: Colors.white,
+                                                fontSize: 13),
+                                          ),
+                                        )
                                     ],
-                                    Text(
-                                      ctl.formatTime(
-                                          ctl.getLastMessageTime(chat)),
-                                      style: TextStyle(
-                                          fontSize: 12,
-                                          color: Colors.grey.shade600),
-                                    ),
-                                    if (unread > 0)
-                                      Container(
-                                        margin: const EdgeInsets.only(top: 4),
-                                        padding: const EdgeInsets.all(6),
-                                        decoration: BoxDecoration(
-                                          color: AppColors.primaryColor,
-                                          shape: BoxShape.circle,
-                                        ),
-                                        child: Text(
-                                          unread.toString(),
-                                          style: const TextStyle(
-                                              color: Colors.white,
-                                              fontSize: 12),
-                                        ),
-                                      )
-                                  ],
+                                  ),
                                 ),
                               );
                             },

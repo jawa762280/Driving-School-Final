@@ -1,4 +1,5 @@
 import 'package:driving_school/core/constant/app_api.dart';
+import 'package:driving_school/core/constant/approuts.dart';
 import 'package:driving_school/core/services/crud.dart';
 import 'package:driving_school/main.dart';
 import 'package:flutter/material.dart';
@@ -29,6 +30,36 @@ class MySearchController extends GetxController {
 
     fetchInstructors();
   }
+ // في search_controller.dart
+Future<void> openChat(int otherUserId, String otherName) async {
+  final myId = data.read('user')['id'] as int;
+
+  // 1) جلب كل المحادثات
+  final resp = await crud.getRequest(AppLinks.chatConversations);
+  int? convId;
+  if (resp['data'] != null) {
+    for (var c in (resp['data'] as List)) {
+      final sid = c['sender_id'] as int;
+      final rid = c['receiver_id'] as int;
+      if ((sid == myId && rid == otherUserId) ||
+          (sid == otherUserId && rid == myId)) {
+        convId = c['id'] as int;
+        break;
+      }
+    }
+  }
+
+  // 2) انتقل إلى شاشة الدردشة مع conversation_id (قد يكون null)
+  Get.toNamed(
+    AppRouts.chatScreen,
+    arguments: {
+      'conversation_id': convId,           // إذا null: ستُنشأ عند أول رسالة
+      'to_id': otherUserId.toString(),
+      'name': otherName,
+    },
+  );
+}
+
 
   Future<void> fetchInstructors({String query = ''}) async {
     isLoading.value = true;

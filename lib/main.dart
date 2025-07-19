@@ -1,6 +1,7 @@
+import 'package:driving_school/controller/chat_controller.dart';
 import 'package:driving_school/controller/chat_people_controller.dart';
 import 'package:driving_school/controller/generate_exam_controller.dart';
-import 'package:driving_school/controller/notifications_controller.dart';
+import 'package:driving_school/core/services/pusher_service.dart';
 import 'package:driving_school/core/services/services.dart';
 import 'package:driving_school/routes.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -10,7 +11,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'firebase_options.dart'; 
+import 'firebase_options.dart';
 
 Future<void> initialServices() async {
   await Get.putAsync(() async => await MyServices().init());
@@ -29,6 +30,7 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await Get.putAsync(() => PusherService().init());
 
   // ✅ تهيئة Firebase
   await Firebase.initializeApp(
@@ -72,8 +74,8 @@ void main() async {
   // ✅ تحميل الخدمات والتهيئة العامة
   await initialServices();
   await initializeDateFormatting('ar');
-  Get.put(GenerateExamController(), permanent: true);
 
+  Get.put(GenerateExamController(), permanent: true);
 
   runApp(const MyApp());
 }

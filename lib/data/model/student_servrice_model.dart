@@ -46,4 +46,9 @@ final List<StudentServiceModel> studentServices = [
     title: "رخصاتي",
     subtitle: "استعرض رخصك الحالية",
   ),
+  StudentServiceModel(
+  imagePath: 'assets/images/noun-chat-7772420.png',
+  title: "قائمة المحادثات",
+  subtitle: "استعرض المحادثات السابقة والحالية",
+),
 ];

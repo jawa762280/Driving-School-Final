@@ -171,6 +171,7 @@ class BookingsSessionsController extends GetxController {
     }
   }
 
+
  Future<void> fetchRouteForBooking(int bookingId, {
   required double startLat,
   required double startLng,

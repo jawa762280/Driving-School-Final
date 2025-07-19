@@ -8,15 +8,10 @@ import 'package:driving_school/controller/bookings_sessions_controller.dart';
 import 'package:driving_school/core/constant/appcolors.dart';
 
 class BookingsSessionsScreen extends StatelessWidget {
-
   const BookingsSessionsScreen({super.key});
-
-  
 
   @override
   Widget build(BuildContext context) {
-
-    
     return GetBuilder<BookingsSessionsController>(
         init: BookingsSessionsController(),
         builder: (controller) {
@@ -275,7 +270,7 @@ class BookingsSessionsScreen extends StatelessWidget {
                                       MainAxisAlignment.spaceBetween,
                                   children: [
                                     if (status == 'booked')
-                                      IconButton( 
+                                      IconButton(
                                         icon: Icon(Icons.map,
                                             color: AppColors.primaryColor),
                                         tooltip: 'عرض الخريطة',

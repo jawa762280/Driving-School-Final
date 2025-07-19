@@ -1,208 +1,117 @@
-import 'dart:async';
+// lib/controller/chat_controller.dart
+
 import 'dart:convert';
-import 'dart:io';
-import 'package:crypto/crypto.dart';
-import 'package:driving_school/controller/chat_people_controller.dart';
-import 'package:driving_school/core/constant/app_api.dart';
 import 'package:driving_school/main.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:pusher_channels_flutter/pusher_channels_flutter.dart';
+import '../core/services/crud.dart';
+import '../core/services/pusher_service.dart';
+import '../core/constant/app_api.dart';
+import 'chat_people_controller.dart';
 
-import '../../core/services/crud.dart';
-  
 class ChatController extends GetxController {
   final Crud crud = Crud();
-
+  final PusherService _pusher = Get.find<PusherService>();
+  double bottomMargin = 50;
   var isSending = false.obs;
   bool _firstLoadDone = false;
-  late PusherChannelsFlutter pusher;
-
   List<Map<String, dynamic>> chatMessages = [];
-  TextEditingController textController = TextEditingController();
-  ScrollController scrollController = ScrollController();
+  final textController = TextEditingController();
+  final scrollController = ScrollController();
 
   String? toID;
   String? name;
   int? conversationId;
 
-  bool chatLoading = false;
-  File? file;
-  double bottomMargin = 50;
-
-  @override
-  void onInit() {
-    super.onInit();
-
-    // 1) استقبل args من الواجهة
-    toID = Get.arguments['to_id']?.toString();
-    name = Get.arguments['name']?.toString();
-    conversationId =
-        int.tryParse(Get.arguments['conversation_id']?.toString() ?? '');
-    if (conversationId == null) {
-      throw Exception('conversation_id missing!');
-    }
-    _firstLoadDone = false;
-
-    // 2) جلب السجل التاريخي أولاً
-    _loadHistory().then((_) => scrollToBottom());
-    initPusher();
-  }
-
-  Future<void> initPusher() async {
-    pusher = PusherChannelsFlutter.getInstance();
-
-    await pusher.init(
-      apiKey: "b86e117cb7e9945a345b",
-      cluster: "eu",
-      onAuthorizer: _onAuthorizer,
-      onConnectionStateChange: (current, previous) {
-        print("🔌 Pusher: $previous ➡ $current");
-      },
-      onSubscriptionSucceeded: (channelName, _) {
-        print("✅ Subscribed to $channelName");
-      },
-      onError: (message, code, e) {
-        print("❌ Pusher Error: $message");
-      },
-      onEvent: (PusherEvent event) {
-        if (event.eventName != 'App\\Events\\MessageSent') return;
-
-        final decoded = jsonDecode(event.data ?? '{}');
-        final msg = decoded['message'] ?? decoded;
-        data.read('user')['id'].toString();
-        final msgId = msg['id'];
-
-        // **هنا الشرط الجديد**: إذا الرسالة من عندي، ما نضيفها
-        final exists = chatMessages.any((m) => m['id'] == msgId);
-        if (exists) return;
-        chatMessages.add({
-          'id': msg['id'],
-          'sender_id': msg['sender_id']?.toString() ?? toID,
-          'content': msg['content'],
-          'created_at': msg['created_at'] ?? DateTime.now().toIso8601String(),
-          'is_me': false,
-          'is_read': true,
-        });
-
-        update();
-        scrollToBottom();
-      },
-    );
-
-    final channelName = 'private-chat.$conversationId';
-    await pusher.subscribe(channelName: channelName);
-    await pusher.connect();
-  }
-
-  @override
-  void onClose() {
-    pusher.disconnect();
-    super.onClose();
-  }
-
-  /// يُرجع digest على شكل نصّ من HMAC–SHA256 لـ data باستخدام secret key
-  String _getSignature(String data) {
-    final secretKey =
-        utf8.encode('f0fcdbf6eb3d8193b3bd'); // your PUSHER_APP_SECRET
-    final bytes = utf8.encode(data);
-    final hmac = Hmac(sha256, secretKey);
-    final digest = hmac.convert(bytes);
-    return digest.toString();
-  }
-
-  /// تُستدعى قبل الاشتراك في قناة خاصة لتعطي auth string
-  Future<dynamic> _onAuthorizer(
-      String channelName, String socketId, dynamic options) async {
-    final signature = _getSignature('$socketId:$channelName');
-    return {
-      'auth':
-          'b86e117cb7e9945a345b:$signature', // your PUSHER_APP_KEY + ':' + signature
-    };
-  }
-
-  /// دالة مساعدة لتمييز أن الرسالة من عندي أنا
-  bool isMe(Map<String, dynamic> msg) {
-    final myId = data.read('user')['id'].toString();
-    return msg['sender_id'].toString() == myId || (msg['is_me'] == true);
-  }
-
-  /// getter بسيط للمعلومات الأساسية عن الطرف الآخر
   Map<String, dynamic> get otherUser => {
         'id': toID,
         'name': name,
       };
 
-  /// تنسيق timestamp من ISO إلى HH:mm
-  String formatTime(String? isoString) {
-    if (isoString == null) return '';
-    final dt = DateTime.tryParse(isoString);
-    if (dt == null) return '';
-    final hh = dt.hour.toString().padLeft(2, '0');
-    final mm = dt.minute.toString().padLeft(2, '0');
-    return '$hh:$mm';
+  @override
+  void onInit() {
+    super.onInit();
+    toID = Get.arguments['to_id']?.toString();
+    name = Get.arguments['name']?.toString();
+    final arg = Get.arguments['conversation_id'];
+    conversationId = arg != null ? int.tryParse(arg.toString()) : null;
+
+    if (conversationId != null) {
+      _loadHistory().then((_) => scrollToBottom());
+      _subscribe();
+    }
+  }
+
+  void _subscribe() {
+    if (conversationId == null) return;
+    final channel = 'private-chat.$conversationId';
+
+    if (_pusher.hasSubscribed(channel)) return;
+
+    _pusher.subscribeChannel(channel, (dynamic rawEvent) {
+      final ev = rawEvent as PusherEvent;
+      if (ev.eventName != 'App\\Events\\MessageSent') return rawEvent;
+
+      final decoded = jsonDecode(ev.data ?? '{}');
+      final msg = decoded['message'] ?? decoded;
+      final id = msg['id'];
+      if (chatMessages.any((m) => m['id'] == id)) return rawEvent;
+
+      chatMessages.add({
+        'id': msg['id'],
+        'sender_id': msg['sender_id']?.toString() ?? toID,
+        'content': msg['content'],
+        'created_at': msg['created_at'] ?? DateTime.now().toIso8601String(),
+        'is_me': false,
+        'is_read': true,
+      });
+      update();
+      scrollToBottom();
+      return rawEvent;
+    });
+  }
+
+  @override
+  void onClose() {
+    if (conversationId != null) {
+      _pusher.unsubscribeChannel('private-chat.$conversationId');
+    }
+    super.onClose();
   }
 
   Future<void> _loadHistory() async {
-    final prevLen = chatMessages.length;
     final resp =
         await crud.getRequest('${AppLinks.chatMessages}/$conversationId');
-
     if (resp['data'] != null) {
       chatMessages = List<Map<String, dynamic>>.from(resp['data']);
       update();
 
       if (!_firstLoadDone) {
         final myId = data.read('user')['id'].toString();
-        for (var msg in chatMessages) {
-          if (msg['sender_id'].toString() != myId &&
-              (msg['is_read'] == 0 || msg['is_read'] == false)) {
-            await _markMessageRead(msg['id']);
-            msg['is_read'] = 1;
+        for (var m in chatMessages) {
+          if (m['sender_id'].toString() != myId &&
+              (m['is_read'] == 0 || m['is_read'] == false)) {
+            await crud
+                .postRequest(AppLinks.markMessageRead, {'message_id': m['id']});
           }
         }
-        update();
-
-        // **هنا نحدّث قائمة المحادثات وعدد ال unread badges **
         if (Get.isRegistered<ChatPeopleController>()) {
-          final pplCtl = Get.find<ChatPeopleController>();
-          pplCtl.markConversationRead(conversationId!);
-
-          await pplCtl.fetchTotalUnread();
-          await pplCtl.fetchUnreadByConversation();
+          final ppl = Get.find<ChatPeopleController>();
+          ppl.markConversationRead(conversationId!);
+          await ppl.fetchTotalUnread();
+          await ppl.fetchUnreadByConversation();
         }
-
         _firstLoadDone = true;
       }
-
-      if (!_firstLoadDone || chatMessages.length > prevLen) {
-        scrollToBottom();
-      }
-    }
-  }
-
-  Future<void> _markMessageRead(int messageId) async {
-    try {
-      final resp = await crud.postRequest(
-        AppLinks.markMessageRead,
-        {'message_id': messageId},
-      );
-      if (resp != null && resp['status'] == true) {
-        print('✔ Message $messageId marked as read');
-      } else {
-        print('⚠ Failed to mark $messageId as read: $resp');
-      }
-    } catch (e) {
-      print('❌ Error in _markMessageRead: $e');
     }
   }
 
   Future<void> sendMessage() async {
     final content = textController.text.trim();
     if (content.isEmpty || isSending.value) return;
-
     isSending.value = true;
     update();
 
@@ -211,28 +120,22 @@ class ChatController extends GetxController {
         'receiver_id': toID,
         'content': content,
       });
-
-      if (resp != null && resp['data'] != null) {
-        final msgData = resp['data'];
-
-        // أضف الرسالة للمحادثة الحالية
+      if (resp?['data'] != null) {
+        final msg = resp['data'];
+        if (conversationId == null) {
+          conversationId = msg['conversation_id'] as int;
+          _subscribe();
+        }
         chatMessages.add({
-          'id': msgData['id'],
+          'id': msg['id'],
           'sender_id': data.read('user')['id'],
           'content': content,
-          'date': msgData['created_at'],
+          'created_at': msg['created_at'],
           'is_me': true,
-          'is_read': 1,
+          'is_read': true,
         });
-
-        // حدّث آخر وقت للمحادثة
-        final nowIso =
-            msgData['created_at'] ?? DateTime.now().toIso8601String();
-        // في حالة عرض شاشة ChatPeopleScreen ضمن GetBuilder واحد،
-        // يمكنك إرسال حدث إعادة تحميل للمحادثات:
         Get.find<ChatPeopleController>()
-            .updateConversationTime(conversationId!, nowIso);
-
+            .updateConversationTime(conversationId!, msg['created_at']);
         textController.clear();
         scrollToBottom();
       }
@@ -243,25 +146,23 @@ class ChatController extends GetxController {
   }
 
   Future<void> sendFileMessage() async {
-    final result = await FilePicker.platform.pickFiles(
+    final res = await FilePicker.platform.pickFiles(
       type: FileType.custom,
       allowedExtensions: ['png', 'jpg', 'jpeg', 'pdf'],
     );
-    if (result == null) return;
-
-    final file = XFile(result.files.single.path!);
+    if (res == null) return;
+    final file = XFile(res.files.single.path!);
     isSending.value = true;
     update();
 
     try {
       final resp = await crud.multiFileRequestMoreImagePath(
-        AppLinks.sendMessages, // endpoint رفع الرسالة
-        {'receiver_id': toID!}, // الحقول الإضافية
-        [file], // قائمة الملفات
-        ['file'], // **اسم الحقل في الـ form-data**
+        AppLinks.sendMessages,
+        {'receiver_id': toID!},
+        [file],
+        ['file'],
       );
-
-      if (resp != null && resp['data'] != null) {
+      if (resp?['data'] != null) {
         final msg = resp['data'];
         chatMessages.add({
           'id': msg['id'],
@@ -287,9 +188,16 @@ class ChatController extends GetxController {
       allowedExtensions: ['png', 'jpg', 'jpeg', 'pdf'],
     );
     if (result == null) return;
-
-    file = File(result.files.single.path!);
     await sendFileMessage();
+  }
+
+  bool isMe(Map<String, dynamic> m) =>
+      m['sender_id'].toString() == data.read('user')['id'].toString();
+
+  String formatTime(String? iso) {
+    if (iso == null) return '';
+    final dt = DateTime.parse(iso);
+    return '${dt.hour.toString().padLeft(2, '0')}:${dt.minute.toString().padLeft(2, '0')}';
   }
 
   void scrollToBottom() {
