@@ -1,6 +1,5 @@
 // lib/controller/chat_people_controller.dart
 
-import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:pusher_channels_flutter/pusher_channels_flutter.dart';

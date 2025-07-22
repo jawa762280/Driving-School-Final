@@ -1,15 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:get/get.dart';
 import 'package:driving_school/core/services/crud.dart';
 import 'package:driving_school/core/constant/app_api.dart';
 import 'package:get_storage/get_storage.dart';
-import 'package:latlong2/latlong.dart';
 
 class BookingsSessionsController extends GetxController {
   final Crud crud = Crud();
   var userRole = ''.obs;
-  List<LatLng> routePoints = [];
 
   TextEditingController comment = TextEditingController();
 
@@ -77,6 +74,7 @@ class BookingsSessionsController extends GetxController {
         );
         getReviews();
         fetchSessions();
+        resetFeedbackForm();
 
         update();
         Navigator.pop(Get.context!); // إغلاق النافذة
@@ -89,6 +87,12 @@ class BookingsSessionsController extends GetxController {
     }
   }
 
+  void resetFeedbackForm() {
+    level = 'beginner'; // أو 0 إذا كانت رقمية
+    comment.clear(); // لتفريغ النص
+  }
+
+  var response;
   Future<void> fetchSessions() async {
     isLoading.value = true;
     error.value = '';
@@ -100,10 +104,9 @@ class BookingsSessionsController extends GetxController {
       url = AppLinks.bookingSessionsStudent;
     }
 
-    final response = await crud.getRequest(url);
+    response = await crud.getRequest(url);
 
     isLoading.value = false;
-
     if (response != null && response['data'] != null) {
       sessions.value = response['data'];
       startedSessions.value = List.generate(sessions.length, (_) => false);
@@ -170,35 +173,4 @@ class BookingsSessionsController extends GetxController {
           duration: Duration(seconds: 2));
     }
   }
-
-
- Future<void> fetchRouteForBooking(int bookingId, {
-  required double startLat,
-  required double startLng,
-  required double endLat,
-  required double endLng,
-}) async {
-  try {
-    final resp = await crud.postRequest(
-      '${AppLinks.defineRoute}/$bookingId/route',
-      {
-        'start_lat': startLat,
-        'start_lng': startLng,
-        'end_lat': endLat,
-        'end_lng': endLng,
-      },
-    );
-    // باقي فك التشفير كما عندك...
-    final route = resp['data']['polyline'] as String;
-    final result = PolylinePoints().decodePolyline(route);
-    routePoints = result
-      .map((p) => LatLng(p.latitude, p.longitude))
-      .toList();
-  } catch (e) {
-    // خطأ
-    routePoints = [];
-  }
-}
-
-
 }

@@ -29,7 +29,7 @@ class TrainerScheduleController extends GetxController {
     'الأربعاء': 'wednesday',
     'الخميس': 'thursday',
   };
-  List<String> get days => dayTranslations.keys.toList(); 
+  List<String> get days => dayTranslations.keys.toList();
 
   void selectDay(String day) {
     selectedDay.value = day;
@@ -156,7 +156,7 @@ class TrainerScheduleController extends GetxController {
     };
 
     final scheduleData = {
-      "schedules": [schedule] 
+      "schedules": [schedule]
     };
 
     try {
@@ -164,13 +164,20 @@ class TrainerScheduleController extends GetxController {
           await crud.postRequest(AppLinks.createSchedule, scheduleData);
       isLoading.value = false;
 
-      if (response != null &&
-          response['message']?.toString().contains("تم انشاء جدول") == true) {
-        Get.snackbar("نجاح", response['message'] ?? "تم حفظ الجدول بنجاح ✅");
-        resetForm();
-      } else {
-        Get.snackbar("خطأ", response['message'] ?? "حدث خطأ أثناء الحفظ ❌");
-        print("⚠️ تفاصيل الرد: ${response.toString()}");
+      if (response != null) {
+        if (response['statusCode'] == 403) {
+          // رسالة رفض بسبب الحساب غير معتمد
+          Get.snackbar(
+              "حساب غير معتمد", 'لا يمكن إنشاء جدول لأن حالة حسابك غير معتمدة');
+        } else if (response['message']?.toString().contains("تم انشاء جدول") ==
+            true) {
+          Get.snackbar("نجاح", response['message'] ?? "تم حفظ الجدول بنجاح ✅");
+          resetForm();
+        } else {
+          Get.snackbar("خطأ", response['message'] ?? "حدث خطأ أثناء الحفظ ❌");
+        }
+
+        print("📬 تفاصيل الرد: ${response.toString()}");
       }
     } catch (e) {
       Get.snackbar("خطأ", "حدث استثناء أثناء الحفظ ❌");

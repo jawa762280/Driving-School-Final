@@ -52,8 +52,13 @@ final List<TrainerServiceModel> trainerServices = [
     subtitle: "استعرض الأعطال المسجلة مسبقًا",
   ),
   TrainerServiceModel(
-  imagePath: 'assets/images/noun-chat-7772420.png',
-  title: "قائمة المحادثات",
-  subtitle: "استعرض المحادثات السابقة والحالية",
-),
+    imagePath: 'assets/images/noun-chat-7772420.png',
+    title: "قائمة المحادثات",
+    subtitle: "استعرض المحادثات السابقة والحالية",
+  ),
+  TrainerServiceModel(
+    imagePath: 'assets/images/car.png',
+    title: "عرض السيارات",
+    subtitle: "استعرض السيارات الموجودة في المدرسة",
+  ),
 ];

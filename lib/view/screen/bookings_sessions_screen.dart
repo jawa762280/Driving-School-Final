@@ -254,8 +254,62 @@ class BookingsSessionsScreen extends StatelessWidget {
                             ],
                           ),
                         ],
+                        // Text(controller.sessions[0]['route'].toString()),
+                        if (status == 'booked' &&
+                            userRole == 'student' &&
+                            controller.sessions[index]['route'] != null)
+                          Center(
+                            child: ElevatedButton.icon(
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: AppColors.primaryColor,
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 24, vertical: 12),
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(12)),
+                              ),
+                              onPressed: () {
+                                final route =
+                                    controller.sessions[index]['route'];
 
-                        // const SizedBox(height: 15),
+                                Get.to(() => MapPageScreen(
+                                      bookingId: session['id'],
+                                      isStudent: true,
+                                      startLat: double.parse(
+                                          controller.sessions[index]['route']
+                                              ['start_lat']),
+                                      startLng: double.parse(
+                                          controller.sessions[index]['route']
+                                              ['start_lng']),
+                                      endLat: double.parse(controller
+                                          .sessions[index]['route']['end_lat']),
+                                      endLng: double.parse(controller
+                                          .sessions[index]['route']['end_lng']),
+                                      distanceMetres: controller.sessions[index]
+                                              ['route']['distance_in_meters']
+                                          .toString(),
+                                      durationInSeconds: controller
+                                          .sessions[index]['route']
+                                              ['duration_in_seconds']
+                                          .toString(),
+                                      startAdress: controller.sessions[index]
+                                              ['route']['start_address']
+                                          .toString(),
+                                      endAdress: controller.sessions[index]
+                                              ['route']['end_address']
+                                          .toString(),
+                                      existingPolyline:
+                                          route['polyline'] as String,
+                                    ));
+                              },
+                              icon: const Icon(Icons.location_on,
+                                  color: Colors.white),
+                              label: const Text(
+                                "عرض مسار التدريب",
+                                style: TextStyle(
+                                    color: Colors.white, fontSize: 14),
+                              ),
+                            ),
+                          ),
 
                         if ((userRole == 'trainer' &&
                                 status != 'completed' &&
@@ -269,18 +323,6 @@ class BookingsSessionsScreen extends StatelessWidget {
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceBetween,
                                   children: [
-                                    if (status == 'booked')
-                                      IconButton(
-                                        icon: Icon(Icons.map,
-                                            color: AppColors.primaryColor),
-                                        tooltip: 'عرض الخريطة',
-                                        onPressed: () {
-                                          Get.to(() => MapPageScreen(
-                                                bookingId: session['id'],
-                                              ));
-                                        },
-                                      ),
-                                    // زر البدء (يمين)
                                     ElevatedButton.icon(
                                       style: ElevatedButton.styleFrom(
                                         backgroundColor: AppColors.primaryColor,
@@ -306,7 +348,6 @@ class BookingsSessionsScreen extends StatelessWidget {
                                               fontSize: 14,
                                               color: Colors.white)),
                                     ),
-
                                     ElevatedButton.icon(
                                       style: ElevatedButton.styleFrom(
                                         backgroundColor: Colors.red.shade600,
@@ -358,7 +399,38 @@ class BookingsSessionsScreen extends StatelessWidget {
                                             color: Colors.white, fontSize: 14)),
                                   ),
                                 ),
+                              SizedBox(
+                                height: 15,
+                              )
                             ],
+                          ),
+                        // بعد زر الإلغاء
+
+// زر تحديد مسار التدريب للمُدرّب فقط
+                        if (userRole == 'trainer' && status == 'booked')
+                          Center(
+                            child: ElevatedButton.icon(
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: AppColors.primaryColor,
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 24, vertical: 12),
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(12)),
+                              ),
+                              onPressed: () {
+                                Get.to(() => MapPageScreen(
+                                      bookingId: session['id'],
+                                      isStudent: false,
+                                    ));
+                              },
+                              icon: const Icon(Icons.location_on,
+                                  color: Colors.white),
+                              label: const Text(
+                                "تحديد مسار التدريب",
+                                style: TextStyle(
+                                    color: Colors.white, fontSize: 14),
+                              ),
+                            ),
                           ),
 
                         SizedBox(height: 15),

@@ -141,18 +141,6 @@ class ContainerSearch extends StatelessWidget {
           Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              buildActionButton(
-                icon: Icons.table_chart_outlined,
-                label: "عرض جداول التدريب",
-                onPressed: () {
-                  final controller =
-                      Get.isRegistered<ShowTrainingSchedulesController>()
-                          ? Get.find<ShowTrainingSchedulesController>()
-                          : Get.put(ShowTrainingSchedulesController());
-                  controller.setTrainerId(trainerId);
-                  Get.toNamed(AppRouts.showTRainingSchedulesScreen);
-                },
-              ),
               if (userRole == 'student') ...[
                 SizedBox(height: 10.h),
                 buildActionButton(
@@ -164,8 +152,8 @@ class ContainerSearch extends StatelessWidget {
                     });
                   },
                 ),
+                SizedBox(height: 10.h),
               ],
-              SizedBox(height: 10.h),
               buildActionButton(
                 icon: Icons.star_border_sharp,
                 label: "عرض تقييمات المدرب",

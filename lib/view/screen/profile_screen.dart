@@ -72,7 +72,10 @@ class ProfileScreen extends StatelessWidget {
                   ),
                   side: const BorderSide(color: Colors.black54),
                 ),
-                child: const Text('تعديل معلومات الحساب'),
+                child: Text(
+                  'تعديل معلومات الحساب',
+                  style: TextStyle(color: AppColors.primaryColor),
+                ),
               ),
 
               const SizedBox(height: 20),
@@ -86,36 +89,15 @@ class ProfileScreen extends StatelessWidget {
                 ),
                 child: Column(
                   children: [
-                    if (data.read('role').toString() == 'trainer') ...[
-                      buildMenuTile(
-                        Icons.schedule,
-                        'جلسات التدريب',
-                        onTap: () {
-                          Get.toNamed(AppRouts.trainingSessionsScreen);
-                        },
-                      ),
-                      const Divider(height: 1),
-                    ],
-                    buildMenuTile(
-                      Icons.directions_car,
-                      ' عرض السيارات',
-                      onTap: () {
-                        controller.goToCarsScreen();
-                      },
-                    ),
-                    const Divider(height: 1),
+                    if (data.read('role').toString() == 'trainer') ...[],
                     buildMenuTile(
                       Icons.info_outline,
                       'معلومات عنا ',
-                      onTap: () {
-
-                      },
+                      onTap: () {},
                     ),
                   ],
                 ),
               ),
-
-              const SizedBox(height: 20),
 
               // القائمة الثانية
               Container(

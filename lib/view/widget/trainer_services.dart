@@ -61,7 +61,8 @@ class TrainerServices extends StatelessWidget {
                     AppRouts.examHomeScreen,
                     AppRouts.createFalutCar,
                     AppRouts.showCarFaults,
-                    AppRouts.chatPeopleScreen
+                    AppRouts.chatPeopleScreen,
+                    AppRouts.allCarsScreen
                   ];
                   if (index < routes.length) {
                     Get.toNamed(routes[index]);

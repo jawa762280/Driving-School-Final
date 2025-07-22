@@ -51,4 +51,9 @@ final List<StudentServiceModel> studentServices = [
   title: "قائمة المحادثات",
   subtitle: "استعرض المحادثات السابقة والحالية",
 ),
+StudentServiceModel(
+    imagePath: 'assets/images/car.png',
+    title: "عرض السيارات",
+    subtitle: "استعرض السيارات الموجودة في المدرسة",
+  ),
 ];

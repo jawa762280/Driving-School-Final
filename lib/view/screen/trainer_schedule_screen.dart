@@ -15,7 +15,7 @@ class TrainerScheduleScreen extends StatelessWidget {
       textDirection: TextDirection.rtl,
       child: Scaffold(
         backgroundColor: const Color(0xFFF9F9F9),
-        appBar: AppBar(
+        appBar: AppBar( 
           elevation: 0,
           title: const Text(
             "إنشاء جدول تدريب",

@@ -62,7 +62,8 @@ class NotificationsController extends GetxController {
   void _playNotificationSound() async {
     try {
       await _audioPlayer.stop();
-      await _audioPlayer.play(AssetSource('sounds/mixkit-confirmation-tone-2867.wav'));
+      await _audioPlayer
+          .play(AssetSource('sounds/mixkit-confirmation-tone-2867.wav'));
     } catch (e) {
       print('🔴 Error playing sound: $e');
     }

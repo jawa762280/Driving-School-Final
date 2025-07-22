@@ -60,7 +60,8 @@ class StudentServices extends StatelessWidget {
                     AppRouts.showPostsScreen,
                     AppRouts.requestLicence,
                     AppRouts.myLicenses,
-                    AppRouts.chatPeopleScreen
+                    AppRouts.chatPeopleScreen,
+                    AppRouts.allCarsScreen
                   ];
                   if (index < routes.length) {
                     Get.toNamed(routes[index]);

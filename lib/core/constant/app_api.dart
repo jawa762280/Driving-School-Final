@@ -1,11 +1,11 @@
 class AppLinks {
   static const String init = 'http://192.168.1.107:8000/api';
   // static const String init = 'http://127.0.0.1:8000/api';
-  // static const String init = 'http://192.168.124.83:8000/api';
+  // static const String init = 'http://192.168.194.83:8000/api';
 
   static const String login = '$init/login';
   static const String signUpStudent = '$init/student/register';
-  static const String signUpTrainer = '$init/trainer/register';
+  static const String signUpTrainer = '$init/trainer/register';   
 
   static const String verifyCodeSignUp = '$init/email/verify';
   static const String resendVerifyCodeSignUp = '$init/resend-email-code';
