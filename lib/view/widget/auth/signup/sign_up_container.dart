@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:driving_school/data/nationalities.dart';
-import 'package:driving_school/main.dart';
 import 'package:driving_school/view/widget/genderchip.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';

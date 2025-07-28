@@ -27,7 +27,7 @@ class SearchScreen extends StatelessWidget {
               children: [
                 MyAppBar(
                   image: Image.asset(
-                    AppImages.appPhoto,
+                    AppImages.logo,
                     fit: BoxFit.contain,
                   ),
                   widget: Text(

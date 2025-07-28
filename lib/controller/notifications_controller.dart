@@ -26,7 +26,7 @@ class NotificationsController extends GetxController {
 
   @override
   void onClose() {
-    timer.cancel();
+    // timer.cancel();
     super.onClose();
   }
 

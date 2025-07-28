@@ -93,7 +93,9 @@ class ProfileScreen extends StatelessWidget {
                     buildMenuTile(
                       Icons.info_outline,
                       'معلومات عنا ',
-                      onTap: () {},
+                      onTap: () {
+                        Get.toNamed(AppRouts.aboutUsScreen);
+                      },
                     ),
                   ],
                 ),

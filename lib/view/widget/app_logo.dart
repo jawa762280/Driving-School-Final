@@ -1,4 +1,5 @@
 import 'package:driving_school/core/constant/appcolors.dart';
+import 'package:driving_school/core/constant/appimages.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -19,7 +20,7 @@ class AppLogo extends StatelessWidget {
               borderRadius: BorderRadius.circular(12.r),
               color: AppColors.primaryColor,
               image: const DecorationImage(
-                image: AssetImage('assets/images/Icon.png'),
+                image: AssetImage(AppImages.logo),
                 fit: BoxFit.cover,
               ),
             ),

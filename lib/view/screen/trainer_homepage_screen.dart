@@ -22,7 +22,7 @@ class TrainerHomePageScreen extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   MyAppBar(
-                    image: Image.asset(AppImages.appPhoto),
+                    image: Image.asset(AppImages.logo),
                     widget: Container(
                       width: 50,
                       height: 50,

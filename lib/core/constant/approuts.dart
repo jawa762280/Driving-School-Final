@@ -41,4 +41,6 @@ class AppRouts {
   static const String chatPeopleScreen = "/chat_people_screen";
   static const String chatScreen = "/chat_screen";
   static const String allCarsScreen = "/all_cars_screen";
+    static const String aboutUsScreen = "/about_us_screen";
+
 }
