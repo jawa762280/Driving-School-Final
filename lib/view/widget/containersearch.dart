@@ -19,7 +19,7 @@ class ContainerSearch extends StatelessWidget {
     required this.userRole,
     this.reviews,
     required this.hasReview,
-    required this.userId, // 'student' أو 'trainer'
+    required this.userId, 
   });
 
   final String image;
@@ -29,10 +29,11 @@ class ContainerSearch extends StatelessWidget {
   final String userRole;
   final Widget? reviews;
   final bool hasReview;
-  final int userId; // ← هذي اضافنا
+  final int userId;
 
   @override
   Widget build(BuildContext context) {
+    // ignore: avoid_print
     print('trainerId: $trainerId - hasReview: $hasReview');
 
     ImageProvider<Object> buildImageProvider(String imagePath) {
@@ -162,7 +163,6 @@ class ContainerSearch extends StatelessWidget {
                   });
                 },
               ),
-              // بدلاً من trainerId لوّ مرّر trainer.user_id
               if (userRole == 'student') ...[
                 SizedBox(height: 10.h),
                 buildActionButton(
@@ -170,8 +170,7 @@ class ContainerSearch extends StatelessWidget {
                   label: "إجراء محادثة",
                   onPressed: () {
                     final ctrl = Get.find<MySearchController>();
-                    // هنا نمرّر user_id وليس trainerId
-                    ctrl.openChat(userId, name); // ← استخدم الحقل الجديد
+                    ctrl.openChat(userId, name);
                   },
                 ),
               ],

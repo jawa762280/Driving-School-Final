@@ -51,7 +51,6 @@ class ExamResultScreen extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    // دائرة النسبة
                     Container(
                       width: 125,
                       height: 125,
@@ -125,7 +124,6 @@ class ExamResultScreen extends StatelessWidget {
                     ),
                     const SizedBox(height: 16),
 
-                    // عرض الأسئلة
                     ListView.separated(
                       shrinkWrap: true,
                       physics: const NeverScrollableScrollPhysics(),
@@ -212,7 +210,6 @@ class ExamResultScreen extends StatelessWidget {
               ),
             ),
 
-            // زر أو زرين حسب النجاح
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
               child: Column(
@@ -228,7 +225,6 @@ class ExamResultScreen extends StatelessWidget {
                               controller.resetExam();
                               controller.regenerateSameExam();
                               Get.off(() => GenerateExamScreen());
-                              // تأكد examType محفوظ داخل الكنترولر
                             },
                             style: ElevatedButton.styleFrom(
                                 backgroundColor: AppColors.primaryColor,

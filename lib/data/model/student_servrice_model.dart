@@ -1,3 +1,5 @@
+import 'package:driving_school/core/constant/appimages.dart';
+
 class StudentServiceModel {
   final String imagePath;
   final String title;
@@ -12,47 +14,47 @@ class StudentServiceModel {
 
 final List<StudentServiceModel> studentServices = [
   StudentServiceModel(
-    imagePath: 'assets/images/exam.png',
+    imagePath: AppImages.exam,
     title: "اختبار نظري",
     subtitle: "ابدأ الاختبار النظري",
   ),
   StudentServiceModel(
-    imagePath: 'assets/images/resulte.png',
+    imagePath: AppImages.resulte,
     title: "عرض نتائجي",
     subtitle: "نتائجك في التدريب والاختبارات",
   ),
   StudentServiceModel(
-    imagePath: 'assets/images/booking.png',
+    imagePath: AppImages.booking,
     title: "حجز اوتوماتيكي",
     subtitle: "احجز مواعيدك بسهولة",
   ),
   StudentServiceModel(
-    imagePath: 'assets/images/noun-driving-testing-4647644.png',
+    imagePath: AppImages.drivingTest,
     title: "موعد اختبار عملي",
     subtitle: "تحقق من مواعيدك العملية",
   ),
   StudentServiceModel(
-    imagePath: 'assets/images/noun-post-it-4192177.png',
+    imagePath: AppImages.podts,
     title: "عرض المدونات",
     subtitle: "اقرأ آخر المقالات",
   ),
   StudentServiceModel(
-    imagePath: 'assets/images/noun-license-7944334.png',
+    imagePath: AppImages.license,
     title: "طلب رخصة",
     subtitle: "قدّم طلب رخصتك هنا",
   ),
   StudentServiceModel(
-    imagePath: 'assets/images/driver-license.png',
+    imagePath: AppImages.showLicense,
     title: "رخصاتي",
     subtitle: "استعرض رخصك الحالية",
   ),
   StudentServiceModel(
-  imagePath: 'assets/images/noun-chat-7772420.png',
-  title: "قائمة المحادثات",
-  subtitle: "استعرض المحادثات السابقة والحالية",
-),
-StudentServiceModel(
-    imagePath: 'assets/images/car.png',
+    imagePath: AppImages.chat,
+    title: "قائمة المحادثات",
+    subtitle: "استعرض المحادثات السابقة والحالية",
+  ),
+  StudentServiceModel(
+    imagePath: AppImages.cars,
     title: "عرض السيارات",
     subtitle: "استعرض السيارات الموجودة في المدرسة",
   ),

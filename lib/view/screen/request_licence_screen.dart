@@ -29,7 +29,7 @@ class RequestLicenceScreen extends StatelessWidget {
                   icon: const Icon(Icons.refresh, color: Colors.white),
                   tooltip: 'تحديث',
                   onPressed: () {
-                    controller.refreshData(); // أو أي دالة تعيد تحميل البيانات
+                    controller.refreshData();
                   },
                 ),
               ],
@@ -96,7 +96,8 @@ class RequestLicenceScreen extends StatelessWidget {
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(20)),
                           elevation: 8,
-                          shadowColor: AppColors.primaryColor.withOpacity(0.3),
+                          shadowColor: AppColors.primaryColor
+                              .withAlpha((0.3 * 255).toInt()),
                           child: Padding(
                             padding: EdgeInsets.all(20.w),
                             child: Column(
@@ -182,8 +183,8 @@ class RequestLicenceScreen extends StatelessWidget {
                                               color: Colors.grey.shade300),
                                           boxShadow: [
                                             BoxShadow(
-                                              color:
-                                                  Colors.grey.withOpacity(0.1),
+                                              color: Colors.grey.withAlpha(
+                                                  (0.1 * 255).toInt()),
                                               blurRadius: 6,
                                               offset: const Offset(0, 2),
                                             ),

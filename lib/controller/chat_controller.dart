@@ -1,4 +1,3 @@
-// lib/controller/chat_controller.dart
 
 import 'dart:convert';
 import 'package:driving_school/main.dart';
@@ -14,7 +13,7 @@ import 'chat_people_controller.dart';
 
 class ChatController extends GetxController {
   final Crud crud = Crud();
-  final PusherService _pusher = Get.find<PusherService>();
+  final PusherService pusher = Get.find<PusherService>();
   double bottomMargin = 50;
   var isSending = false.obs;
   bool _firstLoadDone = false;
@@ -49,9 +48,9 @@ class ChatController extends GetxController {
     if (conversationId == null) return;
     final channel = 'private-chat.$conversationId';
 
-    if (_pusher.hasSubscribed(channel)) return;
+    if (pusher.hasSubscribed(channel)) return;
 
-    _pusher.subscribeChannel(channel, (dynamic rawEvent) {
+    pusher.subscribeChannel(channel, (dynamic rawEvent) {
       final ev = rawEvent as PusherEvent;
       if (ev.eventName != 'App\\Events\\MessageSent') return rawEvent;
 
@@ -77,7 +76,7 @@ class ChatController extends GetxController {
   @override
   void onClose() {
     if (conversationId != null) {
-      _pusher.unsubscribeChannel('private-chat.$conversationId');
+      pusher.unsubscribeChannel('private-chat.$conversationId');
     }
     super.onClose();
   }

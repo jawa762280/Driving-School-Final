@@ -28,6 +28,7 @@ class StudentHomepageController extends GetxController {
     await firebaseMessaging
         .getToken()
         .then((value) => mytoken = value.toString());
+    // ignore: avoid_print
     print('$mytoken Mytoken');
     await firebaseMessaging.subscribeToTopic("allusers");
   }

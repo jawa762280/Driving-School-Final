@@ -62,7 +62,7 @@ class NotificationsScreen extends StatelessWidget {
                   ),
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.black.withOpacity(0.04),
+                      color: Colors.black.withAlpha((0.04 * 255).toInt()),
                       blurRadius: 5,
                       offset: const Offset(0, 2),
                     )
@@ -127,8 +127,8 @@ class NotificationsScreen extends StatelessWidget {
                                   style: TextButton.styleFrom(
                                     padding: const EdgeInsets.symmetric(
                                         horizontal: 12, vertical: 4),
-                                    backgroundColor:
-                                        AppColors.primaryColor.withOpacity(0.1),
+                                    backgroundColor: AppColors.primaryColor
+                                        .withAlpha((0.1 * 255).toInt()),
                                     shape: RoundedRectangleBorder(
                                         borderRadius: BorderRadius.circular(8)),
                                   ),

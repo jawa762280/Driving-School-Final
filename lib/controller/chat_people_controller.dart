@@ -1,4 +1,3 @@
-// lib/controller/chat_people_controller.dart
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -82,7 +81,6 @@ class ChatPeopleController extends GetxController {
     }
   }
 
-  /// استدعاء عند العودة من ChatScreen
   Future<void> resubscribeChannels() async => _subscribeAll();
 
   void onSearch() {
@@ -129,7 +127,9 @@ class ChatPeopleController extends GetxController {
   }
 
   void updateConversationTime(int convId, String newIso) {
-    for (var c in peoples) if (c['id']==convId) c['updated_at']=newIso;
+    for (var c in peoples) {
+      if (c['id']==convId) c['updated_at']=newIso;
+    }
     onSearch();
     update();
   }

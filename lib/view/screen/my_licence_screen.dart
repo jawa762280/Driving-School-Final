@@ -32,15 +32,15 @@ class MyLicenceScreen extends StatelessWidget {
               backgroundColor: AppColors.primaryColor,
               iconTheme: const IconThemeData(color: Colors.white),
               elevation: 2,
-                actions: [
-                  IconButton(
-                    icon: const Icon(Icons.refresh, color: Colors.white),
-                    tooltip: 'تحديث',
-                    onPressed: () {
-                      controller.getMyLicense();
-                    },
-                  ),
-                ],
+              actions: [
+                IconButton(
+                  icon: const Icon(Icons.refresh, color: Colors.white),
+                  tooltip: 'تحديث',
+                  onPressed: () {
+                    controller.getMyLicense();
+                  },
+                ),
+              ],
             ),
             body: Obx(() {
               if (controller.isLoading.value) {
@@ -129,7 +129,7 @@ class MyLicenceScreen extends StatelessWidget {
         borderRadius: BorderRadius.circular(18),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.04),
+            color: Colors.black.withAlpha((0.04 * 255).toInt()),
             offset: const Offset(0, 4),
             blurRadius: 12,
           ),
@@ -141,7 +141,7 @@ class MyLicenceScreen extends StatelessWidget {
           children: [
             Container(
               decoration: BoxDecoration(
-                color: statusColor.withOpacity(0.15),
+                color: statusColor.withAlpha((0.15 * 255).toInt()),
                 shape: BoxShape.circle,
               ),
               padding: const EdgeInsets.all(12),

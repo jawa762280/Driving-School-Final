@@ -21,7 +21,6 @@ class UserAvatar extends StatelessWidget {
           ? NetworkImage(imageUrl)
           : const AssetImage('assets/images/default_user.png') as ImageProvider,
       onBackgroundImageError: (_, __) {
-        // يمكنك تسجيل الخطأ هنا إذا أردت
         debugPrint('خطأ في تحميل صورة المستخدم');
       },
     );

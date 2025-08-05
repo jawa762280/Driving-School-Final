@@ -26,7 +26,6 @@ class ShowPostsScreen extends StatelessWidget {
               ? const Loading()
               : Column(
                   children: [
-                    // 🔍 الفلترة
                     Padding(
                       padding: const EdgeInsets.symmetric(
                           horizontal: 16.0, vertical: 10),
@@ -34,7 +33,8 @@ class ShowPostsScreen extends StatelessWidget {
                         borderRadius: BorderRadius.circular(12),
                         borderColor: AppColors.primaryColor,
                         selectedBorderColor: AppColors.primaryColor,
-                        fillColor: AppColors.primaryColor.withOpacity(0.15),
+                        fillColor: AppColors.primaryColor
+                            .withAlpha((0.15 * 255).toInt()),
                         selectedColor: AppColors.primaryColor,
                         color: Colors.grey.shade600,
                         isSelected: List.generate(
@@ -53,8 +53,6 @@ class ShowPostsScreen extends StatelessWidget {
                             .toList(),
                       ),
                     ),
-
-                    // 📰 البوستات
                     Expanded(
                       child: controller.filteredPosts.isEmpty
                           ? const Center(child: Text("لا توجد منشورات"))
@@ -83,7 +81,6 @@ class ShowPostsScreen extends StatelessWidget {
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
                                       children: [
-                                        // Header
                                         Row(
                                           children: [
                                             CircleAvatar(
@@ -118,8 +115,6 @@ class ShowPostsScreen extends StatelessWidget {
                                           ],
                                         ),
                                         const SizedBox(height: 12),
-
-                                        // Title & Body
                                         Text(
                                           post['title'] ?? '',
                                           style: TextStyle(
@@ -133,8 +128,6 @@ class ShowPostsScreen extends StatelessWidget {
                                           style: const TextStyle(fontSize: 14),
                                         ),
                                         const SizedBox(height: 12),
-
-                                        // File display
                                         if (file != null) ...[
                                           file['type'] == 'image'
                                               ? ClipRRect(
@@ -174,11 +167,7 @@ class ShowPostsScreen extends StatelessWidget {
                                                   },
                                                 ),
                                         ],
-
                                         const SizedBox(height: 10),
-
-                                        // Likes
-                                        // Likes Row
                                         Row(
                                           children: [
                                             IconButton(

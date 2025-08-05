@@ -1,3 +1,5 @@
+import 'package:driving_school/core/constant/appimages.dart';
+
 class TrainerServiceModel {
   final String imagePath;
   final String title;
@@ -12,7 +14,7 @@ class TrainerServiceModel {
 
 final List<TrainerServiceModel> trainerServices = [
   TrainerServiceModel(
-    imagePath: 'assets/images/noun-calendar-5022159.png',
+    imagePath: AppImages.calendar,
     title: "إنشاء جدول تدريب",
     subtitle: "ابدأ بإنشاء جداول التدريب الخاصة بك",
   ),
@@ -22,17 +24,17 @@ final List<TrainerServiceModel> trainerServices = [
     subtitle: "شاهد جميع الجداول التدريبية الخاصة بك",
   ),
   TrainerServiceModel(
-    imagePath: 'assets/images/vacation.png',
+    imagePath: AppImages.vacation,
     title: "طلب إجازة",
     subtitle: "أرسل طلب إجازتك بسهولة",
   ),
   TrainerServiceModel(
-    imagePath: 'assets/images/vacation.png',
+    imagePath: AppImages.vacation,
     title: "عرض الإجازات",
     subtitle: "اطلع على سجل الإجازات الخاصة بك",
   ),
   TrainerServiceModel(
-    imagePath: 'assets/images/test2.png',
+    imagePath: AppImages.creatExam,
     title: "إنشاء امتحان",
     subtitle: "قم بإعداد امتحان جديد للطلاب",
   ),
@@ -42,22 +44,22 @@ final List<TrainerServiceModel> trainerServices = [
     subtitle: "راجع جميع الامتحانات السابقة",
   ),
   TrainerServiceModel(
-    imagePath: 'assets/images/breakdown2.png',
+    imagePath: AppImages.breakdown,
     title: "إبلاغ عطل سيارة",
     subtitle: "سجّل الأعطال التي تواجهها في السيارة",
   ),
   TrainerServiceModel(
-    imagePath: 'assets/images/breakdown4.png',
+    imagePath: AppImages.showBreakdown,
     title: "عرض أعطال السيارات",
     subtitle: "استعرض الأعطال المسجلة مسبقًا",
   ),
   TrainerServiceModel(
-    imagePath: 'assets/images/noun-chat-7772420.png',
+    imagePath: AppImages.chat,
     title: "قائمة المحادثات",
     subtitle: "استعرض المحادثات السابقة والحالية",
   ),
   TrainerServiceModel(
-    imagePath: 'assets/images/car.png',
+    imagePath: AppImages.cars,
     title: "عرض السيارات",
     subtitle: "استعرض السيارات الموجودة في المدرسة",
   ),

@@ -1,4 +1,3 @@
-// lib/view/screen/chat_people_screen.dart
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -25,7 +24,6 @@ class ChatPeopleScreen extends StatelessWidget {
                   style: TextStyle(fontWeight: FontWeight.bold),
                 ),
                 const Spacer(),
-                // هنا الحقل الجديد
                 Obx(() {
                   final total = ctl.totalUnread.value;
                   return Padding(
@@ -75,7 +73,6 @@ class ChatPeopleScreen extends StatelessWidget {
           ),
           body: Column(
             children: [
-              // شريط البحث
               Padding(
                 padding: const EdgeInsets.all(16),
                 child: TextField(
@@ -95,7 +92,6 @@ class ChatPeopleScreen extends StatelessWidget {
                 ),
               ),
 
-              // قائمة المحادثات
               Expanded(
                 child: ctl.isLoading.value
                     ? const Center(
@@ -128,14 +124,12 @@ class ChatPeopleScreen extends StatelessWidget {
                                     'to_id': other['id'].toString(),
                                     'name': other['name'],
                                   })?.then((_) async {
-                                    // المستخدم رجع من شاشة ChatScreen
                                     await pplCtl.fetchTotalUnread();
                                     await pplCtl.fetchUnreadByConversation();
                                     pplCtl.markConversationRead(chat['id']);
                                           await pplCtl.resubscribeChannels();
 
 
-                                    // (هنا ليس ضرورياً مناداة update() لأن داخل fetchUnreadByConversation فعلنا update())
                                   });
                                 },
                                 leading: Stack(

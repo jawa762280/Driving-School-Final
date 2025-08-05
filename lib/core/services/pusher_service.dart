@@ -1,4 +1,3 @@
-// lib/core/services/pusher_service.dart
 
 import 'dart:convert';
 import 'package:get/get.dart';
@@ -9,7 +8,6 @@ class PusherService extends GetxService {
   final PusherChannelsFlutter pusher = PusherChannelsFlutter();
   final _subs = <String>{};
 
-  // HMAC–SHA256 signature
   String _getSignature(String data) {
     final key = utf8.encode('f0fcdbf6eb3d8193b3bd');
     return Hmac(sha256, key).convert(utf8.encode(data)).toString();
@@ -26,7 +24,9 @@ class PusherService extends GetxService {
       cluster: 'eu',
       onAuthorizer: _authorizer,
       onConnectionStateChange: (curr, prev) =>
+          // ignore: avoid_print
           print('🔌 PusherService: $prev ➡ $curr'),
+      // ignore: avoid_print
       onError: (msg, code, ex) => print('❌ PusherService Error: $msg'),
     );
     await pusher.connect();
@@ -34,12 +34,14 @@ class PusherService extends GetxService {
   }
 
   bool hasSubscribed(String channelName) => _subs.contains(channelName);
+  
 
   Future<void> subscribeChannel(
     String channelName,
     dynamic Function(dynamic) onEvent,
   ) async {
     if (_subs.contains(channelName)) {
+      // ignore: avoid_print
       print('⚠ Already subscribed to $channelName');
       return;
     }
@@ -47,6 +49,7 @@ class PusherService extends GetxService {
       channelName: channelName,
       onEvent: onEvent,
     );
+    // ignore: avoid_print
     print('✅ Subscribed to $channelName');
     _subs.add(channelName);
   }
@@ -54,6 +57,7 @@ class PusherService extends GetxService {
   Future<void> unsubscribeChannel(String channelName) async {
     if (!_subs.contains(channelName)) return;
     await pusher.unsubscribe(channelName: channelName);
+    // ignore: avoid_print
     print('❌ Unsubscribed from $channelName');
     _subs.remove(channelName);
   }

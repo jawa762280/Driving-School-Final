@@ -1,5 +1,3 @@
-// lib/view/screen/map_page_screen.dart
-
 import 'dart:async';
 import 'dart:convert';
 import 'package:driving_school/controller/map_page_controller.dart';
@@ -104,6 +102,7 @@ class _MapPageScreenState extends State<MapPageScreen> {
       return;
     }
     final pos = await Geolocator.getCurrentPosition(
+        // ignore: deprecated_member_use
         desiredAccuracy: LocationAccuracy.high);
     setState(() => _myLocation = LatLng(pos.latitude, pos.longitude));
   }
@@ -284,7 +283,8 @@ class _MapPageScreenState extends State<MapPageScreen> {
                               padding: const EdgeInsets.symmetric(
                                   horizontal: 6, vertical: 4),
                               decoration: BoxDecoration(
-                                  color: Colors.white.withOpacity(0.8),
+                                  color: Colors.white
+                                      .withAlpha((0.8 * 255).toInt()),
                                   borderRadius: BorderRadius.circular(4)),
                               child: Text(widget.startAdress!,
                                   maxLines: 2,
@@ -309,7 +309,8 @@ class _MapPageScreenState extends State<MapPageScreen> {
                               padding: const EdgeInsets.symmetric(
                                   horizontal: 6, vertical: 4),
                               decoration: BoxDecoration(
-                                  color: Colors.white.withOpacity(0.8),
+                                  color: Colors.white
+                                      .withAlpha((0.8 * 255).toInt()),
                                   borderRadius: BorderRadius.circular(4)),
                               child: Text(widget.endAdress!,
                                   maxLines: 2,
@@ -401,9 +402,11 @@ class _MapPageScreenState extends State<MapPageScreen> {
                     endLng: _point2!.longitude,
                   );
                   // اغلق الديالوج
+                  // ignore: use_build_context_synchronously
                   Navigator.of(context).pop();
                   // اظهر تأكيد
                   showDialog(
+                      // ignore: use_build_context_synchronously
                       context: context,
                       builder: (_) => AlertDialog(
                             title: const Text('تم'),
@@ -417,6 +420,7 @@ class _MapPageScreenState extends State<MapPageScreen> {
                           ));
                 } catch (_) {
                   // اغلق الديالوج
+                  // ignore: use_build_context_synchronously
                   Navigator.of(context).pop();
                   Get.snackbar(
                     'خطأ',

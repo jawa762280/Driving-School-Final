@@ -1,4 +1,3 @@
-// lib/controller/map_page_controller.dart
 
 import 'package:driving_school/core/constant/app_api.dart';
 import 'package:driving_school/core/services/crud.dart';
@@ -17,6 +16,7 @@ class MapPageController extends GetxController {
     required double endLat,
     required double endLng,
   }) async {
+    // ignore: avoid_print
     print('🔄 fetchRouteForBooking called for booking $bookingId');
 
     try {
@@ -30,10 +30,10 @@ class MapPageController extends GetxController {
         },
       );
 
-      // API might return { success: false, message: ... }
       final success = resp['success'] == true || resp['status'] == true;
       if (!success) {
         final msg = resp['message'] ?? 'فشل في جلب المسار';
+        // ignore: avoid_print
         print('⚠️ API error: $msg');
         Get.snackbar('خطأ', msg, snackPosition: SnackPosition.BOTTOM);
         routePoints = [];
@@ -41,9 +41,9 @@ class MapPageController extends GetxController {
         return;
       }
 
-      // نضمن أن الـ data موجود ويحوي حقل polyline
       final data = resp['data'];
       if (data == null || data['polyline'] == null) {
+        // ignore: avoid_print
         print('⚠️ API returned no polyline.');
         Get.snackbar('خطأ', 'لم يتم العثور على بيانات المسار', snackPosition: SnackPosition.BOTTOM);
         routePoints = [];
@@ -51,18 +51,18 @@ class MapPageController extends GetxController {
         return;
       }
 
-      // فكّ التشفير
       final encoded = data['polyline'] as String;
       final decoded = PolylinePoints().decodePolyline(encoded);
+      // ignore: avoid_print
       print('🔵 Decoded ${decoded.length} points');
 
-      // حدّث القائمة
       routePoints = decoded
           .map((p) => LatLng(p.latitude, p.longitude))
           .toList();
 
-      update(); // يحدث الـ UI ليعيد رسم المسار
+      update(); 
     } catch (e) {
+      // ignore: avoid_print
       print('⚠️ Exception in fetchRouteForBooking: $e');
       Get.snackbar('خطأ', 'حدث خطأ غير متوقع', snackPosition: SnackPosition.BOTTOM);
       routePoints = [];

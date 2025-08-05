@@ -58,6 +58,7 @@ class StudentEvaluationController extends GetxController {
             'C:/xampp/htdocs/DrivingSchoolSystem/storage/app/public',
             'http://192.168.1.107:8000/storage');
 
+        // ignore: avoid_print
         print('رابط الشهادة بعد التحويل: "$publicUrl"');
 
         certificateUrl.value = publicUrl;
@@ -66,6 +67,7 @@ class StudentEvaluationController extends GetxController {
         Get.snackbar('خطأ', 'فشل توليد الشهادة');
       }
     } catch (e) {
+      // ignore: avoid_print
       print('Error generating certificate: $e');
       Get.snackbar('خطأ', 'حدث خطأ أثناء توليد الشهادة');
     } finally {

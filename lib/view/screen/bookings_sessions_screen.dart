@@ -29,9 +29,7 @@ class BookingsSessionsScreen extends StatelessWidget {
               ),
               backgroundColor: AppColors.primaryColor,
               centerTitle: true,
-              iconTheme:
-                  IconThemeData(color: Colors.white), // <-- هنا لون السهم
-
+              iconTheme: IconThemeData(color: Colors.white),
               elevation: 5,
               shadowColor: Colors.black54,
             ),
@@ -136,7 +134,6 @@ class BookingsSessionsScreen extends StatelessWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        // التاريخ
                         Row(
                           children: [
                             Icon(Icons.calendar_today_rounded,
@@ -144,16 +141,12 @@ class BookingsSessionsScreen extends StatelessWidget {
                             const SizedBox(width: 10),
                             Text(
                               formattedDate,
-                              style: TextStyle(
-                                  fontSize: 15,
-                                  // fontWeight: FontWeight.bold,
-                                  color: Colors.black),
+                              style:
+                                  TextStyle(fontSize: 15, color: Colors.black),
                             ),
                           ],
                         ),
                         const SizedBox(height: 12),
-
-                        // الوقت
                         Row(
                           children: [
                             Icon(Icons.access_time,
@@ -165,8 +158,6 @@ class BookingsSessionsScreen extends StatelessWidget {
                           ],
                         ),
                         const SizedBox(height: 12),
-
-                        // المدرب
                         Row(
                           children: [
                             Icon(Icons.person_outline,
@@ -189,8 +180,6 @@ class BookingsSessionsScreen extends StatelessWidget {
                           ],
                         ),
                         const SizedBox(height: 12),
-
-                        // السيارة
                         Row(
                           children: [
                             Icon(Icons.directions_car_outlined,
@@ -254,7 +243,6 @@ class BookingsSessionsScreen extends StatelessWidget {
                             ],
                           ),
                         ],
-                        // Text(controller.sessions[0]['route'].toString()),
                         if (status == 'booked' &&
                             userRole == 'student' &&
                             controller.sessions[index]['route'] != null)
@@ -310,7 +298,6 @@ class BookingsSessionsScreen extends StatelessWidget {
                               ),
                             ),
                           ),
-
                         if ((userRole == 'trainer' &&
                                 status != 'completed' &&
                                 status != 'cancelled') ||
@@ -337,8 +324,7 @@ class BookingsSessionsScreen extends StatelessWidget {
                                         final bookingId = session['id'];
                                         await controller
                                             .startSession(bookingId);
-                                        await controller
-                                            .fetchSessions(); // لتحديث القائمة
+                                        await controller.fetchSessions();
                                       },
                                       icon: Icon(Icons.play_arrow,
                                           size: 18,
@@ -404,9 +390,6 @@ class BookingsSessionsScreen extends StatelessWidget {
                               )
                             ],
                           ),
-                        // بعد زر الإلغاء
-
-// زر تحديد مسار التدريب للمُدرّب فقط
                         if (userRole == 'trainer' && status == 'booked')
                           Center(
                             child: ElevatedButton.icon(
@@ -432,9 +415,7 @@ class BookingsSessionsScreen extends StatelessWidget {
                               ),
                             ),
                           ),
-
                         SizedBox(height: 15),
-
                         if (userRole == 'trainer' &&
                             status == 'completed' &&
                             session['is_rated'] == false)

@@ -6,7 +6,7 @@ import 'package:driving_school/core/constant/appimages.dart';
 class CarCardReadonly extends StatelessWidget {
   final CarModel car;
 
-  const CarCardReadonly({Key? key, required this.car}) : super(key: key);
+  const CarCardReadonly({super.key, required this.car});
 
   @override
   Widget build(BuildContext context) {
@@ -16,7 +16,6 @@ class CarCardReadonly extends StatelessWidget {
       clipBehavior: Clip.antiAlias,
       child: Column(
         children: [
-          // الصورة بخفض  ارتفاع بسيط لحل overflow
           SizedBox(
             height: 110.h,
             width: double.infinity,
@@ -31,15 +30,12 @@ class CarCardReadonly extends StatelessWidget {
                   : _placeholder(),
             ),
           ),
-
-          // المحتوى السفلي بمساحة أقل padding رأسي
           Expanded(
             child: Padding(
               padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.h),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  // اسم السيارة ورقم اللوحة
                   Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
@@ -65,8 +61,6 @@ class CarCardReadonly extends StatelessWidget {
                       ),
                     ],
                   ),
-
-                  // المميزات عمودياً
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisSize: MainAxisSize.min,
@@ -76,15 +70,13 @@ class CarCardReadonly extends StatelessWidget {
                       _featureItem(Icons.settings, car.transmission),
                     ],
                   ),
-
-                  // نوع السيارة بتقليل البادينج الرأسي
                   Container(
                     padding:
                         EdgeInsets.symmetric(horizontal: 10.w, vertical: 4.h),
                     decoration: BoxDecoration(
                       color: car.isForSpecialNeeds
-                          ? Colors.pink.withOpacity(0.2)
-                          : Colors.green.withOpacity(0.2),
+                          ? Colors.pink.withAlpha((0.2 * 255).toInt())
+                          : Colors.green.withAlpha((0.2 * 255).toInt()),
                       borderRadius: BorderRadius.circular(12.r),
                     ),
                     child: Text(

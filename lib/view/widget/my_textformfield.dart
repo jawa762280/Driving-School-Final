@@ -42,7 +42,6 @@ class MyTextformfield extends StatelessWidget {
       maxLines: maxLines ?? 1,
       focusNode: _focusNode,
 
-      // initialValue: value,
       onTap: onTapTextField,
       obscureText: obscureText == null || obscureText == false ? false : true,
       validator: valid,

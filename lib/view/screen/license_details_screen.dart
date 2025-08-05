@@ -19,7 +19,8 @@ class LicenseDetailsScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: const Color(0xFFF5F7FA),
       appBar: AppBar(
-        title: const Text("تفاصيل الرخصة", style: TextStyle(color: Colors.white)),
+        title:
+            const Text("تفاصيل الرخصة", style: TextStyle(color: Colors.white)),
         backgroundColor: AppColors.primaryColor,
         centerTitle: true,
         iconTheme: const IconThemeData(color: Colors.white),
@@ -31,7 +32,8 @@ class LicenseDetailsScreen extends StatelessWidget {
           const SizedBox(height: 12),
           _buildInfoCard([
             _InfoItem(Icons.card_membership, "اسم الرخصة", name),
-            _InfoItem(Icons.info_outline, "الحالة", status, statusColor: _getStatusColor(license['status'])),
+            _InfoItem(Icons.info_outline, "الحالة", status,
+                statusColor: _getStatusColor(license['status'])),
             _InfoItem(Icons.loop, "نوع الطلب", type),
             _InfoItem(Icons.calendar_today, "تاريخ التقديم", createdAt),
           ]),
@@ -42,7 +44,8 @@ class LicenseDetailsScreen extends StatelessWidget {
               ? const Center(
                   child: Padding(
                     padding: EdgeInsets.all(24),
-                    child: Text("لا توجد ملفات", style: TextStyle(color: Colors.grey)),
+                    child: Text("لا توجد ملفات",
+                        style: TextStyle(color: Colors.grey)),
                   ),
                 )
               : GridView.builder(
@@ -67,7 +70,8 @@ class LicenseDetailsScreen extends StatelessWidget {
                           fit: BoxFit.cover,
                           errorBuilder: (_, __, ___) => Container(
                             color: Colors.grey[200],
-                            child: const Icon(Icons.broken_image, size: 40, color: Colors.grey),
+                            child: const Icon(Icons.broken_image,
+                                size: 40, color: Colors.grey),
                           ),
                         ),
                       ),
@@ -98,7 +102,7 @@ class LicenseDetailsScreen extends StatelessWidget {
         borderRadius: BorderRadius.circular(18),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.04),
+            color: Colors.black.withAlpha((0.04 * 255).toInt()),
             offset: const Offset(0, 4),
             blurRadius: 10,
           ),
@@ -111,7 +115,8 @@ class LicenseDetailsScreen extends StatelessWidget {
                 padding: const EdgeInsets.symmetric(vertical: 10),
                 child: Row(
                   children: [
-                    Icon(item.icon, color: item.statusColor ?? AppColors.primaryColor),
+                    Icon(item.icon,
+                        color: item.statusColor ?? AppColors.primaryColor),
                     const SizedBox(width: 12),
                     Text(
                       "${item.label}: ",
@@ -146,8 +151,9 @@ class LicenseDetailsScreen extends StatelessWidget {
             child: Image.network(
               url,
               fit: BoxFit.contain,
-              errorBuilder: (_, __, ___) =>
-                  const Center(child: Icon(Icons.broken_image, size: 60, color: Colors.white)),
+              errorBuilder: (_, __, ___) => const Center(
+                  child:
+                      Icon(Icons.broken_image, size: 60, color: Colors.white)),
             ),
           ),
         ),

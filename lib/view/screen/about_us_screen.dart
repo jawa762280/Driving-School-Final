@@ -27,14 +27,12 @@ class AboutUsScreen extends StatelessWidget {
         padding: const EdgeInsets.all(16),
         child: Column(
           children: [
-            // Logo with animated scale & fade
             TweenAnimationBuilder<double>(
               duration: Duration(milliseconds: 900),
               tween: Tween<double>(begin: 0.0, end: 1.0),
               builder: (context, value, child) {
                 return Opacity(
-                  opacity: value.clamp(
-                      0.0, 1.0), // للتأكد من أن القيمة ضمن النطاق المسموح
+                  opacity: value.clamp(0.0, 1.0),
                   child: child,
                 );
               },
@@ -53,7 +51,6 @@ class AboutUsScreen extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 24),
-
             const Text(
               'أهلاً بكم في تطبيق "مدرسة قيادة"، منصتكم الشاملة لتعلم القيادة بأمان واحتراف. '
               'صممنا هذا التطبيق خصيصاً لنجعل رحلتكم نحو رخصة القيادة أكثر مرونة وسلاسة، بخدمات متكاملة وتقنيات ذكية تلبي تطلعاتكم.',
@@ -65,7 +62,6 @@ class AboutUsScreen extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 28),
-
             Align(
               alignment: Alignment.centerRight,
               child: Text(
@@ -78,7 +74,6 @@ class AboutUsScreen extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 12),
-
             _buildFeatureCard(Icons.credit_card, 'إصدار الرخص',
                 'متابعة جميع الإجراءات الرسمية لاستخراج الرخصة بسهولة.'),
             _buildFeatureCard(Icons.directions_car, 'تدريب عملي متقدم',
@@ -90,7 +85,6 @@ class AboutUsScreen extends StatelessWidget {
             _buildFeatureCard(Icons.event_available, 'حجز الجلسات بسهولة',
                 'اختيار المدرب والوقت الأنسب في خطوات بسيطة.'),
             const SizedBox(height: 28),
-
             const Text(
               'ثقتكم هي محركنا. مع "مدرسة قيادة"، اكتشفوا تجربة تعليم قيادة حديثة وآمنة. 🚗💡',
               textAlign: TextAlign.center,
@@ -99,7 +93,6 @@ class AboutUsScreen extends StatelessWidget {
             const SizedBox(height: 24),
             const Divider(),
             const SizedBox(height: 12),
-
             Wrap(
               alignment: WrapAlignment.center,
               spacing: 24,

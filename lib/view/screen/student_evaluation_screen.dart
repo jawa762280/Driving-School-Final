@@ -68,7 +68,6 @@ class StudentEvaluationScreen extends StatelessWidget {
           }
 
           return ListView(padding: const EdgeInsets.all(16), children: [
-            // الحالة النهائية
             Container(
               padding: const EdgeInsets.symmetric(vertical: 18, horizontal: 20),
               margin: const EdgeInsets.only(bottom: 25),
@@ -110,7 +109,6 @@ class StudentEvaluationScreen extends StatelessWidget {
               ),
             ),
 
-            // قائمة التقييمات
             ...controller.evaluations.map((item) {
               final bool passed = item.status.contains('✅');
               final bool hasScore = item.score != null;
@@ -136,7 +134,6 @@ class StudentEvaluationScreen extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    // عنوان نوع الامتحان
                     Text(
                       _formatType(item.type),
                       style: const TextStyle(
@@ -147,7 +144,6 @@ class StudentEvaluationScreen extends StatelessWidget {
                     ),
                     const SizedBox(height: 10),
 
-                    // إذا تم تقديم الامتحان
                     if (hasScore)
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -179,7 +175,6 @@ class StudentEvaluationScreen extends StatelessWidget {
 
                     const SizedBox(height: 12),
 
-                    // الحالة
                     Row(
                       children: [
                         Icon(
@@ -203,7 +198,6 @@ class StudentEvaluationScreen extends StatelessWidget {
                 ),
               );
             }),
-            // داخل Obx اللي في جسم الصفحة
             if (controller.passedAll.value)
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 20),
@@ -213,7 +207,6 @@ class StudentEvaluationScreen extends StatelessWidget {
                     if (controller.isLoading.value) {
                       return const Center(child: CircularProgressIndicator());
                     }
-                    // لو الشهادة مولدة بالفعل
                     if (controller.isCertificateGenerated.value &&
                         controller.certificateUrl.value.isNotEmpty) {
                       return ElevatedButton(
@@ -249,7 +242,6 @@ class StudentEvaluationScreen extends StatelessWidget {
                         ),
                       );
                     }
-                    // إذا الشهادة ما تولدت بعد
                     else {
                       return ElevatedButton(
                         onPressed: () async {

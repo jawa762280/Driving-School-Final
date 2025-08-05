@@ -15,7 +15,7 @@ class TrainerScheduleScreen extends StatelessWidget {
       textDirection: TextDirection.rtl,
       child: Scaffold(
         backgroundColor: const Color(0xFFF9F9F9),
-        appBar: AppBar( 
+        appBar: AppBar(
           elevation: 0,
           title: const Text(
             "إنشاء جدول تدريب",
@@ -65,7 +65,7 @@ class TrainerScheduleScreen extends StatelessWidget {
                                       ? [
                                           BoxShadow(
                                             color: AppColors.primaryColor
-                                                .withOpacity(0.4),
+                                                .withAlpha((0.4 * 255).toInt()),
                                             blurRadius: 10,
                                             offset: const Offset(0, 4),
                                           )
@@ -75,8 +75,8 @@ class TrainerScheduleScreen extends StatelessWidget {
                                 child: InkWell(
                                   onTap: () => controller.selectDay(day),
                                   borderRadius: BorderRadius.circular(10.r),
-                                  splashColor:
-                                      AppColors.primaryColor.withOpacity(0.3),
+                                  splashColor: AppColors.primaryColor
+                                      .withAlpha((0.3 * 255).toInt()),
                                   child: Text(
                                     day,
                                     style: TextStyle(
@@ -184,7 +184,7 @@ class TrainerScheduleScreen extends StatelessWidget {
         borderRadius: BorderRadius.circular(16.r),
         boxShadow: [
           BoxShadow(
-            color: Colors.grey.withOpacity(0.12),
+            color: Colors.grey.withAlpha((0.12 * 255).toInt()),
             blurRadius: 10,
             spreadRadius: 3,
             offset: const Offset(0, 6),
@@ -208,7 +208,7 @@ class TrainerScheduleScreen extends StatelessWidget {
       child: InkWell(
         onTap: onTap,
         borderRadius: BorderRadius.circular(12.r),
-        splashColor: AppColors.primaryColor.withOpacity(0.3),
+        splashColor: AppColors.primaryColor.withAlpha((0.3 * 255).toInt()),
         child: Container(
           padding: EdgeInsets.symmetric(vertical: 14.h, horizontal: 12.w),
           decoration: BoxDecoration(
@@ -252,7 +252,6 @@ class TrainerScheduleScreen extends StatelessWidget {
   }
 }
 
-// Animation helper for fade + slide from bottom effect with delay
 class FadeSlideTransition extends StatefulWidget {
   final Widget child;
   final int delay;
@@ -306,7 +305,6 @@ class _FadeSlideTransitionState extends State<FadeSlideTransition>
   }
 }
 
-// زر متحرك بتدرج لوني متغير باستمرار
 class AnimatedGradientButton extends StatefulWidget {
   final VoidCallback onPressed;
   final String text;

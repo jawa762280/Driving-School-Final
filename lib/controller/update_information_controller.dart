@@ -152,7 +152,6 @@ class UpdateInformationController extends GetxController {
         data.read('user')[data.read('role').toString()]['training_type'] ?? '';
     experience.text =
         data.read('user')[data.read('role').toString()]['experience'] ?? '';
-    /////////////////////
     nationalityController.text =
         data.read('user')[data.read('role').toString()]['nationality'] ?? '';
     data.read('user')[data.read('role').toString()]['is_military'].toString() ==
@@ -166,7 +165,6 @@ class UpdateInformationController extends GetxController {
             '0'
         ? isLeftHandDisabled = false
         : isLeftHandDisabled = true;
-    //////////////////
     imageUrl =
         'http${data.read('user')[data.read('role').toString()]['image'].toString().split('http').last}';
 

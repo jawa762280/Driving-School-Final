@@ -20,7 +20,7 @@ class TrainerServices extends StatelessWidget {
           colors: [
             Colors.white,
             AppColors.primaryColor.withAlpha((255 * 0.01).toInt()),
-          ],  
+          ],
         ),
       ),
       child: Column(
@@ -76,13 +76,6 @@ class TrainerServices extends StatelessWidget {
                   decoration: BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(20.r),
-                    // boxShadow: [
-                    // BoxShadow(
-                    //   color: AppColors.primaryColor.withOpacity(0.5),
-                    //   blurRadius: 12,
-                    //   offset: Offset(0, 6),
-                    // ),
-                    // ],
                   ),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
@@ -96,7 +89,8 @@ class TrainerServices extends StatelessWidget {
                           gradient: LinearGradient(
                             colors: [
                               AppColors.primaryColor,
-                              AppColors.primaryColor.withOpacity(0.2),
+                              AppColors.primaryColor
+                                  .withAlpha((0.2 * 2255).toInt()),
                             ],
                             begin: Alignment.topLeft,
                             end: Alignment.bottomRight,

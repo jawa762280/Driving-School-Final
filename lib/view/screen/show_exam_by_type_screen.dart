@@ -177,7 +177,6 @@ class ShowExamByTypeScreen extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // Header: رقم السؤال
                   Container(
                     padding:
                         const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
@@ -196,14 +195,12 @@ class ShowExamByTypeScreen extends StatelessWidget {
                   ),
                   const SizedBox(height: 10),
 
-                  // نص السؤال
                   Text(
                     question.text,
                     style: const TextStyle(
                         fontSize: 16, fontWeight: FontWeight.w600),
                   ),
 
-                  // صورة إن وجدت
                   if ((question.imageUrl?.isNotEmpty ?? false))
                     Padding(
                       padding: const EdgeInsets.only(top: 12),
@@ -220,7 +217,6 @@ class ShowExamByTypeScreen extends StatelessWidget {
 
                   const SizedBox(height: 14),
 
-                  // الخيارات
                   Column(
                     children: question.choices.map((choice) {
                       return Container(

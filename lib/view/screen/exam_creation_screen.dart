@@ -50,7 +50,6 @@ class ExamCreationScreen extends StatelessWidget {
                   isNumber: true),
               const SizedBox(height: 32),
 
-              // الأسئلة
               buildSectionTitle('الأسئلة'),
               const SizedBox(height: 12),
 
@@ -211,7 +210,6 @@ class ExamCreationScreen extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // رأس البطاقة: رقم السؤال ونص السؤال
           Row(
             children: [
               CircleAvatar(
@@ -247,7 +245,6 @@ class ExamCreationScreen extends StatelessWidget {
 
           const SizedBox(height: 16),
 
-          // نص السؤال (متعدد الأسطر)
           buildTextField(
             question.textController,
             'أدخل نص السؤال',
@@ -256,7 +253,6 @@ class ExamCreationScreen extends StatelessWidget {
 
           const SizedBox(height: 20),
 
-          // صورة السؤال + زر رفع
           Row(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
@@ -301,13 +297,11 @@ class ExamCreationScreen extends StatelessWidget {
 
           const SizedBox(height: 30),
 
-          // عنوان الخيارات
           const Text('الخيارات:',
               style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
 
           const SizedBox(height: 16),
 
-          // قائمة الخيارات
           Obx(() {
             return Column(
               children: List.generate(question.choices.length, (cIndex) {
@@ -319,7 +313,6 @@ class ExamCreationScreen extends StatelessWidget {
 
           const SizedBox(height: 20),
 
-          // زر إضافة خيار
           Align(
             alignment: Alignment.centerRight,
             child: ElevatedButton.icon(
@@ -373,10 +366,8 @@ class ExamCreationScreen extends StatelessWidget {
       ),
       child: Row(
         children: [
-          // زر الاختيار (Checkbox مع تصميم أنيق)
           GestureDetector(
             onTap: () {
-              // تفعيل/إلغاء تفعيل الخيار الصحيح
               choice.isCorrect.value = !choice.isCorrect.value;
             },
             child: AnimatedContainer(
@@ -402,12 +393,11 @@ class ExamCreationScreen extends StatelessWidget {
           ),
           const SizedBox(width: 14),
 
-          // حقل النص مع توسع ليملأ المساحة المتاحة
           Expanded(
             child: ConstrainedBox(
               constraints: const BoxConstraints(
-                minHeight: 48, // ارتفاع مبدئي مناسب
-                maxHeight: 120, // أقصى ارتفاع (يمكن تعديله حسب الحاجة)
+                minHeight: 48, 
+                maxHeight: 120, 
               ),
               child: TextField(
                 controller: choice.textController,
@@ -418,13 +408,12 @@ class ExamCreationScreen extends StatelessWidget {
                   contentPadding: const EdgeInsets.symmetric(vertical: 10),
                 ),
                 style: const TextStyle(fontSize: 16),
-                maxLines: null, // للسماح بتعدد الأسطر
+                maxLines: null, 
                 keyboardType: TextInputType.multiline,
               ),
             ),
           ),
 
-          // زر الحذف صغير وأنيق
           IconButton(
             icon: const Icon(Icons.close, color: Colors.redAccent, size: 22),
             onPressed: () {

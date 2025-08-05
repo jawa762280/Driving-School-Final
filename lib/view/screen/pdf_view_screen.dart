@@ -126,7 +126,6 @@ class _PdfViewScreenState extends State<PdfViewScreen> {
             });
           },
           onViewCreated: (pdfViewController) {
-            // ممكن تخزن pdfViewController إذا تحتاجه للتحكم بالصفحات
           },
           onPageChanged: (page, total) {
             setState(() {

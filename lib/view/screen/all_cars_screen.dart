@@ -36,7 +36,6 @@ class _AllCarsScreenState extends State<AllCarsScreen> {
             return const Loading();
           }
 
-          // Filter cars based on selected index
           final filteredCars = controller.cars.where((car) {
             switch (_selectedIndex) {
               case 1:
@@ -62,7 +61,8 @@ class _AllCarsScreenState extends State<AllCarsScreen> {
                 selectedColor: Colors.white,
                 fillColor: AppColors.primaryColor,
                 color: AppColors.primaryColor,
-                borderColor: AppColors.primaryColor.withOpacity(0.4),
+                borderColor:
+                    AppColors.primaryColor.withAlpha((0.4 * 255).toInt()),
                 selectedBorderColor: AppColors.primaryColor,
                 children: _tabs.map((title) {
                   return Padding(

@@ -14,7 +14,9 @@ class TrainerReviewsController extends GetxController {
     var response =
         await crud.getRequest('${AppLinks.init}/trainer/$id/reviews');
 
+    // ignore: avoid_print
     print('Full response: $response');
+    // ignore: avoid_print
     print('Data part: ${response['data']}');
 
     var data = response['data'];
@@ -25,9 +27,11 @@ class TrainerReviewsController extends GetxController {
     if (data is List && data.isNotEmpty) {
       List cleanedReviews =
           data.where((e) => e is Map && e.isNotEmpty).toList();
+      // ignore: avoid_print
       print('Cleaned reviews: $cleanedReviews');
       reviews.addAll(cleanedReviews);
     } else {
+      // ignore: avoid_print
       print('Data is empty or not a list');
     }
 

@@ -10,13 +10,11 @@ class NotificationsController extends GetxController {
   late Timer timer;
 
   var isLoading = true.obs;
-  // خليها RxList عشان GetX يلتقط التغييرات
   var notifications = <Map<String, dynamic>>[].obs;
 
   @override
   void onInit() {
     super.onInit();
-    // أول جلب
     fetchNotifications();
     // وشغل polling كل 30 ثانية
     // timer = Timer.periodic(const Duration(seconds: 30), (_) {
@@ -31,7 +29,6 @@ class NotificationsController extends GetxController {
   }
 
   Future<void> fetchNotifications() async {
-    // حفظ عدد غير المقروءين قبل التحديث
     final prevCount = notifications.where((n) => n['read_at'] == null).length;
 
     isLoading(true);
@@ -46,13 +43,11 @@ class NotificationsController extends GetxController {
       rawList = [];
     }
 
-    // حدّد نوع العناصر إلى Map<String, dynamic>
     notifications.value =
         rawList.map((e) => e as Map<String, dynamic>).toList();
 
     isLoading(false);
 
-    // قارن عدد غير المقروءين بعد التحديث
     final newCount = notifications.where((n) => n['read_at'] == null).length;
     if (newCount > prevCount) {
       _playNotificationSound();
@@ -65,6 +60,7 @@ class NotificationsController extends GetxController {
       await _audioPlayer
           .play(AssetSource('sounds/mixkit-confirmation-tone-2867.wav'));
     } catch (e) {
+      // ignore: avoid_print
       print('🔴 Error playing sound: $e');
     }
   }

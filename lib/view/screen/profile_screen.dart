@@ -32,7 +32,6 @@ class ProfileScreen extends StatelessWidget {
               ),
               const SizedBox(height: 20),
 
-              // صورة الملف الشخصي
               Container(
                 width: 150,
                 height: 150,
@@ -45,13 +44,11 @@ class ProfileScreen extends StatelessWidget {
               ),
 
               const SizedBox(height: 10),
-              // الاسم الكامل
               Text(
                 data.read('user')[data.read('role').toString()]['first_name'],
                 style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
               ),
               SizedBox(height: 5.h),
-              // رقم الهاتف
               Text(
                 data.read('user')[data.read('role').toString()]['phone_number'],
                 style: TextStyle(color: Colors.grey[700]),
@@ -59,7 +56,6 @@ class ProfileScreen extends StatelessWidget {
 
               const SizedBox(height: 15),
 
-              // زر تعديل معلومات الحساب
               OutlinedButton(
                 onPressed: () {
                   controller.goToUpdateInformation();
@@ -80,7 +76,6 @@ class ProfileScreen extends StatelessWidget {
 
               const SizedBox(height: 20),
 
-              // القائمة الأولى
               Container(
                 decoration: BoxDecoration(
                   color: Colors.white,
@@ -101,7 +96,6 @@ class ProfileScreen extends StatelessWidget {
                 ),
               ),
 
-              // القائمة الثانية
               Container(
                 decoration: BoxDecoration(
                   color: Colors.white,

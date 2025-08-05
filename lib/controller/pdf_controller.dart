@@ -19,16 +19,20 @@ class PdfController extends GetxController {
       final file = File(filePath);
 
       if (!await file.exists()) {
+        // ignore: avoid_print
         print('تحميل الملف من: $url');
         final dio = Dio();
         await dio.download(url, filePath);
       } else {
+        // ignore: avoid_print
         print('الملف موجود مسبقاً: $filePath');
       }
 
       localPath = filePath;
+      // ignore: avoid_print
       print('تم حفظ الملف في: $filePath');
     } catch (e) {
+      // ignore: avoid_print
       print('خطأ أثناء تحميل الملف: $e');
       Get.snackbar('خطأ', 'فشل تحميل الشهادة');
       localPath = null;
@@ -58,13 +62,16 @@ class PdfController extends GetxController {
         options: Options(headers: headers),
       );
 
+      // ignore: avoid_print
       print('✅ تم تحميل الشهادة في: $savePath');
 
       final result = await OpenFile.open(savePath);
+      // ignore: avoid_print
       print('📄 حالة فتح الملف: ${result.message}');
 
       Get.snackbar('تم', 'تم تحميل الشهادة بنجاح ✅');
     } catch (e) {
+      // ignore: avoid_print
       print('❌ خطأ أثناء تحميل الشهادة: $e');
       Get.snackbar('خطأ', 'فشل تحميل الشهادة');
     }

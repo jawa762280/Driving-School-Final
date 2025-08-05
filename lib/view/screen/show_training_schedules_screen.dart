@@ -159,7 +159,6 @@ class ShowTRainingSchedulesScreen extends StatelessWidget {
           ),
           const SizedBox(height: 12),
 
-          /// 👇 الزر هنا
 
           Row(
             children: [

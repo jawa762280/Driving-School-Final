@@ -248,7 +248,6 @@ class GenerateExamController extends GetxController {
         completedTypes.refresh();
         update();
       }
-    } catch (e) {
     } finally {
       isLoading.value = false;
     }

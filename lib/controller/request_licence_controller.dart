@@ -109,6 +109,7 @@ class RequestLicenceController extends GetxController {
       files,
       strings,
     );
+    // ignore: avoid_print
     print(response);
     if (response['success'] == true) {
       Get.snackbar(

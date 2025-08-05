@@ -1,4 +1,3 @@
-// ignore_for_file: avoid_print
 
 import 'package:driving_school/core/constant/app_api.dart';
 import 'package:driving_school/core/constant/appcolors.dart';
@@ -166,7 +165,6 @@ class TrainerScheduleController extends GetxController {
 
       if (response != null) {
         if (response['statusCode'] == 403) {
-          // رسالة رفض بسبب الحساب غير معتمد
           Get.snackbar(
               "حساب غير معتمد", 'لا يمكن إنشاء جدول لأن حالة حسابك غير معتمدة');
         } else if (response['message']?.toString().contains("تم انشاء جدول") ==
@@ -177,10 +175,12 @@ class TrainerScheduleController extends GetxController {
           Get.snackbar("خطأ", response['message'] ?? "حدث خطأ أثناء الحفظ ❌");
         }
 
+        // ignore: avoid_print
         print("📬 تفاصيل الرد: ${response.toString()}");
       }
     } catch (e) {
       Get.snackbar("خطأ", "حدث استثناء أثناء الحفظ ❌");
+      // ignore: avoid_print
       print("❌ استثناء أثناء الطلب: ${e.toString()}");
     }
   }

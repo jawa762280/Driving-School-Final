@@ -24,12 +24,7 @@ class BookingsSessionsController extends GetxController {
   void onInit() {
     super.onInit();
     userRole.value = data.read('role') ?? 'student';
-    if (data.read('student-review') == null) {
-      data.write('student-review', []);
-    }
-    if (data.read('trainer-review') == null) {
-      data.write('trainer-review', []);
-    }
+
     if (data.read('role').toString() == 'trainer') {
       getReviews();
     }
@@ -77,7 +72,7 @@ class BookingsSessionsController extends GetxController {
         resetFeedbackForm();
 
         update();
-        Navigator.pop(Get.context!); // إغلاق النافذة
+        Navigator.pop(Get.context!);
       }
     } catch (e) {
       Get.snackbar("خطأ", "حدث خطأ أثناء إرسال التقييم");
@@ -88,10 +83,11 @@ class BookingsSessionsController extends GetxController {
   }
 
   void resetFeedbackForm() {
-    level = 'beginner'; // أو 0 إذا كانت رقمية
-    comment.clear(); // لتفريغ النص
+    level = 'beginner';
+    comment.clear();
   }
 
+  // ignore: prefer_typing_uninitialized_variables
   var response;
   Future<void> fetchSessions() async {
     isLoading.value = true;

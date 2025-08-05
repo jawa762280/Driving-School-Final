@@ -57,7 +57,6 @@ class TrainerReviewsScreen extends StatelessWidget {
             itemCount: controller.reviews.length,
             itemBuilder: (context, i) {
               var review = controller.reviews[i];
-              // ... بقية تصميم البطاقة كما في كودك
               return Container(
                 margin: EdgeInsets.only(bottom: 20.h),
                 decoration: BoxDecoration(
@@ -79,7 +78,6 @@ class TrainerReviewsScreen extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    // محتويات التقييم (صورة الطالب، الاسم، النجوم، التعليق) كما في كودك السابق
                     Row(
                       children: [
                         CircleAvatar(

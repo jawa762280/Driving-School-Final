@@ -22,6 +22,7 @@ class MySearchController extends GetxController {
   void onInit() {
     super.onInit();
     currentUserRole.value = data.read('role') ?? 'student';
+    // ignore: avoid_print
     print("👤 Loaded studentId: $studentId");
 
     if (studentId == null) {
@@ -30,11 +31,9 @@ class MySearchController extends GetxController {
 
     fetchInstructors();
   }
- // في search_controller.dart
 Future<void> openChat(int otherUserId, String otherName) async {
   final myId = data.read('user')['id'] as int;
 
-  // 1) جلب كل المحادثات
   final resp = await crud.getRequest(AppLinks.chatConversations);
   int? convId;
   if (resp['data'] != null) {
@@ -49,11 +48,10 @@ Future<void> openChat(int otherUserId, String otherName) async {
     }
   }
 
-  // 2) انتقل إلى شاشة الدردشة مع conversation_id (قد يكون null)
   Get.toNamed(
     AppRouts.chatScreen,
     arguments: {
-      'conversation_id': convId,           // إذا null: ستُنشأ عند أول رسالة
+      'conversation_id': convId,           
       'to_id': otherUserId.toString(),
       'name': otherName,
     },
@@ -122,10 +120,12 @@ Future<void> openChat(int otherUserId, String otherName) async {
           }
         }
 
+        // ignore: avoid_print
         print(
             "👤 Checking if student $studentId has rated trainer ${trainer['trainer_id']}");
 
         for (var review in flatReviews) {
+          // ignore: avoid_print
           print(
               "🔎 Review student_id: ${review['student_id']} - rating: ${review['rating']}");
 
@@ -135,6 +135,7 @@ Future<void> openChat(int otherUserId, String otherName) async {
 
             if (review['student_id'].toString() == studentId.toString()) {
               hasReview = true;
+              // ignore: avoid_print
               print(
                   "✅ Student $studentId has reviewed trainer ${trainer['trainer_id']}");
             }
@@ -171,6 +172,7 @@ Future<void> openChat(int otherUserId, String otherName) async {
         'rating': rating,
       });
 
+      // ignore: avoid_print
       print('MyResponse $response');
 
       if (response['status'] == true) {
@@ -185,7 +187,6 @@ Future<void> openChat(int otherUserId, String otherName) async {
 
         Get.back();
 
-        // إعادة تعيين الحقول (اختياري)
         comment.clear();
         rating = 3;
         update();

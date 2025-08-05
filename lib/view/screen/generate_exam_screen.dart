@@ -313,7 +313,7 @@ class GenerateExamScreen extends StatelessWidget {
           ),
         ),
         child: Row(
-          textDirection: TextDirection.ltr, // أجبر اتجاه النص لليسار لليمين
+          textDirection: TextDirection.ltr,
 
           mainAxisSize: MainAxisSize.min,
           mainAxisAlignment: MainAxisAlignment.center,

@@ -15,61 +15,19 @@ Future<void> initialServices() async {
   await Get.putAsync(() async => await MyServices().init());
 }
 
-String mytoken = 'UNKNOWN';
-
-/// ✅ معالج الإشعارات عند وصولها بالخلفية أو إغلاق التطبيق
-Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
-  await Firebase.initializeApp();
-  print("📥 إشعار بالخلفية (onBackgroundMessage):");
-  print("🔔 Title: ${message.notification?.title}");
-  print("📝 Body: ${message.notification?.body}");
-  print("📦 Data: ${message.data}");
-}
-
+String mytoken = '';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Get.putAsync(() => PusherService().init());
 
-  // ✅ تهيئة Firebase
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
-  // ✅ تسجيل معالج الخلفية
-  FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
-
-  // ✅ طلب صلاحيات الإشعارات
-  NotificationSettings settings =
-      await FirebaseMessaging.instance.requestPermission();
-  print('📛 Notification permission status: ${settings.authorizationStatus}');
-
-  // ✅ الحصول على التوكن
-  mytoken = (await FirebaseMessaging.instance.getToken()) ?? 'UNKNOWN';
+  mytoken = (await FirebaseMessaging.instance.getToken()) ?? 'null';
+  // ignore: avoid_print
   print("📲 FCM Token: $mytoken");
 
-  // ✅ الاستماع للإشعارات عندما يكون التطبيق مفتوحًا
-  FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-    print('✅ استلمنا إشعار أثناء فتح التطبيق (onMessage)');
-    print('🔔 Title: ${message.notification?.title}');
-    print('📝 Body: ${message.notification?.body}');
-    print('📦 Data: ${message.data}');
-  });
-
-  // ✅ عند فتح التطبيق من إشعار
-  FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
-    print('📲 تم فتح التطبيق من الإشعار (onMessageOpenedApp)');
-    print('📦 Data: ${message.data}');
-  });
-
-  // ✅ عند تشغيل التطبيق من إشعار وهو مغلق تمامًا
-  FirebaseMessaging.instance.getInitialMessage().then((RemoteMessage? message) {
-    if (message != null) {
-      print('🚀 تم تشغيل التطبيق من إشعار مغلق مسبقاً (getInitialMessage)');
-      print('📦 Data: ${message.data}');
-    }
-  });
-
-  // ✅ تحميل الخدمات والتهيئة العامة
   await initialServices();
   await initializeDateFormatting('ar');
 

@@ -80,6 +80,7 @@ class LoginController extends GetxController {
         if (response != null && response['status'] == 'success') {
           final userData = response['data']['user'];
 
+          // ignore: avoid_print
           print('userData: ${response['data']}');
           final token = response['data']['token'];
           myServices.saveToken(token);

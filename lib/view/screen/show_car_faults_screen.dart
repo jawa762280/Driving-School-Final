@@ -30,7 +30,8 @@ class ShowCarFaults extends StatelessWidget {
           ),
           body: Obx(() {
             if (ctrl.isLoading.value) {
-              return const Center(child: CircularProgressIndicator(color: Colors.green));
+              return const Center(
+                  child: CircularProgressIndicator(color: Colors.green));
             }
 
             if (ctrl.faults.isEmpty) {
@@ -65,7 +66,7 @@ class ShowCarFaults extends StatelessWidget {
         borderRadius: BorderRadius.circular(16.r),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
+            color: Colors.black.withAlpha((0.05 * 255).toInt()),
             blurRadius: 8,
             offset: const Offset(0, 4),
           )
@@ -79,7 +80,7 @@ class ShowCarFaults extends StatelessWidget {
                 width: 60.w,
                 height: 60.w,
                 decoration: BoxDecoration(
-                  color: AppColors.primaryColor.withOpacity(0.1),
+                  color: AppColors.primaryColor.withAlpha((0.1 * 255).toInt()),
                   borderRadius: BorderRadius.circular(30.r),
                 ),
                 child: Icon(Icons.directions_car,

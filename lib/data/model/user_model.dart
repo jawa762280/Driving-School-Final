@@ -10,7 +10,7 @@ class UserModel {
   final String? gender;
   final String? role;
   final String? imageUrl;
-  final TrainerModel? trainer; // ✅ إضافة
+  final TrainerModel? trainer; 
 
   UserModel({
     required this.userId,

@@ -37,7 +37,6 @@ class CarCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // 🔹 بيانات السيارة
           Row(
             children: [
               ClipRRect(
@@ -53,7 +52,6 @@ class CarCard extends StatelessWidget {
                           car.isForSpecialNeeds
                               ? AppImages.specialneedscar
                               : AppImages.car,
-                          // color: AppColors.primaryColor,
                         ),
                       ),
               ),
@@ -113,7 +111,7 @@ class CarCard extends StatelessWidget {
                               textCancel: "إلغاء",
                               buttonColor: AppColors.primaryColor,
                               onConfirm: () {
-                                Get.back(); // إغلاق الحوار
+                                Get.back();
                                 final bookingController =
                                     Get.find<BookingController>();
                                 bookingController.bookTrainingSession(car.id);

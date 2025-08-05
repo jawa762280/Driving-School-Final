@@ -13,7 +13,7 @@ class SearchScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final MySearchController controller = Get.put(MySearchController());
-    controller.fetchInstructors(); // ✅ إضافة هذا السطر لحل المشكلة
+    controller.fetchInstructors(); 
 
     return Directionality(
       textDirection: TextDirection.rtl,
@@ -70,7 +70,7 @@ class SearchScreen extends StatelessWidget {
                                     '${instructor['first_name']} ${instructor['last_name']}',
                                 email: instructor['email'] ?? '',
                                 trainerId: instructor['trainer_id'],
-                                userId: instructor['user_id'], // ← هنا
+                                userId: instructor['user_id'],
 
                                 userRole: controller.currentUserRole.value,
                                 hasReview: instructor['has_review'] ?? false,

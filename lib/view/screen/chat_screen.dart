@@ -30,13 +30,11 @@ class ChatScreen extends StatelessWidget {
                     style: const TextStyle(fontSize: 18, color: Colors.white),
                   ),
                 ),
-                // أيقونة فيديو أو مكالمة صوتية مثلاً
               ],
             ),
           ),
           body: Stack(
             children: [
-              // الخلفية بزخارف
               Positioned.fill(
                 child: Image.asset(
                   'assets/images/chat_bg.png.jpg',
@@ -44,7 +42,6 @@ class ChatScreen extends StatelessWidget {
                 ),
               ),
 
-              // الرسائل
               Column(
                 children: [
                   Expanded(
@@ -96,7 +93,6 @@ class ChatScreen extends StatelessWidget {
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  // محتوى الرسالة
                                   Text(
                                     msg['content'] ?? '',
                                     style: TextStyle(
@@ -106,10 +102,8 @@ class ChatScreen extends StatelessWidget {
                                     ),
                                   ),
 
-                                  // مسافة صغيرة  
                                   const SizedBox(height: 4),
 
-                                  // توقيت الرسالة بخط صغير
                                   Text(
                                     ctl.formatTime(msg['created_at']?.toString()),
                                     style: TextStyle(
@@ -120,7 +114,6 @@ class ChatScreen extends StatelessWidget {
                                     ),
                                   ),
 
-                                  // علامة القراءة (فقط إذا الرسالة مني)
                                   if (isMe && msg['is_read'] == true)
                                     const Icon(
                                       Icons.done_all,
@@ -136,7 +129,6 @@ class ChatScreen extends StatelessWidget {
                     ),
                   ),
 
-                  // حقل الإدخال
                   Container(
                     padding:
                         const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
@@ -172,7 +164,6 @@ class ChatScreen extends StatelessWidget {
                         ),
                         const SizedBox(width: 8),
                         Obx(() {
-                          // إذا isSending true فالأيقونة معطّلة
                           return IconButton(
                             icon: ctl.isSending.value
                                 ? const SizedBox(
