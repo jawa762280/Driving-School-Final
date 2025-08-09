@@ -1,4 +1,5 @@
 import 'package:driving_school/controller/generate_exam_controller.dart';
+import 'package:driving_school/core/functions/background_service.dart';
 import 'package:driving_school/core/services/pusher_service.dart';
 import 'package:driving_school/core/services/services.dart';
 import 'package:driving_school/routes.dart';
@@ -13,6 +14,7 @@ import 'firebase_options.dart';
 
 Future<void> initialServices() async {
   await Get.putAsync(() async => await MyServices().init());
+  await initializeBackgroundService();
 }
 
 String mytoken = '';

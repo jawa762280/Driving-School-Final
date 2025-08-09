@@ -69,6 +69,9 @@ dependencies:
   geolocator: ^13.0.0
   pusher_channels_flutter: ^2.5.0
   crypto: ^3.0.6
+  flutter_background_service_android: ^6.3.1
+  flutter_background_service: ^5.1.0
+  flutter_local_notifications: ^19.4.0
 
 flutter_launcher_icons:
   android: true
