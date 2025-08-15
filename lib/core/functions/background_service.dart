@@ -2,10 +2,10 @@ import 'dart:async';
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_background_service/flutter_background_service.dart';
-import 'package:flutter_background_service_android/flutter_background_service_android.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:intl/intl.dart';
 
 import '../constant/app_api.dart';
 import '../services/crud.dart';
@@ -19,7 +19,7 @@ Future<void> setupNotificationChannel() async {
   }
 
   const AndroidNotificationChannel channel = AndroidNotificationChannel(
-    'location_channel', 
+    'location_channel',
     'Location Tracking',
     description: 'Tracks location in background',
     importance: Importance.low,
@@ -31,10 +31,13 @@ Future<void> setupNotificationChannel() async {
       ?.createNotificationChannel(channel);
 }
 
-Future<void> initializeBackgroundService() async {
+/// تناديها عند "بدء الجلسة"
+Future<void> initializeBackgroundService({
+  required int sessionId,
+  required int carId,
+}) async {
   await Geolocator.requestPermission();
-  await Permission.locationAlways.request();
-
+  await Permission.locationAlways.request(); // لأندرويد 10+
   await setupNotificationChannel();
 
   final service = FlutterBackgroundService();
@@ -43,7 +46,7 @@ Future<void> initializeBackgroundService() async {
     androidConfiguration: AndroidConfiguration(
       onStart: onStart,
       isForegroundMode: true,
-      autoStart: true,
+      autoStart: false, // لا تبدأ تلقائياً
       notificationChannelId: 'location_channel',
       initialNotificationTitle: 'مدرسة القيادة',
       initialNotificationContent: 'تتبع الموقع في الخلفية',
@@ -51,11 +54,29 @@ Future<void> initializeBackgroundService() async {
     ),
     iosConfiguration: IosConfiguration(
       onForeground: onStart,
-      onBackground: (service) => true,
+      onBackground: onIosBackground, // ✅ لازم دالة ترجع Future<bool>
     ),
   );
 
   await service.startService();
+  await Future.delayed(const Duration(milliseconds: 300));
+  service.invoke('config', {
+    'session_id': sessionId,
+    'car_id': carId,
+  });
+}
+
+/// تناديها عند "إنهاء الجلسة"
+Future<void> stopBackgroundService() async {
+  final service = FlutterBackgroundService();
+  service.invoke('stopService');
+}
+
+@pragma('vm:entry-point')
+Future<bool> onIosBackground(ServiceInstance service) async {
+  WidgetsFlutterBinding.ensureInitialized();
+  DartPluginRegistrant.ensureInitialized();
+  return true;
 }
 
 @pragma('vm:entry-point')
@@ -67,44 +88,91 @@ void onStart(ServiceInstance service) async {
     service.setAsForegroundService();
   }
 
-  bool serviceRunning = true;
+  // سنملأها من UI عبر event 'config'
+  int? sessionId;
+  int? carId;
 
-  service.on("stopService").listen((event) {
-    serviceRunning = false;
+  service.on('config').listen((event) {
+    final sid = event?['session_id'];
+    final cid = event?['car_id'];
+    sessionId = sid is int ? sid : int.tryParse('$sid');
+    carId = cid is int ? cid : int.tryParse('$cid');
+  });
+
+  service.on('stopService').listen((_) async {
+    await _posSub?.cancel();
+    _posSub = null;
     service.stopSelf();
   });
 
-  Timer.periodic(const Duration(seconds: 10), (timer) async {
-    if (!serviceRunning) {
-      timer.cancel();
-      return;
-    }
+  await _startPositionStream(
+    service: service,
+    getSessionId: () => sessionId,
+    getCarId: () => carId,
+  );
+}
 
-    final enabled = await Geolocator.isLocationServiceEnabled();
-    var permission = await Geolocator.checkPermission();
+// ====== حالة على مستوى isolate ======
+StreamSubscription<Position>? _posSub;
+DateTime? _lastSent;
 
-    if (permission == LocationPermission.denied) {
-      permission = await Geolocator.requestPermission();
-    }
+// بدء بث المواقع + الإرسال
+Future<void> _startPositionStream({
+  required ServiceInstance service,
+  required int? Function() getSessionId,
+  required int? Function() getCarId,
+}) async {
+  final gpsOn = await Geolocator.isLocationServiceEnabled();
+  var perm = await Geolocator.checkPermission();
+  if (perm == LocationPermission.denied) {
+    perm = await Geolocator.requestPermission();
+  }
+  if (!gpsOn || perm == LocationPermission.deniedForever) {
+    return;
+  }
 
-    if (!enabled || permission == LocationPermission.deniedForever) {
-      return;
-    }
+  const settings = LocationSettings(
+    accuracy: LocationAccuracy.bestForNavigation,
+    distanceFilter: 10, // أرسل بعد ~10م
+  );
 
-    final pos = await Geolocator.getCurrentPosition(
-      desiredAccuracy: LocationAccuracy.high,
-    );
+  _posSub?.cancel();
+  _posSub = Geolocator.getPositionStream(locationSettings: settings).listen(
+    (pos) async {
+      final now = DateTime.now();
+      if (_lastSent != null &&
+          now.difference(_lastSent!) < const Duration(seconds: 5)) {
+        return; // throttle
+      }
 
-    print("موقعي: ${pos.latitude}, ${pos.longitude}");
+      final sid = getSessionId();
+      final cid = getCarId();
+      if (sid == null || cid == null) return;
 
-    final crud = Crud();
-    final response = await crud.postRequest(AppLinks.carLocations, {
-      "car_id": '3',
-      "latitude": pos.latitude,
-      "longitude": pos.longitude,
-      "recorded_at": '20-05-2001',
-    });
+      final recordedAt = (pos.timestamp ?? DateTime.now()).toUtc();
+      final body = {
+        "car_id": cid,
+        "session_id": sid,
+        "latitude": pos.latitude,
+        "longitude": pos.longitude,
+        "recorded_at": DateFormat("yyyy-MM-dd'T'HH:mm:ss").format(recordedAt),
+      };
 
-    print("Response: $response");
-  });
+      try {
+        final crud = Crud();
+        await crud.postRequest(AppLinks.carLocations, body);
+        _lastSent = now;
+
+        if (service is AndroidServiceInstance) {
+          service.setForegroundNotificationInfo(
+            title: 'مدرسة القيادة',
+            content:
+                'جلسة $sid | ${pos.latitude.toStringAsFixed(5)}, ${pos.longitude.toStringAsFixed(5)}',
+          );
+        }
+      } catch (_) {
+        // ممكن إضافة Queue لاحقاً
+      }
+    },
+  );
 }

@@ -595,7 +595,7 @@ void showMyDialog(BuildContext context, id) {
 }
 
 Widget buildBox(String text, int i) {
-  final controller = Get.put(BookingsSessionsController());
+  final controller = Get.find<BookingsSessionsController>();
   return AnimatedContainer(
     duration: const Duration(milliseconds: 300),
     padding: EdgeInsets.symmetric(vertical: 15),

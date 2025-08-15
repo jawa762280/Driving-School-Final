@@ -228,7 +228,7 @@ class ExamResultScreen extends StatelessWidget {
                             },
                             style: ElevatedButton.styleFrom(
                                 backgroundColor: AppColors.primaryColor,
-                              shape: RoundedRectangleBorder(
+                          shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(14),
                               ),
                               elevation: 6,

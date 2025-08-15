@@ -1,3 +1,4 @@
+import 'package:driving_school/core/functions/background_service.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:driving_school/core/services/crud.dart';
@@ -19,6 +20,9 @@ class BookingsSessionsController extends GetxController {
   String level = 'beginner';
   int levelCount = 0;
   var reviews = <dynamic>[].obs;
+
+  // ✅ لتتبع أي جلسة مفعّل عليها التتبع
+  int? _activeTrackingBookingId;
 
   @override
   void onInit() {
@@ -44,7 +48,6 @@ class BookingsSessionsController extends GetxController {
 
   getReviewsStudent() async {
     var response = await crud.getRequest(AppLinks.studentFeedbacks);
-
     reviews.clear();
     reviews.addAll(response['data']);
     update();
@@ -65,7 +68,7 @@ class BookingsSessionsController extends GetxController {
           'تم ارسال التقييم',
           backgroundColor: Colors.green.shade100,
           colorText: Colors.black,
-          duration: Duration(seconds: 2),
+          duration: const Duration(seconds: 2),
         );
         getReviews();
         fetchSessions();
@@ -119,14 +122,14 @@ class BookingsSessionsController extends GetxController {
       Get.snackbar("نجاح", response['message'],
           backgroundColor: Colors.green.shade100,
           colorText: Colors.black,
-          duration: Duration(seconds: 2));
+          duration: const Duration(seconds: 2));
       await fetchSessions();
     } else {
       final errorMsg = response?['message'] ?? 'فشل في إلغاء الجلسة';
       Get.snackbar("خطأ", errorMsg,
           backgroundColor: Colors.red.shade100,
           colorText: Colors.black,
-          duration: Duration(seconds: 2));
+          duration: const Duration(seconds: 2));
     }
   }
 
@@ -138,7 +141,10 @@ class BookingsSessionsController extends GetxController {
       Get.snackbar("نجاح", response['message'],
           backgroundColor: Colors.green.shade100,
           colorText: Colors.black,
-          duration: Duration(seconds: 2));
+          duration: const Duration(seconds: 2));
+
+      // ✅ ابدأ تتبع الخلفية فوراً لهالجلسة
+      await _startTrackingForBooking(bookingId);
 
       await fetchSessions();
     } else {
@@ -146,7 +152,7 @@ class BookingsSessionsController extends GetxController {
       Get.snackbar("خطأ", errorMsg,
           backgroundColor: Colors.red.shade100,
           colorText: Colors.black,
-          duration: Duration(seconds: 2));
+          duration: const Duration(seconds: 2));
     }
   }
 
@@ -158,7 +164,10 @@ class BookingsSessionsController extends GetxController {
       Get.snackbar("نجاح", response['message'],
           backgroundColor: Colors.green.shade100,
           colorText: Colors.black,
-          duration: Duration(seconds: 2));
+          duration: const Duration(seconds: 2));
+
+      // ✅ أوقف تتبع الخلفية إن كانت لنفس الجلسة
+      await _stopTrackingIfActive(bookingId);
 
       await fetchSessions();
     } else {
@@ -166,7 +175,74 @@ class BookingsSessionsController extends GetxController {
       Get.snackbar("خطأ", errorMsg,
           backgroundColor: Colors.red.shade100,
           colorText: Colors.black,
-          duration: Duration(seconds: 2));
+          duration: const Duration(seconds: 2));
     }
   }
+
+  // ----------------- Helpers -----------------
+
+  // يحوّل أي قيمة إلى int إذا أمكن
+  int? _toInt(dynamic v) {
+    if (v is int) return v;
+    if (v is String) return int.tryParse(v);
+    return null;
+    }
+
+  // استخرج session_id و car_id من عنصر الجلسة
+  Ids? _extractIdsForBooking(int bookingId) {
+    for (final e in sessions) {
+      if (e is Map && e['id'] == bookingId) {
+        final dynamic s1 = e['session']?['id'];
+        final dynamic s2 = e['session_id'];
+        final dynamic s3 = e['id']; // fallback
+        final dynamic c1 = e['car']?['id'];
+        final dynamic c2 = e['car_id'];
+
+        final sid = _toInt(s1) ?? _toInt(s2) ?? _toInt(s3);
+        final cid = _toInt(c1) ?? _toInt(c2);
+
+        if (sid != null && cid != null) return Ids(sid, cid);
+        break;
+      }
+    }
+    return null;
+  }
+
+  Future<void> _startTrackingForBooking(int bookingId) async {
+    final ids = _extractIdsForBooking(bookingId);
+    if (ids == null) {
+      Get.snackbar("تنبيه",
+          "تعذر بدء إرسال الموقع: session_id أو car_id غير موجود.",
+          backgroundColor: Colors.yellow.shade100,
+          colorText: Colors.black,
+          duration: const Duration(seconds: 2));
+      return;
+    }
+
+    try {
+      await initializeBackgroundService(
+        sessionId: ids.sessionId,
+        carId: ids.carId,
+      );
+      _activeTrackingBookingId = bookingId;
+    } catch (e) {
+      Get.snackbar("خطأ", "تعذر بدء تتبع الموقع: $e",
+          backgroundColor: Colors.red.shade100,
+          colorText: Colors.black,
+          duration: const Duration(seconds: 2));
+    }
+  }
+
+  Future<void> _stopTrackingIfActive(int bookingId) async {
+    if (_activeTrackingBookingId == bookingId) {
+      await stopBackgroundService();
+      _activeTrackingBookingId = null;
+    }
+  }
+}
+
+class Ids {
+  final int sessionId;
+  final int carId;
+  Ids(this.sessionId, this.carId);
 }

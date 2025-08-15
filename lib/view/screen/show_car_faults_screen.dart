@@ -44,8 +44,11 @@ class ShowCarFaults extends StatelessWidget {
               itemBuilder: (ctx, idx) {
                 final f = ctrl.faults[idx];
                 final car = f['car'];
-                final trainerName = f['trainer']['trainer_name'];
-                final status = f['status'];
+                final trainerName = f['trainer'] != null
+                    ? f['trainer']['trainer_name']
+                    : 'غير معروف';
+                final status = getArabicStatus(f['status']);
+
                 final comment = f['comment'];
 
                 return _buildFaultCard(car, trainerName, status, comment);
@@ -137,6 +140,17 @@ class ShowCarFaults extends StatelessWidget {
         ),
       ],
     );
+  }
+
+  String getArabicStatus(String status) {
+    switch (status.toLowerCase()) {
+      case 'in_progress':
+        return 'قيد المعالجة';
+      case 'resolved':
+        return 'تم الإصلاح';
+      default:
+        return 'غير معروف';
+    }
   }
 
   Widget _statusChip(String status) {
