@@ -1,3 +1,4 @@
+import 'package:driving_school/core/constant/approuts.dart';
 import 'package:driving_school/core/services/crud.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -27,6 +28,7 @@ class ChooseOtomatikController extends GetxController {
   List<String> get days => dayTranslations.keys.toList();
   String trainingType = '';
   String vitesType = '';
+
   void selectDay(String day) {
     selectedDay.value = day;
     update();
@@ -37,10 +39,8 @@ class ChooseOtomatikController extends GetxController {
       context: Get.context!,
       initialTime: TimeOfDay.now(),
     );
-    if (picked != null) {
-      if (isStartTime) {
-        startTime.value = picked;
-      }
+    if (picked != null && isStartTime) {
+      startTime.value = picked;
     }
     update();
   }
@@ -74,22 +74,37 @@ class ChooseOtomatikController extends GetxController {
     isLoading.value = true;
     update();
     sessions.clear();
+
     final url = '${AppLinks.recommendedSessions}'
         '?preferred_date=${formatDate(startDate.value)}'
         '&preferred_time=${formatTime(startTime.value)}'
         '&training_type=$trainingType';
-    var response = await crud.getRequest(url);
-    sessions.addAll(response['data']);
+
+    final response = await crud.getRequest(url);
+    sessions.addAll(response['data'] ?? []);
     hasFetched = true;
-    update();
 
     isLoading.value = false;
     update();
   }
 
-  selectSessions(id) async {
+  // ✅ الآن نستقبل الجلسة كاملة لنرسل amount
+  // ✅ الآن نستقبل الجلسة كاملة لنرسل amount ثم نوجّه لواجهة الدفع
+  selectSessions(Map session) async {
     isLoading.value = true;
+    update();
+
     String token = data.read('token') ?? '';
+
+    // استخراج السعر بأمان من الجلسة
+    num? fee;
+    final rawFee = session['registration_fee'];
+    if (rawFee is num) {
+      fee = rawFee;
+    } else if (rawFee != null) {
+      fee = num.tryParse(rawFee.toString());
+    }
+
     try {
       final response = await http.post(
         Uri.parse(AppLinks.autobooksession),
@@ -99,39 +114,90 @@ class ChooseOtomatikController extends GetxController {
           'Accept': 'application/json',
         },
         body: jsonEncode({
-          'session_id': id,
-          'transmission': vitesType,
+          'session_id': session['id'],
+          'transmission': vitesType, // 'automatic' / 'manual'
           'is_for_special_needs': trainingType == 'special_needs' ? '1' : '0',
+          'amount': (fee != null) ? fee.toString() : null, // إرسال السعر
         }),
       );
 
-      final data = jsonDecode(response.body);
+      final body = jsonDecode(response.body);
 
-      if (response.statusCode == 200 &&
-          data['data'] != null &&
-          data['data'].isNotEmpty) {
-        Get.snackbar(
-          'تمت العملية بنجاح',
-          'تم حجز الجلسة بنجاح',
-          snackPosition: SnackPosition.TOP,
-          backgroundColor: Colors.green.shade400,
-          colorText: Colors.white,
-          duration: const Duration(seconds: 3),
-          margin: const EdgeInsets.all(16),
-          borderRadius: 12,
-        );
-      } else {
-        Get.snackbar(
-          'حدث خطأ',
-          data['message'] ?? 'حدث خطأ غير متوقع',
-          snackPosition: SnackPosition.TOP,
-          backgroundColor: Colors.red.shade400,
-          colorText: Colors.white,
-          duration: const Duration(seconds: 3),
-          margin: const EdgeInsets.all(16),
-          borderRadius: 12,
-        );
+      // نجاح الحجز
+      if (response.statusCode == 201 || response.statusCode == 200) {
+        // محاولات متعددة لالتقاط invoiceId حسب شكل الاستجابة
+        final dynamic payment =
+            body['data']?['payment'] ?? body['payment']; // مرن
+        final dynamic invoiceDyn = payment?['invoiceId'] ??
+            payment?['Receipt']?['Invoice'] ??
+            body['invoiceId'];
+
+        int? invoiceId;
+        if (invoiceDyn is int) {
+          invoiceId = invoiceDyn;
+        } else if (invoiceDyn != null) {
+          invoiceId = int.tryParse(invoiceDyn.toString());
+        }
+
+        // تحديد المبلغ المُستحق للواجهة
+        dynamic amountDyn = payment?['apiResponse']?['json']?['Receipt']
+                ?['Amount'] ??
+            body['data']?['amount'] ??
+            body['amount'] ??
+            fee;
+        int amountToPay;
+        if (amountDyn is num) {
+          amountToPay = amountDyn.toInt();
+        } else {
+          amountToPay =
+              int.tryParse(amountDyn?.toString() ?? '') ?? (fee?.toInt() ?? 0);
+        }
+
+        // إيقاف اللودينغ قبل التوجيه
+        isLoading.value = false;
+        update();
+
+        // التوجيه لواجهة الدفع
+        if (invoiceId != null && invoiceId > 0) {
+          Get.offAllNamed(
+            AppRouts.paymentScreen,
+            arguments: {
+              'invoiceId': invoiceId,
+              'amount': amountToPay,
+            },
+          );
+        } else {
+          // ما رجع رقم فاتورة — نوجّه مع المبلغ وننبه المستخدم
+          Get.offAllNamed(
+            AppRouts.paymentScreen,
+            arguments: {
+              'invoiceId':
+                  0, // أو اتركه بدون تمرير لو واجهة الدفع تتطلبه إلزامياً
+              'amount': amountToPay,
+            },
+          );
+          Get.snackbar(
+            'تنبيه',
+            'تم الحجز بنجاح لكن لم يتم إنشاء رقم فاتورة بعد.',
+            snackPosition: SnackPosition.TOP,
+            margin: const EdgeInsets.all(16),
+            borderRadius: 12,
+          );
+        }
+        return;
       }
+
+      // فشل من الخادم
+      Get.snackbar(
+        'حدث خطأ',
+        body['message'] ?? 'حدث خطأ غير متوقع',
+        snackPosition: SnackPosition.TOP,
+        backgroundColor: Colors.red.shade400,
+        colorText: Colors.white,
+        duration: const Duration(seconds: 3),
+        margin: const EdgeInsets.all(16),
+        borderRadius: 12,
+      );
     } catch (e) {
       Get.snackbar(
         'خطأ في الاتصال',
@@ -144,6 +210,7 @@ class ChooseOtomatikController extends GetxController {
         borderRadius: 12,
       );
     }
+
     isLoading.value = false;
     update();
   }

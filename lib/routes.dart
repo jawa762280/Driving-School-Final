@@ -17,6 +17,8 @@ import 'package:driving_school/view/screen/my_licence_screen.dart';
 import 'package:driving_school/view/screen/notification_screen.dart';
 import 'package:driving_school/view/screen/onboarding_screen.dart';
 import 'package:driving_school/view/screen/forget_password_screen.dart';
+import 'package:driving_school/view/screen/payment_phone_screen.dart';
+import 'package:driving_school/view/screen/payment_verify_screen.dart';
 import 'package:driving_school/view/screen/practical_exam_screen.dart';
 import 'package:driving_school/view/screen/profile_screen.dart';
 import 'package:driving_school/view/screen/request_licence_screen.dart';
@@ -199,5 +201,13 @@ List<GetPage<dynamic>> routes = [
   GetPage(
     name: AppRouts.aboutUsScreen,
     page: () => AboutUsScreen(),
+  ),
+  GetPage(
+    name: AppRouts.paymentVerifyScreen,
+    page: () => PaymentVerifyScreen(),
+  ),
+  GetPage(
+    name: AppRouts.paymentScreen,
+    page: () => PaymentPhoneScreen(),
   ),
 ];

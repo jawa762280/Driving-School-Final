@@ -3,9 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:driving_school/controller/training_sessions_controller.dart';
 import 'package:driving_school/core/constant/appcolors.dart';
+import 'package:intl/intl.dart';
 
 class TrainingSessionsScreen extends StatelessWidget {
   final controller = Get.put(TrainingSessionsController());
+  final NumberFormat arNumber = NumberFormat.decimalPattern('ar');
 
   TrainingSessionsScreen({super.key});
 
@@ -20,7 +22,7 @@ class TrainingSessionsScreen extends StatelessWidget {
               fontWeight: FontWeight.bold, fontSize: 22, color: Colors.white),
         ),
         centerTitle: true,
-        iconTheme: IconThemeData(color: Colors.white),
+        iconTheme: const IconThemeData(color: Colors.white),
         backgroundColor: AppColors.primaryColor,
         elevation: 0,
       ),
@@ -31,8 +33,8 @@ class TrainingSessionsScreen extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 CircularProgressIndicator(color: AppColors.primaryColor),
-                SizedBox(height: 16),
-                Text(
+                const SizedBox(height: 16),
+                const Text(
                   "جارٍ تحميل الجلسات...",
                   style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
                 ),
@@ -91,7 +93,17 @@ class TrainingSessionsScreen extends StatelessWidget {
               duration: const Duration(milliseconds: 250),
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
               decoration: BoxDecoration(
-                color: isSelected ? AppColors.primaryColor : Colors.white,
+                gradient: isSelected
+                    ? LinearGradient(
+                        colors: [
+                          AppColors.primaryColor,
+                          AppColors.primaryColor.withOpacity(0.85),
+                        ],
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                      )
+                    : null,
+                color: isSelected ? null : Colors.white,
                 borderRadius: BorderRadius.circular(16),
                 boxShadow: [
                   BoxShadow(
@@ -140,12 +152,20 @@ class TrainingSessionsScreen extends StatelessWidget {
       itemCount: sessions.length,
       separatorBuilder: (_, __) => const SizedBox(height: 14),
       itemBuilder: (context, index) {
-        final session = sessions[index];
-        final status = session['status'];
-
+        final session = sessions[index] as Map<String, dynamic>;
+        final status = session['status'] as String? ?? 'unknown';
         final isAvailable = status == 'available';
-        final start = session['start_time'].substring(0, 5);
-        final end = session['end_time'].substring(0, 5);
+
+        final start = (session['start_time'] as String).substring(0, 5);
+        final end = (session['end_time'] as String).substring(0, 5);
+
+        final num? fee = session['registration_fee'] is num
+            ? session['registration_fee'] as num
+            : (session['registration_fee'] != null
+                ? num.tryParse(session['registration_fee'].toString())
+                : null);
+
+        final String feeText = fee != null ? arNumber.format(fee) : '—';
 
         return GestureDetector(
           onTap: (!controller.isTrainer && isAvailable)
@@ -153,10 +173,11 @@ class TrainingSessionsScreen extends StatelessWidget {
                   Get.toNamed(AppRouts.carsScreen, arguments: {
                     'mode': 'booking',
                     'session_id': session['id'],
+                    'registration_fee': fee,
                   });
                   Get.snackbar(
                     "تم اختيار الجلسة",
-                    "من $start إلى $end",
+                    "من $start إلى $end • الرسوم: $feeText",
                     snackPosition: SnackPosition.TOP,
                     colorText: Colors.black,
                     borderRadius: 12,
@@ -166,57 +187,83 @@ class TrainingSessionsScreen extends StatelessWidget {
               : null,
           child: AnimatedContainer(
             duration: const Duration(milliseconds: 250),
-            padding: const EdgeInsets.all(16),
+            padding: const EdgeInsets.all(18),
             decoration: BoxDecoration(
-              color: isAvailable ? Colors.white : Colors.grey.shade200,
-              borderRadius: BorderRadius.circular(16),
-              border: Border.all(
-                color:
-                    isAvailable ? AppColors.primaryColor : Colors.grey.shade400,
-                width: 1.4,
-              ),
+              color: _getSessionBackground(status),
+              borderRadius: BorderRadius.circular(18),
               boxShadow: [
-                if (isAvailable && !controller.isTrainer)
-                  BoxShadow(
-                    color:
-                        AppColors.primaryColor.withAlpha((0.1 * 255).toInt()),
-                    blurRadius: 8,
-                    offset: const Offset(0, 3),
-                  ),
+                BoxShadow(
+                  color: Colors.black12,
+                  blurRadius: 8,
+                  offset: const Offset(0, 4),
+                ),
               ],
             ),
             child: Row(
               children: [
-                const Icon(Icons.access_time, size: 24),
-                const SizedBox(width: 12),
-                Expanded(
-                  child: Text(
-                    '$start - $end',
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w600,
-                      color: isAvailable
-                          ? AppColors.primaryColor
-                          : Colors.grey.shade700,
+                // وقت + الحالة
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      '$start - $end',
+                      style: TextStyle(
+                        fontSize: 17,
+                        fontWeight: FontWeight.bold,
+                        color: _getStatusTextColor(status),
+                      ),
                     ),
-                  ),
+                    const SizedBox(height: 6),
+                    Text(
+                      _getStatusText(status),
+                      style: TextStyle(
+                        fontSize: 13,
+                        fontWeight: FontWeight.w600,
+                        color: _getStatusTextColor(status),
+                      ),
+                    ),
+                  ],
                 ),
-                Container(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                  decoration: BoxDecoration(
-                    color: _getStatusBackgroundColor(status),
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: Text(
-                    _getStatusText(status),
-                    style: TextStyle(
-                      fontSize: 12,
-                      fontWeight: FontWeight.bold,
-                      color: _getStatusTextColor(status),
+                const Spacer(),
+
+                if (isAvailable)
+                  Container(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 18, vertical: 12),
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        colors: [
+                          AppColors.primaryColor.withOpacity(0.9),
+                          AppColors.primaryColor.withOpacity(0.7),
+                        ],
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                      ),
+                      borderRadius: BorderRadius.circular(14),
+                    ),
+                    child: Column(
+                      children: [
+                        const Icon(Icons.payments_outlined,
+                            color: Colors.white, size: 22),
+                        const SizedBox(height: 4),
+                        Text(
+                          fee != null ? "$feeText ل.س" : "—",
+                          style: const TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
+                          ),
+                        ),
+                        const Text(
+                          "سعر الجلسة",
+                          style: TextStyle(
+                            fontSize: 11,
+                            color: Colors.white70,
+                          ),
+                        ),
+                      ],
                     ),
                   ),
-                )
               ],
             ),
           ),
@@ -245,34 +292,34 @@ class TrainingSessionsScreen extends StatelessWidget {
   Color _getStatusTextColor(String status) {
     switch (status) {
       case 'available':
-        return AppColors.primaryColor;
+        return AppColors.primaryColor; // أزرق رئيسي
       case 'booked':
-        return Colors.white;
+        return Colors.white; // أبيض على الخلفية الرمادية
       case 'vacation':
-        return Colors.orange.shade700;
+        return Colors.orange.shade700; // برتقالي غامق
       case 'completed':
-        return Colors.green.shade700;
+        return Colors.green.shade700; // أخضر غامق
       case 'cancelled':
-        return Colors.red.shade700;
+        return Colors.red.shade700; // أحمر غامق
       default:
         return Colors.grey;
     }
   }
 
-  Color _getStatusBackgroundColor(String status) {
+  Color _getSessionBackground(String status) {
     switch (status) {
       case 'available':
-        return AppColors.primaryColor.withAlpha(40);
+        return AppColors.primaryColor.withAlpha(40); // أزرق فاتح شفاف
       case 'booked':
-        return Colors.grey.shade500;
+        return Colors.grey.shade400; // رمادي متوسط
       case 'vacation':
-        return Colors.orange.shade100;
+        return Colors.orange.shade100; // برتقالي فاتح
       case 'completed':
-        return Colors.green.shade100;
+        return Colors.green.shade100; // أخضر فاتح
       case 'cancelled':
-        return Colors.red.shade100;
+        return Colors.red.shade200; // أحمر فاتح
       default:
-        return Colors.grey.shade300;
+        return Colors.grey.shade300; // رمادي فاتح
     }
   }
 }

@@ -1,5 +1,7 @@
 class AppLinks {
-  static const String init = 'http://192.168.1.107:8000/api';
+  // static const String init = 'http://192.168.1.107:8000/api';
+  static const String init = 'https://dls.tepcode.com/api';
+
   // static const String init = 'http://127.0.0.1:8000/api';
   // static const String init = 'http://192.168.139.83:8000/api';
 
@@ -67,4 +69,6 @@ class AppLinks {
   static const unreadCountByConversation = '$init/unread-count-by-conversation';
   static const defineRoute = '$init/bookings';
   static const carLocations = '$init/car-locations';
+  static const mtnFlowInitiate = '$init/mtn/flow/initiate';
+  static const String mtnFlowConfirm = '$init/mtn/flow/confirm';
 }

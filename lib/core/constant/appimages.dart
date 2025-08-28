@@ -6,7 +6,7 @@ class AppImages {
       "assets/images/onboardingThree.PNG";
   static const String logo = "$rootImage/logo.jpg";
   static const String defaultUser = "$rootImage/defaultUser.png";
-  static const String test = "$rootImage/test.png";
+  static const String test = "$rootImage/test2.png";
   static const String exam = "$rootImage/exam.png";
   static const String specialneedscar =
       "$rootImage/noun-disabled-person-6241943.png";

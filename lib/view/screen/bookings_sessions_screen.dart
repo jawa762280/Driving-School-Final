@@ -462,7 +462,10 @@ class BookingsSessionsScreen extends StatelessWidget {
             onPressed: () {
               Navigator.of(ctx).pop();
             },
-            child: const Text("تراجع"),
+            child: Text(
+              "تراجع",
+              style: TextStyle(color: Colors.black),
+            ),
           ),
           ElevatedButton(
             style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
@@ -470,7 +473,7 @@ class BookingsSessionsScreen extends StatelessWidget {
               Navigator.of(ctx).pop();
               await controller.cancelSession(sessionId);
             },
-            child: const Text("تأكيد"),
+            child: const Text("تأكيد", style: TextStyle(color: Colors.black)),
           ),
         ],
       ),
